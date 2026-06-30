@@ -140,6 +140,7 @@ export interface LebenStore extends GoalSlice, BookSlice {
 
   // ── System ───────────────────────────────────────────────────────────────────
   purgeAll: () => Promise<void>;
+  clearStore: () => void;
   isSyncing: boolean;
   setIsSyncing: (isSyncing: boolean) => void;
 
@@ -416,6 +417,17 @@ export const useLebenStore = create<LebenStore>()(
           productivityHistory: {},
         });
         await purgeAllData();
+      },
+
+      clearStore: () => {
+        set({
+          ...initialState,
+          tasks:        [],
+          habits:       [],
+          goals:        [],
+          books:        [],
+          productivityHistory: {},
+        });
       },
     }),
     {

@@ -61,9 +61,8 @@ function CustomTabBar() {
       >
         {MAIN_TABS.map((tab) => {
           const active =
-            pathname === tab.route ||
             (tab.name === 'index' && pathname === '/') ||
-            (tab.name !== 'index' && pathname.startsWith(`/(tabs)/${tab.name}`));
+            (tab.name !== 'index' && pathname.startsWith(`/${tab.name}`));
 
           return (
             <TabButton
