@@ -1,24 +1,29 @@
 // components/shared/NeuralDropup.tsx
 // Press "Neural ✦" tab → panel animates up showing Planner, AI Chat, Analytics
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import {
   View, Text, TouchableOpacity, Animated,
   TouchableWithoutFeedback, Pressable,
 } from 'react-native';
 import { useRouter }      from 'expo-router';
 import { LC }             from '@/constants/theme';
+import {
+  SparkleIcon,
+  AIIcon,
+  AnalyticsIcon,
+} from '@/constants/Icons';
 
 interface SubLink {
   label:  string;
-  icon:   string;
+  icon:   React.ElementType;
   href:   '/(tabs)/planner' | '/(tabs)/ai' | '/(tabs)/analytics';
   desc:   string;
 }
 
 const SUB_LINKS: SubLink[] = [
-  { label: 'Daily Planner', icon: '✦', href: '/(tabs)/planner',   desc: 'AI-generated schedule' },
-  { label: 'Neural Chat',   icon: '◈', href: '/(tabs)/ai',        desc: 'Ask your AI assistant' },
-  { label: 'Analytics',     icon: '◉', href: '/(tabs)/analytics', desc: 'Productivity insights' },
+  { label: 'Daily Planner', icon: SparkleIcon,   href: '/(tabs)/planner',   desc: 'AI-generated schedule' },
+  { label: 'Neural Chat',   icon: AIIcon,        href: '/(tabs)/ai',        desc: 'Ask your AI assistant' },
+  { label: 'Analytics',     icon: AnalyticsIcon, href: '/(tabs)/analytics', desc: 'Productivity insights' },
 ];
 
 interface NeuralDropupProps {
@@ -28,12 +33,14 @@ interface NeuralDropupProps {
 }
 
 export function NeuralDropup({ visible, onClose, tabBarHeight }: NeuralDropupProps) {
-  const translateY = useRef(new Animated.Value(200)).current;
+  const [renderVisible, setRenderVisible] = useState(visible);
+  const translateY = useRef(new Animated.Value(400)).current;
   const opacity    = useRef(new Animated.Value(0)).current;
   const router     = useRouter();
 
   useEffect(() => {
     if (visible) {
+      setRenderVisible(true);
       Animated.parallel([
         Animated.spring(translateY, {
           toValue:          0,
@@ -50,7 +57,7 @@ export function NeuralDropup({ visible, onClose, tabBarHeight }: NeuralDropupPro
     } else {
       Animated.parallel([
         Animated.timing(translateY, {
-          toValue:         200,
+          toValue:         400,
           duration:        160,
           useNativeDriver: true,
         }),
@@ -59,11 +66,13 @@ export function NeuralDropup({ visible, onClose, tabBarHeight }: NeuralDropupPro
           duration:        130,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]).start(() => {
+        setRenderVisible(false);
+      });
     }
-  }, [visible]);
+  }, [visible, translateY, opacity]);
 
-  if (!visible) return null;
+  if (!renderVisible) return null;
 
   return (
     <>
@@ -82,41 +91,44 @@ export function NeuralDropup({ visible, onClose, tabBarHeight }: NeuralDropupPro
           transform: [{ translateY }],
           bottom: tabBarHeight,
         }}
-        className="absolute left-0 right-0 bg-leben-bg-card border-t border-leben-border rounded-t-3xl px-5 pt-5 pb-3"
+        className="absolute left-0 right-0 bg-[#0a0a0a] border-t border-leben-border rounded-t-3xl px-5 pt-5 pb-6"
       >
         {/* Handle */}
         <View className="w-10 h-1 bg-leben-border rounded-full self-center mb-4" />
 
         <Text className="text-leben-text-2 text-xs uppercase tracking-widest font-semibold mb-3 px-1">
-          Neural ✦
+          Neural <SparkleIcon size={12} color="#888888" />
         </Text>
 
         <View className="gap-2">
-          {SUB_LINKS.map((link) => (
-            <Pressable
-              key={link.href}
-              onPress={() => {
-                onClose();
-                router.push(link.href as any);
-              }}
-              className="flex-row items-center gap-4 px-3 py-4 rounded-2xl active:bg-leben-bg-secondary"
-            >
-              {/* Icon bubble */}
-              <View className="w-11 h-11 rounded-xl bg-leben-accent-dim border border-[rgba(124,106,240,0.2)] items-center justify-center">
-                <Text className="text-leben-accent text-lg">{link.icon}</Text>
-              </View>
-              {/* Text */}
-              <View className="flex-1">
-                <Text className="text-leben-text font-medium text-[15px]">
-                  {link.label}
-                </Text>
-                <Text className="text-leben-text-muted text-xs mt-0.5">
-                  {link.desc}
-                </Text>
-              </View>
-              <Text className="text-leben-text-muted text-lg">›</Text>
-            </Pressable>
-          ))}
+          {SUB_LINKS.map((link) => {
+            const Icon = link.icon;
+            return (
+              <Pressable
+                key={link.href}
+                onPress={() => {
+                  onClose();
+                  router.push(link.href as any);
+                }}
+                className="flex-row items-center gap-4 px-3 py-4 rounded-2xl active:bg-leben-bg-secondary"
+              >
+                {/* Icon bubble */}
+                <View className="w-11 h-11 rounded-xl bg-leben-accent-dim border border-[rgba(124,106,240,0.2)] items-center justify-center">
+                  <Icon size={20} color="#7c6af0" />
+                </View>
+                {/* Text */}
+                <View className="flex-1">
+                  <Text className="text-leben-text font-medium text-[15px]">
+                    {link.label}
+                  </Text>
+                  <Text className="text-leben-text-muted text-xs mt-0.5">
+                    {link.desc}
+                  </Text>
+                </View>
+                <Text className="text-leben-text-muted text-lg">›</Text>
+              </Pressable>
+            );
+          })}
         </View>
       </Animated.View>
     </>

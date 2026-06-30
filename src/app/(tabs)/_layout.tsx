@@ -5,23 +5,30 @@ import { View, TouchableOpacity, Text, Platform } from 'react-native';
 import { Tabs, usePathname }     from 'expo-router';
 import { useSafeAreaInsets }     from 'react-native-safe-area-context';
 import { NeuralDropup }          from '@/components/shared/NeuralDropup';
+import {
+  GridIcon,
+  TaskIcon,
+  HabitIcon,
+  GoalIcon,
+  SparkleIcon,
+} from '@/constants/Icons';
 
 // ── Tab Bar ──────────────────────────────────────────────────────────────────
 
-const TAB_HEIGHT = 60;
+const TAB_HEIGHT = 65;
 
 interface TabItem {
   name:  string;
   label: string;
-  icon:  string;
+  icon:  React.ElementType;
   route: string;
 }
 
 const MAIN_TABS: TabItem[] = [
-  { name: 'index',    label: 'Home',   icon: '◈',  route: '/(tabs)' },
-  { name: 'tasks',    label: 'Tasks',  icon: '✓',  route: '/(tabs)/tasks' },
-  { name: 'habits',   label: 'Habits', icon: '↺',  route: '/(tabs)/habits' },
-  { name: 'goals',    label: 'Goals',  icon: '◉',  route: '/(tabs)/goals' },
+  { name: 'index',    label: 'Home',   icon: GridIcon,  route: '/(tabs)' },
+  { name: 'tasks',    label: 'Tasks',  icon: TaskIcon,  route: '/(tabs)/tasks' },
+  { name: 'habits',   label: 'Habits', icon: HabitIcon, route: '/(tabs)/habits' },
+  { name: 'goals',    label: 'Goals',  icon: GoalIcon,  route: '/(tabs)/goals' },
 ];
 
 // Screens inside the tabs group that belong to "Neural" (shown via dropup)
@@ -70,19 +77,16 @@ function CustomTabBar() {
 
         {/* Neural ✦ — dropup trigger */}
         <TouchableOpacity
-          className="flex-1 items-center justify-center"
+          className="flex-1 items-center justify-center pt-2 pb-1"
           onPress={toggleDropup}
           activeOpacity={0.7}
         >
+          <SparkleIcon
+            size={22}
+            color={isNeuralActive || dropupOpen ? '#7c6af0' : '#888888'}
+          />
           <Text
-            className={`text-[22px] ${
-              isNeuralActive || dropupOpen ? 'text-leben-accent' : 'text-leben-text-muted'
-            }`}
-          >
-            ✦
-          </Text>
-          <Text
-            className={`text-[10px] mt-0.5 font-medium ${
+            className={`text-[10px] mt-1.5 font-medium ${
               isNeuralActive || dropupOpen ? 'text-leben-accent' : 'text-leben-text-dim'
             }`}
           >
@@ -99,20 +103,20 @@ function CustomTabBar() {
 function TabButton({ tab, active, onPress }: { tab: TabItem; active: boolean; onPress: () => void }) {
   const { useRouter } = require('expo-router');
   const router = useRouter();
+  const Icon = tab.icon;
+  
   return (
     <TouchableOpacity
-      className="flex-1 items-center justify-center"
+      className="flex-1 items-center justify-center pt-2 pb-1"
       onPress={() => {
         onPress();
         router.push(tab.route as any);
       }}
       activeOpacity={0.7}
     >
-      <Text className={`text-[22px] ${active ? 'text-leben-accent' : 'text-leben-text-muted'}`}>
-        {tab.icon}
-      </Text>
+      <Icon size={22} color={active ? '#7c6af0' : '#888888'} />
       <Text
-        className={`text-[10px] mt-0.5 font-medium ${
+        className={`text-[10px] mt-1.5 font-medium ${
           active ? 'text-leben-accent' : 'text-leben-text-dim'
         }`}
       >
