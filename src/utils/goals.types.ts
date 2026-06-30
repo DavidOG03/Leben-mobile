@@ -19,6 +19,7 @@ export interface Goal {
   color?:       string;
   targetValue:  number;
   currentValue: number;
+  reminderAt?:  string;
 }
 
 export interface GoalFormData {
@@ -29,6 +30,7 @@ export interface GoalFormData {
   deadline:     string;
   icon:         string;
   milestones:   string[]; // raw strings converted to Milestone on save
+  reminderAt?:  string;
 }
 
 export interface DerivedGoalStats {

@@ -9,6 +9,7 @@ export interface Book {
   coverColor: string;
   status: "reading" | "completed" | "paused";
   addedAt: string;
+  reminderAt?: string;
 }
 
 export interface BookFormData {
@@ -16,6 +17,7 @@ export interface BookFormData {
   author: string;
   totalPages: number;
   coverColor: string;
+  reminderAt?: string;
 }
 
 export interface BookSlice {
@@ -81,6 +83,7 @@ export function createBookSlice(
         coverColor: data.coverColor,
         status: "reading",
         addedAt: new Date().toISOString(),
+        reminderAt: data.reminderAt,
       };
       set((state: any) => ({ books: [...state.books, newBook] }));
       await insertBook(newBook);

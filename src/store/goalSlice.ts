@@ -68,6 +68,7 @@ export function createGoalSlice(
           color:        fd.color,
           targetValue:  fd.targetValue,
           currentValue: fd.currentValue,
+          reminderAt:   fd.reminderAt,
         };
       } else {
         // Full Goal object passed directly

@@ -1,8 +1,9 @@
 import { BOOK_COLORS } from "@/constants/habits";
 import type { BookFormData } from "@/store/bookSlice";
 import { useState } from "react";
-import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { BottomSheet } from "@/components/ui/BottomSheet";
+import ReminderPicker from "@/components/shared/ReminderPicker";
 
 interface AddBookModalProps {
   visible: boolean;
@@ -19,6 +20,8 @@ export default function AddBookModal({
   const [author, setAuthor] = useState("");
   const [totalPages, setTotalPages] = useState("");
   const [color, setColor] = useState(BOOK_COLORS[0]);
+  const [showReminder, setShowReminder] = useState(false);
+  const [reminderAt, setReminderAt] = useState<string | undefined>();
 
   const handleAdd = () => {
     if (!title.trim() || !totalPages) return;
@@ -27,6 +30,7 @@ export default function AddBookModal({
       author: author.trim() || "Unknown Author",
       totalPages: parseInt(totalPages),
       coverColor: color,
+      reminderAt,
     });
     // Reset form
     setTitle("");
@@ -46,156 +50,165 @@ export default function AddBookModal({
   };
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      onRequestClose={handleCancel}
-    >
-      <SafeAreaView className="flex-1" style={{ backgroundColor: "#0a0a0a" }}>
-        <View className="flex-1 px-5 pt-4">
-          <View className="flex-row items-center justify-between mb-6">
-            <Text
-              className="font-black text-white text-[20px]"
-              style={{ letterSpacing: -0.4 }}
-            >
-              Track a Book
-            </Text>
-          </View>
+    <BottomSheet visible={visible} onClose={handleCancel}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className="flex-row items-center justify-between mb-6">
+          <Text
+            className="font-black text-white text-[20px]"
+            style={{ letterSpacing: -0.4 }}
+          >
+            Track a Book
+          </Text>
+        </View>
 
-          <View className="flex-row gap-3 mb-6">
-            {BOOK_COLORS.map((c) => (
-              <TouchableOpacity
-                key={c}
-                onPress={() => setColor(c)}
-                className="rounded-full"
-                style={{
-                  width: 32,
-                  height: 32,
-                  backgroundColor: c,
-                  borderWidth: color === c ? 2 : 0,
-                  borderColor: "#fff",
-                }}
-              />
-            ))}
-          </View>
-
-          <View>
-            <Text
-              style={{
-                fontSize: 10,
-                color: "#555",
-                letterSpacing: 1,
-                textTransform: "uppercase",
-                marginBottom: 8,
-              }}
-            >
-              Book Title
-            </Text>
-            <TextInput
-              value={title}
-              onChangeText={setTitle}
-              placeholder="e.g. Atomic Habits"
-              placeholderTextColor="#555"
-              className="w-full rounded-xl px-4 py-3 text-white mb-5"
-              style={{
-                backgroundColor: "#161616",
-                borderWidth: 1,
-                borderColor: "#2a2a2a",
-                fontSize: 14,
-              }}
-            />
-          </View>
-
-          <View>
-            <Text
-              style={{
-                fontSize: 10,
-                color: "#555",
-                letterSpacing: 1,
-                textTransform: "uppercase",
-                marginBottom: 8,
-              }}
-            >
-              Author
-            </Text>
-            <TextInput
-              value={author}
-              onChangeText={setAuthor}
-              placeholder="e.g. James Clear"
-              placeholderTextColor="#555"
-              className="w-full rounded-xl px-4 py-3 text-white mb-5"
-              style={{
-                backgroundColor: "#161616",
-                borderWidth: 1,
-                borderColor: "#2a2a2a",
-                fontSize: 14,
-              }}
-            />
-          </View>
-
-          <View>
-            <Text
-              style={{
-                fontSize: 10,
-                color: "#555",
-                letterSpacing: 1,
-                textTransform: "uppercase",
-                marginBottom: 8,
-              }}
-            >
-              Total Pages
-            </Text>
-            <TextInput
-              value={totalPages}
-              onChangeText={setTotalPages}
-              placeholder="e.g. 320"
-              placeholderTextColor="#555"
-              keyboardType="numeric"
-              className="w-full rounded-xl px-4 py-3 text-white mb-8"
-              style={{
-                backgroundColor: "#161616",
-                borderWidth: 1,
-                borderColor: "#2a2a2a",
-                fontSize: 14,
-              }}
-            />
-          </View>
-
-          <View className="flex-row gap-3">
+        <View className="flex-row gap-3 mb-6">
+          {BOOK_COLORS.map((c) => (
             <TouchableOpacity
-              onPress={handleCancel}
-              className="flex-1 rounded-xl py-3 items-center justify-center"
+              key={c}
+              onPress={() => setColor(c)}
+              className="rounded-full"
               style={{
-                backgroundColor: "#161616",
-                borderWidth: 1,
-                borderColor: "#2a2a2a",
+                width: 32,
+                height: 32,
+                backgroundColor: c,
+                borderWidth: color === c ? 2 : 0,
+                borderColor: "#fff",
               }}
-            >
-              <Text style={{ color: "#888", fontSize: 13, fontWeight: "600" }}>
-                Cancel
-              </Text>
+            />
+          ))}
+        </View>
+
+        <View>
+          <Text
+            style={{
+              fontSize: 10,
+              color: "#555",
+              letterSpacing: 1,
+              textTransform: "uppercase",
+              marginBottom: 8,
+            }}
+          >
+            Book Title
+          </Text>
+          <TextInput
+            value={title}
+            onChangeText={setTitle}
+            placeholder="e.g. Atomic Habits"
+            placeholderTextColor="#555"
+            className="w-full rounded-xl px-4 py-3 text-white mb-5"
+            style={{
+              backgroundColor: "#161616",
+              borderWidth: 1,
+              borderColor: "#2a2a2a",
+              fontSize: 14,
+            }}
+          />
+        </View>
+
+        <View>
+          <Text
+            style={{
+              fontSize: 10,
+              color: "#555",
+              letterSpacing: 1,
+              textTransform: "uppercase",
+              marginBottom: 8,
+            }}
+          >
+            Author
+          </Text>
+          <TextInput
+            value={author}
+            onChangeText={setAuthor}
+            placeholder="e.g. James Clear"
+            placeholderTextColor="#555"
+            className="w-full rounded-xl px-4 py-3 text-white mb-5"
+            style={{
+              backgroundColor: "#161616",
+              borderWidth: 1,
+              borderColor: "#2a2a2a",
+              fontSize: 14,
+            }}
+          />
+        </View>
+
+        <View>
+          <Text
+            style={{
+              fontSize: 10,
+              color: "#555",
+              letterSpacing: 1,
+              textTransform: "uppercase",
+              marginBottom: 8,
+            }}
+          >
+            Total Pages
+          </Text>
+          <TextInput
+            value={totalPages}
+            onChangeText={setTotalPages}
+            placeholder="e.g. 320"
+            placeholderTextColor="#555"
+            keyboardType="numeric"
+            className="w-full rounded-xl px-4 py-3 text-white mb-5"
+            style={{
+              backgroundColor: "#161616",
+              borderWidth: 1,
+              borderColor: "#2a2a2a",
+              fontSize: 14,
+            }}
+          />
+          {/* Buttons */}
+          <View className="flex-row items-center justify-between mt-4">
+            <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1.5 p-2 bg-[#1a1a1a] rounded-lg border border-[#2a2a2a]">
+              <Text className="text-[#888] text-[12px]">{reminderAt ? new Date(reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Add Reminder"}</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleAdd}
-              className="flex-1 rounded-xl py-3 items-center justify-center"
-              style={{
-                backgroundColor:
-                  title.trim() && totalPages ? "#f0f0f0" : "#2a2a2a",
-              }}
-            >
-              <Text
+
+            <View className="flex-row gap-3 flex-1 ml-3">
+              <TouchableOpacity
+                onPress={handleCancel}
+                className="flex-1 py-3 rounded-xl items-center justify-center"
                 style={{
-                  color: title.trim() && totalPages ? "#0a0a0a" : "#555",
-                  fontSize: 13,
-                  fontWeight: "600",
+                  backgroundColor: "#161616",
+                  borderWidth: 1,
+                  borderColor: "#2a2a2a",
                 }}
               >
-                Add Book
-              </Text>
-            </TouchableOpacity>
+                <Text style={{ color: "#888", fontSize: 13, fontWeight: "600" }}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={handleAdd}
+                disabled={!title.trim() || !totalPages}
+                className="flex-1 py-3 rounded-xl items-center justify-center"
+                style={{
+                  backgroundColor: title.trim() && totalPages ? "#f0f0f0" : "#2a2a2a",
+                }}
+              >
+                <Text
+                  style={{
+                    color: title.trim() && totalPages ? "#0a0a0a" : "#555",
+                    fontSize: 13,
+                    fontWeight: "600",
+                  }}
+                >
+                  Add Book
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </SafeAreaView>
-    </Modal>
+      </ScrollView>
+
+      {showReminder && (
+        <View style={{ position: 'absolute', bottom: 20, left: 20, right: 20 }}>
+          <ReminderPicker
+            initialValue={reminderAt}
+            onSave={(val) => { setReminderAt(val); setShowReminder(false); }}
+            onClose={() => setShowReminder(false)}
+          />
+        </View>
+      )}
+    </BottomSheet>
   );
 }

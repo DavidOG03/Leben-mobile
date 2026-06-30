@@ -2,12 +2,15 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useLebenStore } from '@/store/useStore';
 import { LC } from '@/constants/theme';
+import { BellIcon } from '@/constants/Icons';
 
 export function DashboardHeader() {
   const router = useRouter();
   const userId = useLebenStore((s) => s.userId);
   const userFullName = useLebenStore((s: any) => s.userFullName);
   const userEmail = useLebenStore((s: any) => s.userEmail);
+  const setNotificationOpen = useLebenStore((s: any) => s.setNotificationOpen);
+  const notifications = useLebenStore((s: any) => s.notifications || []);
 
   let firstName = 'Guest';
   if (userFullName) {
@@ -29,6 +32,8 @@ export function DashboardHeader() {
     day: 'numeric',
   }).toUpperCase();
 
+  const hasUnread = notifications.some((n: any) => !n.read);
+
   return (
     <View className="flex-row items-center justify-between px-5 py-4 border-b border-[#1a1a1a]">
       {/* Left: Greeting */}
@@ -43,9 +48,15 @@ export function DashboardHeader() {
 
       {/* Right: Actions */}
       <View className="flex-row items-center gap-4">
-        {/* Notification Bell Placeholder */}
-        <TouchableOpacity className="items-center justify-center">
-          <Text className="text-[#666] text-xl">🔔</Text>
+        {/* Notification Bell */}
+        <TouchableOpacity 
+          className="items-center justify-center relative w-8 h-8"
+          onPress={() => setNotificationOpen(true)}
+        >
+          <BellIcon color="#888" size={22} />
+          {hasUnread && (
+            <View className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-[#7c6af0] border-2 border-[#0a0a0a]" />
+          )}
         </TouchableOpacity>
 
         {/* Avatar */}

@@ -6,9 +6,10 @@ interface BottomSheetProps {
   visible: boolean;
   onClose: () => void;
   children: ReactNode;
+  containerStyle?: any;
 }
 
-export function BottomSheet({ visible, onClose, children }: BottomSheetProps) {
+export function BottomSheet({ visible, onClose, children, containerStyle }: BottomSheetProps) {
   const [showModal, setShowModal] = useState(visible);
   const translateY = useRef(new Animated.Value(1000)).current;
 
@@ -68,8 +69,8 @@ export function BottomSheet({ visible, onClose, children }: BottomSheetProps) {
           </TouchableWithoutFeedback>
           
           <Animated.View 
-            style={{ transform: [{ translateY }] }}
-            className="bg-leben-bg-card rounded-t-3xl border-t border-leben-border pt-3 pb-8 px-5 shadow-lg max-h-[90%]"
+            style={[{ transform: [{ translateY }] }, containerStyle]}
+            className="bg-leben-bg rounded-t-3xl border-t border-leben-border pt-3 pb-8 px-5 shadow-lg max-h-[90%]"
           >
             <View 
               {...panResponder.panHandlers}

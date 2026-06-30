@@ -40,6 +40,8 @@ function AuthGuard() {
   return null;
 }
 
+import NotificationManager from '@/components/shared/NotificationManager';
+
 export default function RootLayout() {
   useAuthSync();
   useLoadUserData();
@@ -52,6 +54,7 @@ export default function RootLayout() {
         <StatusBar style="light" backgroundColor="#0a0a0a" />
         <AuthGuard />
         <Slot />
+        <NotificationManager />
       </View>
     </ThemeProvider>
   );
