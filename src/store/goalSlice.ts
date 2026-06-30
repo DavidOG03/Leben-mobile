@@ -1,21 +1,29 @@
-// store/goalSlice.ts — ported from the web's goalSlice.ts
+// store/goalSlice.ts — aligned with web goalSlice.ts
 import {
   deleteGoal,
   fetchGoals,
   insertGoal,
   updateGoal,
-} from "@/lib/supabase/db";
-import type { Goal } from "@/utils/goals.types";
+} from '@/lib/supabase/db';
+import {
+  Goal,
+  GoalFormData,
+  Milestone,
+  generateGoalId,
+  generateMilestoneId,
+} from '@/utils/goals.types';
 
 export interface GoalSlice {
-  goals: Goal[];
-  goalsLoaded: boolean;
-  loadGoals: () => Promise<void>;
-  addGoal: (goal: Goal) => Promise<void>;
-  editGoal: (id: string, updates: Partial<Goal>) => Promise<void>;
-  removeGoal: (id: string) => Promise<void>;
+  goals:              Goal[];
+  goalsLoaded:        boolean;
+  loadGoals:          () => Promise<void>;
+  addGoal:            (data: GoalFormData | Goal) => Promise<void>;
+  editGoal:           (id: string, updates: Partial<Goal>) => Promise<void>;
+  updateGoal:         (id: string, updates: Partial<Goal>) => Promise<void>; // alias
+  removeGoal:         (id: string) => Promise<void>;
   updateGoalProgress: (id: string, currentValue: number) => Promise<void>;
-  toggleMilestone: (goalId: string, milestoneId: string) => Promise<void>;
+  toggleMilestone:    (goalId: string, milestoneId: string) => Promise<void>;
+  editMilestone:      (goalId: string, milestoneId: string, newLabel: string) => Promise<void>;
 }
 
 export function createGoalSlice(
@@ -23,7 +31,7 @@ export function createGoalSlice(
   get: () => any,
 ): GoalSlice {
   return {
-    goals: [],
+    goals:       [],
     goalsLoaded: false,
 
     loadGoals: async () => {
@@ -32,12 +40,55 @@ export function createGoalSlice(
       set(() => ({ goals, goalsLoaded: true }));
     },
 
-    addGoal: async (goal) => {
-      set((s) => ({ goals: [goal, ...s.goals] }));
-      await insertGoal(goal);
+    addGoal: async (data) => {
+      let newGoal: Goal;
+
+      // Accept either a full Goal object (legacy callers) or GoalFormData
+      if ('milestones' in data && Array.isArray((data as any).milestones) &&
+          (data as any).milestones.length > 0 &&
+          typeof (data as any).milestones[0] === 'string') {
+        // GoalFormData path — milestones are raw strings
+        const fd = data as GoalFormData;
+        const milestones: Milestone[] = (fd.milestones as string[])
+          .filter((m) => m.trim() !== '')
+          .map((label) => ({
+            id:   generateMilestoneId(),
+            label,
+            done: false,
+          }));
+        newGoal = {
+          id:           generateGoalId(),
+          title:        fd.title,
+          name:         fd.title,
+          deadline:     fd.deadline,
+          icon:         fd.icon,
+          milestones,
+          tasksLinked:  0,
+          createdAt:    new Date().toISOString(),
+          color:        fd.color,
+          targetValue:  fd.targetValue,
+          currentValue: fd.currentValue,
+        };
+      } else {
+        // Full Goal object passed directly
+        newGoal = data as Goal;
+      }
+
+      set((s) => ({ goals: [newGoal, ...s.goals] }));
+      await insertGoal(newGoal);
     },
 
     editGoal: async (id, updates) => {
+      set((s) => ({
+        goals: s.goals.map((g: Goal) =>
+          g.id === id ? { ...g, ...updates } : g,
+        ),
+      }));
+      await updateGoal(id, updates);
+    },
+
+    // Alias kept for back-compat
+    updateGoal: async (id, updates) => {
       set((s) => ({
         goals: s.goals.map((g: Goal) =>
           g.id === id ? { ...g, ...updates } : g,
@@ -61,16 +112,38 @@ export function createGoalSlice(
     },
 
     toggleMilestone: async (goalId, milestoneId) => {
-      let updatedMilestones = [] as any[];
+      let updatedMilestones: Milestone[] = [];
       set((s) => ({
         goals: s.goals.map((g: Goal) => {
-          if (g.id === goalId) {
-            updatedMilestones = g.milestones.map((m) =>
-              m.id === milestoneId ? { ...m, completed: !m.completed } : m,
-            );
-            return { ...g, milestones: updatedMilestones };
-          }
-          return g;
+          if (g.id !== goalId) return g;
+          updatedMilestones = g.milestones.map((m) => {
+            if (m.id !== milestoneId) return m;
+            const newDone = !m.done;
+            return {
+              ...m,
+              done:        newDone,
+              completedAt: newDone
+                ? new Date().toISOString().split('T')[0]
+                : undefined,
+            };
+          });
+          return { ...g, milestones: updatedMilestones };
+        }),
+      }));
+      if (updatedMilestones.length > 0) {
+        await updateGoal(goalId, { milestones: updatedMilestones });
+      }
+    },
+
+    editMilestone: async (goalId, milestoneId, newLabel) => {
+      let updatedMilestones: Milestone[] = [];
+      set((s) => ({
+        goals: s.goals.map((g: Goal) => {
+          if (g.id !== goalId) return g;
+          updatedMilestones = g.milestones.map((m) =>
+            m.id === milestoneId ? { ...m, label: newLabel } : m,
+          );
+          return { ...g, milestones: updatedMilestones };
         }),
       }));
       if (updatedMilestones.length > 0) {

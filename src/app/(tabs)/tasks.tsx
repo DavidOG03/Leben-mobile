@@ -1,14 +1,15 @@
-import { View, Text } from 'react-native';
-import { ScreenLayout } from '@/components/shared/ScreenLayout';
-import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
-import { TaskInput } from '@/components/tasks/TaskInput';
-import { TaskList } from '@/components/tasks/TaskList';
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { ScreenLayout } from "@/components/shared/ScreenLayout";
+import { SmartSuggestion } from "@/components/tasks/SmartSuggestion";
+import { TaskInput } from "@/components/tasks/TaskInput";
+import { TaskList } from "@/components/tasks/TaskList";
+import { Text, View } from "react-native";
 
 export default function TasksScreen() {
   return (
     <ScreenLayout scrollable>
       <DashboardHeader />
-      
+
       <View className="flex-1 px-4 py-6">
         <View className="mb-6">
           <Text className="text-white font-bold text-3xl tracking-tight leading-tight mb-1">
@@ -21,6 +22,7 @@ export default function TasksScreen() {
 
         <TaskInput />
         <TaskList />
+        <SmartSuggestion />
       </View>
     </ScreenLayout>
   );

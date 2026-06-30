@@ -1,16 +1,17 @@
-// utils/goals.types.ts — ported from the web
+// utils/goals.types.ts — aligned with web goals.types.ts
 
 export interface Milestone {
-  id:        string;
-  title:     string;
-  completed: boolean;
+  id:          string;
+  label:       string;   // web uses 'label', not 'title'
+  done:        boolean;  // web uses 'done', not 'completed'
+  completedAt?: string;
 }
 
 export interface Goal {
   id:           string;
   title:        string;
-  name:         string;   // alias for title (used in some components)
-  deadline?:    string;   // ISO date string
+  name:         string;   // alias for title
+  deadline?:    string;
   icon?:        string;
   milestones:   Milestone[];
   tasksLinked:  number;
@@ -20,30 +21,76 @@ export interface Goal {
   currentValue: number;
 }
 
-export function deriveGoalStats(goal: Goal) {
-  const completedMilestones = goal.milestones?.filter(m => m.completed).length || 0;
-  const totalMilestones = goal.milestones?.length || 0;
-  
-  // If we have a target value (e.g. read 10 books), use that. Otherwise use milestones.
-  let progress = 0;
-  if (goal.targetValue > 0) {
-    progress = Math.round((goal.currentValue / goal.targetValue) * 100);
-  } else if (totalMilestones > 0) {
-    progress = Math.round((completedMilestones / totalMilestones) * 100);
-  }
+export interface GoalFormData {
+  color:        string;
+  targetValue:  number;
+  currentValue: number;
+  title:        string;
+  deadline:     string;
+  icon:         string;
+  milestones:   string[]; // raw strings converted to Milestone on save
+}
 
-  progress = Math.min(progress, 100);
+export interface DerivedGoalStats {
+  progress:    number; // 0-100
+  status:      GoalStatus;
+  statusColor: string;
+  daysLeft:    number;
+}
 
-  let status = 'ON TRACK';
-  let statusColor = '#4caf70';
-  
+export type GoalStatus =
+  | 'ACTIVE'
+  | 'STEADY'
+  | 'ACCELERATED'
+  | 'AT RISK'
+  | 'COMPLETE';
+
+export const STATUS_COLORS: Record<GoalStatus, string> = {
+  ACTIVE:       '#7c6af0',
+  STEADY:       '#888',
+  ACCELERATED:  '#9d8ff5',
+  'AT RISK':    '#e05c5c',
+  COMPLETE:     '#4caf8a',
+};
+
+/** Pure utility: derive stats from a Goal object — never stored. */
+export function deriveGoalStats(goal: Goal): DerivedGoalStats {
+  const milestones = goal.milestones ?? [];
+  const total      = milestones.length;
+  const done       = milestones.filter((m) => m.done).length;
+  const progress   = total === 0 ? 0 : Math.round((done / total) * 100);
+
+  const deadlineDate = goal.deadline ? new Date(goal.deadline) : null;
+  const now          = new Date();
+  const daysLeft     = deadlineDate
+    ? Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+    : Infinity;
+
+  let status: GoalStatus;
   if (progress === 100) {
-    status = 'COMPLETED';
-    statusColor = '#7c6af0';
-  } else if (goal.deadline && new Date(goal.deadline) < new Date()) {
-    status = 'OVERDUE';
-    statusColor = '#f06a6a';
+    status = 'COMPLETE';
+  } else if (daysLeft < 0) {
+    status = 'AT RISK';
+  } else if (progress >= 70) {
+    status = 'ACCELERATED';
+  } else if (progress >= 30) {
+    status = 'ACTIVE';
+  } else {
+    status = 'STEADY';
   }
 
-  return { progress, status, statusColor };
+  return {
+    progress,
+    status,
+    statusColor: STATUS_COLORS[status],
+    daysLeft: daysLeft === Infinity ? 0 : daysLeft,
+  };
+}
+
+export function generateMilestoneId(): string {
+  return Math.random().toString(36).slice(2, 9);
+}
+
+export function generateGoalId(): string {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
 }

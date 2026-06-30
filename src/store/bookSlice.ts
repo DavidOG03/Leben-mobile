@@ -1,33 +1,68 @@
-// store/bookSlice.ts — ported from the web's bookSlice.ts
-import { fetchBooks, insertBook, updateBook, deleteBook } from '@/lib/supabase/db';
+import { fetchBooks, insertBook, updateBook as updateBookDb, deleteBook } from '@/lib/supabase/db';
 
 export interface Book {
-  id:          string;
-  title:       string;
-  author:      string;
+  id: string;
+  title: string;
+  author: string;
   currentPage: number;
-  totalPages:  number;
-  coverColor:  string;
-  status:      'reading' | 'completed' | 'paused' | 'want-to-read';
-  addedAt:     string;
+  totalPages: number;
+  coverColor: string;
+  status: "reading" | "completed" | "paused";
+  addedAt: string;
+}
+
+export interface BookFormData {
+  title: string;
+  author: string;
+  totalPages: number;
+  coverColor: string;
 }
 
 export interface BookSlice {
-  books:       Book[];
+  books: Book[];
   booksLoaded: boolean;
-  loadBooks:   () => Promise<void>;
-  addBook:     (book: Book) => Promise<void>;
-  editBook:    (id: string, updates: Partial<Book>) => Promise<void>;
-  removeBook:  (id: string) => Promise<void>;
-  updateReadingProgress: (id: string, currentPage: number) => Promise<void>;
+  loadBooks: () => Promise<void>;
+  addBook: (data: BookFormData) => void;
+  updateBook: (id: string, updates: Partial<Book>) => void;
+  removeBook: (id: string) => void;
+  setBooks: (books: Book[]) => void;
+}
+
+export function deriveBooksStats(books: Book[]) {
+  const total = books.length;
+  const completed = books.filter((b) => b.status === "completed").length;
+  const reading = books.filter((b) => b.status === "reading").length;
+  const totalPagesRead = books.reduce((sum, b) => sum + b.currentPage, 0);
+  const totalPages = books.reduce((sum, b) => sum + b.totalPages, 0);
+  const overallProgress =
+    totalPages === 0 ? 0 : Math.round((totalPagesRead / totalPages) * 100);
+
+  return {
+    total,
+    completed,
+    reading,
+    totalPagesRead,
+    totalPages,
+    overallProgress,
+  };
+}
+
+export function bookProgress(book: Book): number {
+  return book.totalPages === 0
+    ? 0
+    : Math.round((book.currentPage / book.totalPages) * 100);
+}
+
+function generateBookId(): string {
+  return "book_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
 }
 
 export function createBookSlice(
-  set: (updater: (state: any) => Partial<any>) => void,
-  get: () => any,
+  set: (updater: (state: any) => Partial<any> | Partial<any>) => void,
+  get: () => any
 ): BookSlice {
   return {
-    books:       [],
+    books: [],
     booksLoaded: false,
 
     loadBooks: async () => {
@@ -36,28 +71,47 @@ export function createBookSlice(
       set(() => ({ books, booksLoaded: true }));
     },
 
-    addBook: async (book) => {
-      set((s) => ({ books: [book, ...s.books] }));
-      await insertBook(book);
+    addBook: async (data: BookFormData) => {
+      const newBook: Book = {
+        id: generateBookId(),
+        title: data.title,
+        author: data.author,
+        currentPage: 0,
+        totalPages: data.totalPages,
+        coverColor: data.coverColor,
+        status: "reading",
+        addedAt: new Date().toISOString(),
+      };
+      set((state: any) => ({ books: [...state.books, newBook] }));
+      await insertBook(newBook);
     },
 
-    editBook: async (id, updates) => {
-      set((s) => ({
-        books: s.books.map((b: Book) => (b.id === id ? { ...b, ...updates } : b)),
+    updateBook: async (id: string, updates: Partial<Book>) => {
+      let updatedBook: Book | undefined;
+      set((state: any) => ({
+        books: state.books.map((b: Book) => {
+          if (b.id !== id) return b;
+          updatedBook = { ...b, ...updates };
+          if (
+            updatedBook.currentPage >= updatedBook.totalPages &&
+            updatedBook.totalPages > 0
+          ) {
+            updatedBook.status = "completed";
+            updatedBook.currentPage = updatedBook.totalPages;
+          }
+          return updatedBook;
+        }),
       }));
-      await updateBook(id, updates);
+      if (updatedBook) {
+        await updateBookDb(id, updates);
+      }
     },
 
-    removeBook: async (id) => {
-      set((s) => ({ books: s.books.filter((b: Book) => b.id !== id) }));
+    removeBook: async (id: string) => {
+      set((state: any) => ({ books: state.books.filter((b: Book) => b.id !== id) }));
       await deleteBook(id);
     },
 
-    updateReadingProgress: async (id, currentPage) => {
-      set((s) => ({
-        books: s.books.map((b: Book) => (b.id === id ? { ...b, currentPage } : b)),
-      }));
-      await updateBook(id, { currentPage });
-    },
+    setBooks: (books: Book[]) => set(() => ({ books })),
   };
 }

@@ -1,158 +1,227 @@
 import { useState } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { BottomSheet } from '@/components/ui/BottomSheet';
-import { Button } from '@/components/ui/Button';
+import { View, Text, TextInput, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLebenStore } from '@/store/useStore';
-import { Milestone } from '@/utils/goals.types';
+import { GoalFormData } from '@/utils/goals.types';
+
+const ICON_OPTIONS = [
+  "🌐", "🏃", "🚀", "💰", "📚",
+  "🎯", "🧠", "🎨", "💪", "🌱",
+];
 
 interface AddGoalSheetProps {
   visible: boolean;
   onClose: () => void;
 }
 
-const PRESET_ICONS = ['🚀', '💰', '🏋️‍♂️', '🎓', '🏆', '✈️', '💼', '🏡'];
-
 export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
-  const addGoal = useLebenStore((s) => s.addGoal);
+  const addGoal = useLebenStore((s: any) => s.addGoal);
 
-  const [title, setTitle] = useState('');
-  const [icon, setIcon] = useState('🚀');
-  const [deadline, setDeadline] = useState('');
-  const [milestones, setMilestones] = useState<Milestone[]>([]);
-  const [newMilestone, setNewMilestone] = useState('');
+  const [form, setForm] = useState<GoalFormData>({
+    title: "",
+    deadline: "",
+    icon: "🎯",
+    milestones: ["", "", ""],
+    color: "#7c6af0",
+    targetValue: 100,
+    currentValue: 0,
+  });
 
-  const handleAddMilestone = () => {
-    if (newMilestone.trim()) {
-      setMilestones([
-        ...milestones,
-        { id: Math.random().toString(36).substring(7), title: newMilestone.trim(), completed: false },
-      ]);
-      setNewMilestone('');
-    }
-  };
+  const [errors, setErrors] = useState<Partial<Record<keyof GoalFormData, string>>>({});
 
-  const handleSave = () => {
-    if (!title.trim()) return;
+  function validate(): boolean {
+    const next: typeof errors = {};
+    if (!form.title.trim()) next.title = "Goal title is required";
+    if (!form.deadline.trim()) next.deadline = "Deadline is required";
+    const filledMilestones = form.milestones.filter((m) => m.trim() !== "");
+    if (filledMilestones.length === 0) next.milestones = "Add at least one milestone";
+    
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  }
 
-    addGoal({
-      id: Math.random().toString(36).substring(7),
-      title: title.trim(),
-      name: title.trim(),
-      icon,
-      deadline: deadline.trim() || new Date().toISOString().split('T')[0],
-      milestones,
-      tasksLinked: 0,
-      targetValue: milestones.length || 100,
-      currentValue: 0,
-      createdAt: new Date().toISOString(),
-    });
-
-    setTitle('');
-    setIcon('🚀');
-    setDeadline('');
-    setMilestones([]);
-    setNewMilestone('');
+  function handleSubmit() {
+    if (!validate()) return;
+    addGoal(form);
+    resetForm();
     onClose();
-  };
+  }
+
+  function updateMilestone(index: number, value: string) {
+    const updated = [...form.milestones];
+    updated[index] = value;
+    setForm({ ...form, milestones: updated });
+  }
+
+  function addMilestoneField() {
+    setForm({
+      ...form,
+      milestones: [...form.milestones, ""],
+    });
+  }
+
+  function resetForm() {
+    setForm({
+      title: "",
+      deadline: "",
+      icon: "🎯",
+      milestones: ["", "", ""],
+      color: "#7c6af0",
+      targetValue: 100,
+      currentValue: 0,
+    });
+    setErrors({});
+  }
+
+  function handleCancel() {
+    resetForm();
+    onClose();
+  }
 
   return (
-    <BottomSheet visible={visible} onClose={onClose}>
-      <View className="mb-4">
-        <Text className="text-white text-xl font-bold mb-1">New Goal</Text>
-        <Text className="text-[#666] text-[13px]">Set a target and define the path.</Text>
-      </View>
-
-      <ScrollView showsVerticalScrollIndicator={false} className="max-h-[80%]">
-        <View className="gap-5 pb-6">
-          {/* Title */}
-          <View className="gap-2">
-            <Text className="text-[#888] text-[11px] uppercase tracking-widest font-semibold">Title</Text>
-            <TextInput
-              value={title}
-              onChangeText={setTitle}
-              placeholder="e.g. Launch Mobile App"
-              placeholderTextColor="#555"
-              className="bg-[#131313] border border-[#222] text-white px-4 py-3.5 rounded-xl text-[15px]"
-            />
+    <Modal visible={visible} animationType="slide" onRequestClose={handleCancel}>
+      <SafeAreaView className="flex-1" style={{ backgroundColor: '#0a0a0a' }}>
+        <View className="flex-1 px-5 pt-4">
+          <View className="mb-6 flex-row items-center justify-between">
+            <Text className="font-black text-white text-[20px]" style={{ letterSpacing: -0.4 }}>
+              New Goal
+            </Text>
           </View>
 
-          {/* Icon */}
-          <View className="gap-2">
-            <Text className="text-[#888] text-[11px] uppercase tracking-widest font-semibold">Icon</Text>
-            <View className="flex-row flex-wrap gap-2">
-              {PRESET_ICONS.map((i) => (
-                <TouchableOpacity
-                  key={i}
-                  onPress={() => setIcon(i)}
-                  className="w-10 h-10 rounded-lg items-center justify-center border"
+          <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+            <View className="gap-5 pb-8">
+              
+              {/* Icon picker */}
+              <View>
+                <Text style={{ fontSize: 10, color: '#555', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+                  Icon
+                </Text>
+                <View className="flex-row flex-wrap gap-2">
+                  {ICON_OPTIONS.map((icon) => (
+                    <TouchableOpacity
+                      key={icon}
+                      onPress={() => setForm({ ...form, icon })}
+                      className="rounded-xl items-center justify-center"
+                      style={{
+                        width: 36,
+                        height: 36,
+                        borderWidth: 1,
+                        borderColor: form.icon === icon ? '#7c6af0' : '#2a2a2a',
+                        backgroundColor: form.icon === icon ? 'rgba(124,106,240,0.15)' : '#161616',
+                      }}
+                    >
+                      <Text style={{ fontSize: 18 }}>{icon}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              {/* Title */}
+              <View>
+                <Text style={{ fontSize: 10, color: '#555', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+                  Goal Title
+                </Text>
+                <TextInput
+                  value={form.title}
+                  onChangeText={(text) => setForm({ ...form, title: text })}
+                  placeholder="e.g. Master Spanish"
+                  placeholderTextColor="#555"
+                  className="w-full rounded-xl px-4 py-3 text-white"
                   style={{
-                    backgroundColor: icon === i ? 'rgba(124,106,240,0.1)' : '#131313',
-                    borderColor: icon === i ? '#7c6af0' : '#222',
+                    backgroundColor: '#161616',
+                    borderWidth: 1,
+                    borderColor: errors.title ? '#e05c5c' : '#2a2a2a',
+                    fontSize: 14,
                   }}
-                >
-                  <Text className="text-[20px]">{i}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+                />
+                {errors.title ? (
+                  <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.title}</Text>
+                ) : null}
+              </View>
 
-          {/* Deadline */}
-          <View className="gap-2">
-            <Text className="text-[#888] text-[11px] uppercase tracking-widest font-semibold">Deadline</Text>
-            <TextInput
-              value={deadline}
-              onChangeText={setDeadline}
-              placeholder="YYYY-MM-DD"
-              placeholderTextColor="#555"
-              className="bg-[#131313] border border-[#222] text-white px-4 py-3.5 rounded-xl text-[15px]"
-            />
-          </View>
+              {/* Deadline */}
+              <View>
+                <Text style={{ fontSize: 10, color: '#555', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+                  Deadline
+                </Text>
+                <TextInput
+                  value={form.deadline}
+                  onChangeText={(text) => setForm({ ...form, deadline: text })}
+                  placeholder="YYYY-MM (or YYYY-MM-DD)"
+                  placeholderTextColor="#555"
+                  className="w-full rounded-xl px-4 py-3 text-white"
+                  style={{
+                    backgroundColor: '#161616',
+                    borderWidth: 1,
+                    borderColor: errors.deadline ? '#e05c5c' : '#2a2a2a',
+                    fontSize: 14,
+                  }}
+                />
+                {errors.deadline ? (
+                  <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.deadline}</Text>
+                ) : null}
+              </View>
 
-          {/* Milestones */}
-          <View className="gap-2">
-            <Text className="text-[#888] text-[11px] uppercase tracking-widest font-semibold">Milestones (Optional)</Text>
-            
-            {milestones.map((m, idx) => (
-              <View key={m.id} className="flex-row items-center justify-between bg-[#1a1a1a] px-3 py-2.5 rounded-lg border border-[#222]">
-                <Text className="text-[#ccc] text-[13px]">{m.title}</Text>
-                <TouchableOpacity
-                  onPress={() => setMilestones(milestones.filter((_, i) => i !== idx))}
-                  className="p-1"
-                >
-                  <Text className="text-red-500 font-bold text-xs">✕</Text>
+              {/* Milestones */}
+              <View>
+                <Text style={{ fontSize: 10, color: '#555', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+                  Milestones
+                </Text>
+                <View className="gap-2">
+                  {form.milestones.map((m, i) => (
+                    <TextInput
+                      key={i}
+                      value={m}
+                      onChangeText={(text) => updateMilestone(i, text)}
+                      placeholder={`Milestone ${i + 1}`}
+                      placeholderTextColor="#555"
+                      className="w-full rounded-xl px-4 py-3 text-white"
+                      style={{
+                        backgroundColor: '#161616',
+                        borderWidth: 1,
+                        borderColor: '#2a2a2a',
+                        fontSize: 13,
+                      }}
+                    />
+                  ))}
+                </View>
+                {errors.milestones ? (
+                  <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.milestones}</Text>
+                ) : null}
+                <TouchableOpacity onPress={addMilestoneField} className="mt-3">
+                  <Text style={{ fontSize: 12, color: '#7c6af0' }}>+ Add milestone</Text>
                 </TouchableOpacity>
               </View>
-            ))}
 
-            <View className="flex-row items-center gap-2 mt-1">
-              <TextInput
-                value={newMilestone}
-                onChangeText={setNewMilestone}
-                onSubmitEditing={handleAddMilestone}
-                placeholder="Add a milestone step..."
-                placeholderTextColor="#555"
-                className="flex-1 bg-[#131313] border border-[#222] text-white px-3 py-2.5 rounded-lg text-[13px]"
-              />
-              <TouchableOpacity
-                onPress={handleAddMilestone}
-                disabled={!newMilestone.trim()}
-                className="px-4 py-3 rounded-lg items-center justify-center bg-[#222]"
-                style={{ opacity: newMilestone.trim() ? 1 : 0.5 }}
-              >
-                <Text className="text-white font-medium text-[12px]">Add</Text>
-              </TouchableOpacity>
+              {/* Actions */}
+              <View className="flex-row gap-3 mt-4">
+                <TouchableOpacity
+                  onPress={handleCancel}
+                  className="flex-1 py-3 rounded-xl items-center justify-center"
+                  style={{
+                    backgroundColor: '#161616',
+                    borderWidth: 1,
+                    borderColor: '#2a2a2a',
+                  }}
+                >
+                  <Text style={{ color: '#888', fontSize: 13, fontWeight: '600' }}>Cancel</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  className="flex-1 py-3 rounded-xl items-center justify-center"
+                  style={{
+                    backgroundColor: '#f0f0f0',
+                  }}
+                >
+                  <Text style={{ color: '#0a0a0a', fontSize: 13, fontWeight: '600' }}>Create Goal</Text>
+                </TouchableOpacity>
+              </View>
+
             </View>
-          </View>
-
-          <View className="mt-4">
-            <Button 
-              label="Create Goal" 
-              onPress={handleSave} 
-              disabled={!title.trim()}
-            />
-          </View>
+          </ScrollView>
         </View>
-      </ScrollView>
-    </BottomSheet>
+      </SafeAreaView>
+    </Modal>
   );
 }

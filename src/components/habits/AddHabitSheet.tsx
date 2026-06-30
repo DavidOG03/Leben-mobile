@@ -1,174 +1,189 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { BottomSheet } from '@/components/ui/BottomSheet';
-import { Button } from '@/components/ui/Button';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Modal } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLebenStore } from '@/store/useStore';
-import { LC } from '@/constants/theme';
 
 interface AddHabitSheetProps {
   visible: boolean;
   onClose: () => void;
 }
 
-const PRESET_COLORS = ['#7c6af0', '#f06a6a', '#f0a86a', '#f0f06a', '#6af086', '#6aebf0'];
-const PRESET_ICONS = ['💧', '🏃', '📚', '🧘', '🥗', '✍️', '🎸', '💻'];
+const HABIT_COLORS = ['#7c6af0', '#f06a6a', '#f0a86a', '#f0f06a', '#6af086', '#6aebf0'];
+const HABIT_ICONS  = ['🎯', '💧', '🏃', '📚', '🧘', '🥗', '✍️', '🎸', '💻', '🌅', '🏋️', '🧠'];
 
 export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
   const addHabit = useLebenStore((s) => s.addHabit);
 
   const [label, setLabel] = useState('');
-  const [icon, setIcon] = useState('💧');
-  const [color, setColor] = useState('#7c6af0');
-  const [frequency, setFrequency] = useState<'daily' | 'weekly'>('daily');
-  const [targetDaysPerWeek, setTargetDays] = useState(7);
-  const [timeOfDay, setTimeOfDay] = useState<'morning' | 'afternoon' | 'evening' | 'anytime'>('anytime');
+  const [sub,   setSub]   = useState('');
+  const [icon,  setIcon]  = useState('🎯');
+  const [color, setColor] = useState(HABIT_COLORS[0]);
 
-  const handleSave = () => {
+  const handleAdd = () => {
     if (!label.trim()) return;
 
     addHabit({
-      id: Math.random().toString(36).substring(7),
-      name: label.trim(),
-      label: label.trim(),
-      sub: frequency === 'daily' ? 'Daily' : `${targetDaysPerWeek}x a week`,
-      icon,
+      id:             `h${Date.now()}`,
+      label:          label.trim(),
+      name:           label.trim(),
+      sub:            sub.trim() || 'Daily habit',
+      streak:         0,
+      longestStreak:  0,
       color,
-      frequency,
-      targetDaysPerWeek: frequency === 'daily' ? 7 : targetDaysPerWeek,
-      timeOfDay,
-      createdAt: new Date().toISOString(),
-      streak: 0,
-      longestStreak: 0,
-      pct: 0,
+      icon,
+      checked:        false,
       completedDates: [],
-      checked: false,
+      pct:            0,
+      frequency:      'daily',
+      targetDaysPerWeek: 7,
+      timeOfDay:      'anytime',
+      createdAt:      new Date().toISOString(),
     });
 
     // Reset form
     setLabel('');
-    setIcon('💧');
-    setColor('#7c6af0');
-    setFrequency('daily');
-    setTargetDays(7);
-    setTimeOfDay('anytime');
+    setSub('');
+    setIcon('🎯');
+    setColor(HABIT_COLORS[0]);
     onClose();
   };
 
   return (
-    <BottomSheet visible={visible} onClose={onClose}>
-      <View className="mb-4">
-        <Text className="text-white text-xl font-bold mb-1">New Habit</Text>
-        <Text className="text-[#666] text-[13px]">Define what you want to build.</Text>
-      </View>
-
-      <ScrollView showsVerticalScrollIndicator={false} className="max-h-[80%]">
-        <View className="gap-5 pb-6">
-          {/* Label Input */}
-          <View className="gap-2">
-            <Text className="text-[#888] text-[11px] uppercase tracking-widest font-semibold">Name</Text>
-            <TextInput
-              value={label}
-              onChangeText={setLabel}
-              placeholder="e.g. Drink Water"
-              placeholderTextColor="#555"
-              className="bg-[#131313] border border-[#222] text-white px-4 py-3.5 rounded-xl text-[15px]"
-            />
+    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+      <SafeAreaView className="flex-1" style={{ backgroundColor: '#0a0a0a' }}>
+        <View className="flex-1 px-5 pt-4">
+          {/* Header */}
+          <View className="mb-6 flex-row items-center justify-between">
+            <Text className="font-black text-white text-[20px]" style={{ letterSpacing: -0.4 }}>
+              New Habit
+            </Text>
           </View>
 
-          {/* Icon & Color Row */}
-          <View className="flex-row gap-4">
-            <View className="flex-1 gap-2">
-              <Text className="text-[#888] text-[11px] uppercase tracking-widest font-semibold">Icon</Text>
-              <View className="flex-row flex-wrap gap-2">
-                {PRESET_ICONS.map((i) => (
-                  <TouchableOpacity
-                    key={i}
-                    onPress={() => setIcon(i)}
-                    className="w-[38px] h-[38px] rounded-lg items-center justify-center border"
-                    style={{
-                      backgroundColor: icon === i ? 'rgba(124,106,240,0.1)' : '#131313',
-                      borderColor: icon === i ? '#7c6af0' : '#222',
-                    }}
-                  >
-                    <Text className="text-lg">{i}</Text>
-                  </TouchableOpacity>
-                ))}
+          <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+            <View className="gap-5 pb-8">
+              {/* Icon */}
+              <View>
+                <Text style={sectionLabel}>Icon</Text>
+                <View className="flex-row flex-wrap gap-2">
+                  {HABIT_ICONS.map((ic) => (
+                    <TouchableOpacity
+                      key={ic}
+                      onPress={() => setIcon(ic)}
+                      className="rounded-xl items-center justify-center"
+                      style={{
+                        width: 38,
+                        height: 38,
+                        backgroundColor: icon === ic ? 'rgba(124,106,240,0.15)' : '#161616',
+                        borderWidth: 1,
+                        borderColor: icon === ic ? '#7c6af0' : '#2a2a2a',
+                      }}
+                    >
+                      <Text style={{ fontSize: 18 }}>{ic}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
-            </View>
 
-            <View className="flex-1 gap-2">
-              <Text className="text-[#888] text-[11px] uppercase tracking-widest font-semibold">Color</Text>
-              <View className="flex-row flex-wrap gap-2">
-                {PRESET_COLORS.map((c) => (
-                  <TouchableOpacity
-                    key={c}
-                    onPress={() => setColor(c)}
-                    className="w-[38px] h-[38px] rounded-lg items-center justify-center border"
-                    style={{
-                      backgroundColor: '#131313',
-                      borderColor: color === c ? c : '#222',
-                    }}
-                  >
-                    <View className="w-5 h-5 rounded-full" style={{ backgroundColor: c }} />
-                  </TouchableOpacity>
-                ))}
+              {/* Color */}
+              <View>
+                <Text style={sectionLabel}>Color</Text>
+                <View className="flex-row gap-2">
+                  {HABIT_COLORS.map((c) => (
+                    <TouchableOpacity
+                      key={c}
+                      onPress={() => setColor(c)}
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 14,
+                        backgroundColor: c,
+                        borderWidth: color === c ? 2 : 0,
+                        borderColor: '#fff',
+                        shadowColor: color === c ? c : 'transparent',
+                        shadowOpacity: color === c ? 0.6 : 0,
+                        shadowRadius: 4,
+                        elevation: color === c ? 4 : 0,
+                      }}
+                    />
+                  ))}
+                </View>
               </View>
-            </View>
-          </View>
 
-          {/* Frequency */}
-          <View className="gap-2">
-            <Text className="text-[#888] text-[11px] uppercase tracking-widest font-semibold">Frequency</Text>
-            <View className="flex-row gap-2">
-              {(['daily', 'weekly'] as const).map((f) => (
+              {/* Name */}
+              <View>
+                <Text style={sectionLabel}>Habit Name</Text>
+                <TextInput
+                  value={label}
+                  onChangeText={setLabel}
+                  placeholder="e.g. Cold Shower"
+                  placeholderTextColor="#555"
+                  style={inputStyle}
+                />
+              </View>
+
+              {/* Target / Sub */}
+              <View>
+                <Text style={sectionLabel}>Target</Text>
+                <TextInput
+                  value={sub}
+                  onChangeText={setSub}
+                  placeholder="e.g. 5 mins every morning"
+                  placeholderTextColor="#555"
+                  style={inputStyle}
+                />
+              </View>
+
+              {/* Buttons */}
+              <View className="flex-row gap-3 mt-4">
                 <TouchableOpacity
-                  key={f}
-                  onPress={() => setFrequency(f)}
-                  className="flex-1 py-3 rounded-lg border items-center justify-center"
+                  onPress={onClose}
+                  className="flex-1 py-3 rounded-xl items-center justify-center"
                   style={{
-                    backgroundColor: frequency === f ? 'rgba(124,106,240,0.1)' : '#131313',
-                    borderColor: frequency === f ? '#7c6af0' : '#222',
+                    backgroundColor: '#161616',
+                    borderWidth: 1,
+                    borderColor: '#2a2a2a',
                   }}
                 >
-                  <Text className="capitalize font-semibold text-[13px]" style={{ color: frequency === f ? '#7c6af0' : '#888' }}>
-                    {f}
-                  </Text>
+                  <Text style={{ color: '#888', fontSize: 13, fontWeight: '600' }}>Cancel</Text>
                 </TouchableOpacity>
-              ))}
-            </View>
-          </View>
 
-          {/* Time of Day */}
-          <View className="gap-2">
-            <Text className="text-[#888] text-[11px] uppercase tracking-widest font-semibold">Time of Day</Text>
-            <View className="flex-row flex-wrap gap-2">
-              {(['anytime', 'morning', 'afternoon', 'evening'] as const).map((t) => (
                 <TouchableOpacity
-                  key={t}
-                  onPress={() => setTimeOfDay(t)}
-                  className="px-4 py-2.5 rounded-lg border items-center justify-center"
+                  onPress={handleAdd}
+                  disabled={!label.trim()}
+                  className="flex-1 py-3 rounded-xl items-center justify-center"
                   style={{
-                    backgroundColor: timeOfDay === t ? 'rgba(124,106,240,0.1)' : '#131313',
-                    borderColor: timeOfDay === t ? '#7c6af0' : '#222',
+                    backgroundColor: label.trim() ? '#f0f0f0' : '#2a2a2a',
                   }}
                 >
-                  <Text className="capitalize font-medium text-[12px]" style={{ color: timeOfDay === t ? '#7c6af0' : '#888' }}>
-                    {t}
+                  <Text style={{ color: label.trim() ? '#0a0a0a' : '#555', fontSize: 13, fontWeight: '600' }}>
+                    Add Habit
                   </Text>
                 </TouchableOpacity>
-              ))}
+              </View>
             </View>
-          </View>
-
-          <View className="mt-2">
-            <Button 
-              label="Create Habit" 
-              onPress={handleSave} 
-              disabled={!label.trim()}
-            />
-          </View>
+          </ScrollView>
         </View>
-      </ScrollView>
-    </BottomSheet>
+      </SafeAreaView>
+    </Modal>
   );
 }
+
+const sectionLabel = {
+  fontSize: 11,
+  color: '#555',
+  marginBottom: 8,
+  textTransform: 'uppercase' as const,
+  letterSpacing: 1.2,
+};
+
+const inputStyle = {
+  backgroundColor: '#1a1a1a',
+  borderWidth: 1,
+  borderColor: '#2a2a2a',
+  borderRadius: 12,
+  paddingHorizontal: 16,
+  paddingVertical: 12,
+  color: '#fff',
+  fontSize: 13,
+  marginBottom: 12,
+};

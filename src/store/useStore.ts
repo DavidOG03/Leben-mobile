@@ -9,12 +9,21 @@ import {
   fetchTasks, insertTask, updateTask, deleteTask,
   fetchHabits, insertHabit, updateHabit, removeHabit,
   fetchProductivityHistory, upsertProductivityHistory,
+  purgeAllData,
 } from '@/lib/supabase/db';
 import { calcStreak, calcLongestStreak } from '@/utils/habits';
 import { createGoalSlice, type GoalSlice } from './goalSlice';
 import { createBookSlice, type BookSlice } from './bookSlice';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
+
+export interface Notification {
+  id: string;
+  title: string;
+  body: string;
+  date: string;
+  read: boolean;
+}
 
 export interface Task {
   id:          string;
@@ -54,6 +63,19 @@ export interface ScheduleBlock {
   tag:         string;
   description: string;
   status:      'pending' | 'completed' | 'skipped';
+}
+
+export interface ScheduleItem {
+  id: string;
+  taskId?: string;
+  start: string;
+  end: string;
+  title: string;
+  description: string;
+  tag: string;
+  priority: 'low' | 'medium' | 'high';
+  status: 'pending' | 'completed';
+  reminderAt?: string; // ISO timestamp
 }
 
 export interface AIInsight { type: string; text: string }
@@ -101,6 +123,10 @@ export interface LebenStore extends GoalSlice, BookSlice {
   plannerError:        string | null;
   setDayPlan:          (plan: DayPlan | null) => void;
   toggleScheduleBlock: (index: number) => Promise<void>;
+  schedule:            ScheduleItem[];
+  setSchedule:         (schedule: ScheduleItem[]) => void;
+  toggleScheduleItem:  (id: string) => void;
+  updateScheduleItem:  (id: string, updates: Partial<ScheduleItem>) => void;
 
   // ── Productivity History ─────────────────────────────────────────────────────
   productivityHistory: Record<string, ProductivityRecord>;
@@ -113,7 +139,18 @@ export interface LebenStore extends GoalSlice, BookSlice {
   toggleSidebar:  (value?: boolean) => void;
 
   // ── System ───────────────────────────────────────────────────────────────────
-  clearStore: () => void;
+  purgeAll: () => Promise<void>;
+  isSyncing: boolean;
+  setIsSyncing: (isSyncing: boolean) => void;
+
+  // ── Notifications ────────────────────────────────────────────────────────────
+  notifications: Notification[];
+  isNotificationOpen: boolean;
+  setNotificationOpen: (open: boolean) => void;
+  addNotification: (notification: Omit<Notification, 'read' | 'date'>) => void;
+  markNotificationRead: (id: string) => void;
+  markAllNotificationsRead: () => void;
+  deleteNotification: (id: string) => void;
 }
 
 // ── Initial State ──────────────────────────────────────────────────────────────
@@ -136,6 +173,10 @@ const initialState = {
   productivityHistory: {},
   historyLoaded:  false,
   isSidebarOpen:  false,
+  isSyncing:      false,
+  notifications:  [],
+  isNotificationOpen: false,
+  schedule:       [],
 };
 
 // ── Store ──────────────────────────────────────────────────────────────────────
@@ -180,10 +221,21 @@ export const useLebenStore = create<LebenStore>()(
       },
 
       editTask: async (id, updates) => {
+        const state = get();
+        const task = state.tasks.find((t) => t.id === id);
+
         set((s) => ({
           tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
         }));
         await updateTask(id, updates);
+
+        if (task && updates.completed !== undefined && updates.completed !== task.completed) {
+          const today = new Date().toISOString().split('T')[0];
+          const dateStr = updates.completed 
+            ? (updates.completedAt ?? today) 
+            : (task.completedAt ?? today);
+          await get().saveHistory(dateStr.split('T')[0]);
+        }
       },
 
       removeTask: async (id) => {
@@ -253,6 +305,52 @@ export const useLebenStore = create<LebenStore>()(
         set({ dayPlan: { ...plan, schedule } });
       },
 
+      schedule: [],
+      setSchedule: (schedule) => set({ schedule }),
+      toggleScheduleItem: (id) =>
+        set((state) => {
+          const scheduleItem = state.schedule.find((s) => s.id === id);
+          if (!scheduleItem) return state;
+
+          const newStatus: "pending" | "completed" =
+            scheduleItem.status === "completed" ? "pending" : "completed";
+          const newSchedule = state.schedule.map((s) =>
+            s.id === id ? { ...s, status: newStatus } : s,
+          );
+
+          let newTasks = state.tasks;
+          if (scheduleItem.taskId) {
+            newTasks = state.tasks.map((t) => {
+              if (t.id === scheduleItem.taskId) {
+                const dateStr =
+                  t.date || new Date().toISOString().split("T")[0];
+                if (t.completed !== (newStatus === "completed")) {
+                  get().saveHistory(dateStr);
+                }
+                return {
+                  ...t,
+                  completed: newStatus === "completed",
+                  reminderAt:
+                    newStatus === "completed" ? undefined : t.reminderAt,
+                };
+              }
+              return t;
+            });
+          }
+
+          return {
+            schedule: newSchedule,
+            tasks: newTasks,
+          };
+        }),
+
+      updateScheduleItem: (id, updates) =>
+        set((state) => ({
+          schedule: state.schedule.map((s) =>
+            s.id === id ? { ...s, ...updates } : s,
+          ),
+        })),
+
       // ── Productivity History ──────────────────────────────────────────────────
       loadHistory: async () => {
         if (get().historyLoaded) return;
@@ -279,7 +377,36 @@ export const useLebenStore = create<LebenStore>()(
         set((s) => ({ isSidebarOpen: value !== undefined ? value : !s.isSidebarOpen })),
 
       // ── System ────────────────────────────────────────────────────────────────
-      clearStore: () =>
+      isSyncing: false,
+      setIsSyncing: (isSyncing) => set({ isSyncing }),
+
+      // ── Notifications ─────────────────────────────────────────────────────────
+      notifications: [],
+      isNotificationOpen: false,
+      setNotificationOpen: (isNotificationOpen) => set({ isNotificationOpen }),
+      addNotification: (n) =>
+        set((state) => ({
+          notifications: [
+            { ...n, read: false, date: new Date().toISOString() },
+            ...state.notifications,
+          ].slice(0, 50),
+        })),
+      markNotificationRead: (id) =>
+        set((state) => ({
+          notifications: state.notifications.map((n) =>
+            n.id === id ? { ...n, read: true } : n,
+          ),
+        })),
+      markAllNotificationsRead: () =>
+        set((state) => ({
+          notifications: state.notifications.map((n) => ({ ...n, read: true })),
+        })),
+      deleteNotification: (id) =>
+        set((state) => ({
+          notifications: state.notifications.filter((n) => n.id !== id),
+        })),
+
+      purgeAll: async () => {
         set({
           ...initialState,
           tasks:        [],
@@ -287,7 +414,9 @@ export const useLebenStore = create<LebenStore>()(
           goals:        [],
           books:        [],
           productivityHistory: {},
-        }),
+        });
+        await purgeAllData();
+      },
     }),
     {
       name:    'leben-store',

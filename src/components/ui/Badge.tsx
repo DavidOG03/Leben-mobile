@@ -22,14 +22,17 @@ export function Badge({ label, variant = 'default', className = '', icon }: Badg
     success: 'text-leben-success',
     error: 'text-leben-error',
     warning: 'text-[#f59e0b]',
-    primary: 'text-leben-accentLight',
+    primary: 'text-white',
     outline: 'text-leben-text-2',
   };
 
   return (
-    <View className={`flex-row items-center rounded-chip px-2.5 py-1 ${variantClasses[variant]} ${className}`}>
+    <View className={`flex-row items-center rounded-chip px-2.5 py-1 flex-shrink ${variantClasses[variant]} ${className}`}>
       {icon && <Text className={`text-xs mr-1 ${textClasses[variant]}`}>{icon}</Text>}
-      <Text className={`text-[11px] font-medium uppercase tracking-wider ${textClasses[variant]}`}>
+      <Text
+        className={`text-[11px] font-medium uppercase tracking-wider ${textClasses[variant]}`}
+        numberOfLines={1}
+      >
         {label}
       </Text>
     </View>

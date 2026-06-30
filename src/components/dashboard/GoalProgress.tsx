@@ -67,7 +67,8 @@ export function GoalProgress() {
       ) : (
         <View className="flex-1 gap-6">
           {goals.slice(0, 2).map((g) => {
-            const { progress } = deriveGoalStats(g);
+            const safeGoal = { ...g, milestones: g.milestones ?? [] };
+            const { progress } = deriveGoalStats(safeGoal);
             return (
               <View key={g.id}>
                 <View className="flex-row items-center justify-between mb-2">
@@ -93,7 +94,7 @@ export function GoalProgress() {
                 </View>
 
                 <View className="gap-1.5">
-                  {g.milestones.slice(0, 3).map((m) => (
+                  {safeGoal.milestones.slice(0, 3).map((m) => (
                     <TouchableOpacity
                       key={m.id}
                       onPress={() => toggleMilestone(g.id, m.id)}
@@ -102,23 +103,23 @@ export function GoalProgress() {
                       <View 
                         className="w-[14px] h-[14px] rounded-full items-center justify-center"
                         style={{
-                          backgroundColor: m.completed ? 'rgba(124,106,240,0.2)' : 'transparent',
-                          borderColor: m.completed ? '#7c6af0' : '#333',
+                          backgroundColor: m.done ? 'rgba(124,106,240,0.2)' : 'transparent',
+                          borderColor: m.done ? '#7c6af0' : '#333',
                           borderWidth: 1,
                         }}
                       >
-                        {m.completed && <Text className="text-leben-accent text-[8px]">✓</Text>}
+                        {m.done && <Text className="text-leben-accent text-[8px]">✓</Text>}
                       </View>
                       <Text 
                         className="flex-1 text-[11px]"
-                        style={{ color: m.completed ? '#888' : '#666' }}
+                        style={{ color: m.done ? '#888' : '#666' }}
                         numberOfLines={1}
                       >
-                        {m.title}
+                        {m.label}
                       </Text>
                     </TouchableOpacity>
                   ))}
-                  {g.milestones.length > 3 && (
+                  {safeGoal.milestones.length > 3 && (
                     <TouchableOpacity onPress={() => router.push('/(tabs)/goals' as any)}>
                       <Text className="text-[#666] text-[11px]">
                         +{g.milestones.length - 3} more

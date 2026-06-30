@@ -140,6 +140,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="planner"   options={{ title: 'Planner',   href: null }} />
       <Tabs.Screen name="ai"        options={{ title: 'Neural AI',  href: null }} />
       <Tabs.Screen name="analytics" options={{ title: 'Analytics',  href: null }} />
+      <Tabs.Screen name="settings"  options={{ title: 'Settings',   href: null }} />
     </Tabs>
   );
 }

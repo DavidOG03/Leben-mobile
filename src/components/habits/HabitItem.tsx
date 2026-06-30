@@ -1,6 +1,7 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useLebenStore, Habit } from '@/store/useStore';
-import { Card } from '@/components/ui/Card';
+import { calcStreak } from '@/utils/habits';
 
 interface HabitItemProps {
   habit: Habit;
@@ -9,89 +10,172 @@ interface HabitItemProps {
 export function HabitItem({ habit }: HabitItemProps) {
   const toggleHabit = useLebenStore((s) => s.toggleHabit);
   const deleteHabit = useLebenStore((s) => s.deleteHabit);
+  const editHabit   = useLebenStore((s) => s.editHabit);
 
-  const handleDelete = () => {
-    Alert.alert('Delete Habit', `Are you sure you want to delete "${habit.label}"?`, [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => deleteHabit(habit.id) },
-    ]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editLabel, setEditLabel] = useState(habit.label);
+  const [editSub,   setEditSub]   = useState(habit.sub);
+
+  // Always derive checked state from completedDates (never stale)
+  const todayStr      = new Date().toISOString().slice(0, 10);
+  const isCheckedToday = (habit.completedDates ?? []).includes(todayStr);
+
+  // Recalculate streak live from completedDates
+  const currentStreak = calcStreak(habit.completedDates ?? []);
+
+  const handleSave = () => {
+    editHabit(habit.id, { label: editLabel, sub: editSub });
+    setIsEditing(false);
   };
 
-  // Build the matrix for the last 14 days
-  const today = new Date();
-  const past14Days = Array.from({ length: 14 }, (_, i) => {
-    const d = new Date(today);
-    d.setDate(today.getDate() - (13 - i));
-    return d.toISOString().split('T')[0];
-  });
+  const handleDelete = () => {
+    Alert.alert(
+      'Delete Habit',
+      `Are you sure you want to delete "${habit.label}"?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: () => deleteHabit(habit.id) },
+      ],
+    );
+  };
 
   return (
-    <Card className="p-4 mb-4" style={{ backgroundColor: '#131313', borderColor: '#1e1e1e' }}>
-      <View className="flex-row items-center justify-between mb-4">
-        <View className="flex-row items-center gap-3 flex-1">
-          <View 
-            className="w-10 h-10 rounded-xl items-center justify-center border border-[#1e1e1e]"
-            style={{ backgroundColor: '#181818' }}
-          >
-            <Text style={{ color: habit.color, fontSize: 20 }}>{habit.icon}</Text>
-          </View>
-          <View className="flex-1">
-            <Text className="text-white font-semibold text-[14px] leading-tight mb-0.5">
-              {habit.label}
-            </Text>
-            <Text className="text-[#666] text-[11px]">
-              {habit.frequency === 'daily' ? 'Daily' : `${habit.targetDaysPerWeek}x / week`} • {habit.timeOfDay}
-            </Text>
-          </View>
+    <View
+      style={{
+        backgroundColor: '#111',
+        borderRadius: 16,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: isCheckedToday ? `${habit.color}55` : '#1e1e1e',
+      }}
+    >
+      {/* Top row: icon + actions */}
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
+        {/* Icon */}
+        <View
+          style={{
+            width: 42,
+            height: 42,
+            borderRadius: 12,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: `${habit.color}18`,
+            borderWidth: 1,
+            borderColor: `${habit.color}22`,
+          }}
+        >
+          <Text style={{ fontSize: 20 }}>{habit.icon}</Text>
         </View>
+
+        {/* Edit / Delete */}
+        <View style={{ flexDirection: 'row', gap: 4 }}>
+          <TouchableOpacity
+            onPress={() => {
+              setEditLabel(habit.label);
+              setEditSub(habit.sub);
+              setIsEditing(true);
+            }}
+            style={{ padding: 6 }}
+          >
+            <Text style={{ fontSize: 13 }}>✏️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleDelete} style={{ padding: 6 }}>
+            <Text style={{ fontSize: 13 }}>🗑️</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Edit form or label display */}
+      {isEditing ? (
+        <View style={{ gap: 8, marginBottom: 16 }}>
+          <TextInput
+            autoFocus
+            value={editLabel}
+            onChangeText={setEditLabel}
+            style={{
+              backgroundColor: '#1a1a1a',
+              borderWidth: 1,
+              borderColor: '#333',
+              borderRadius: 8,
+              paddingHorizontal: 10,
+              paddingVertical: 6,
+              color: '#fff',
+              fontSize: 14,
+            }}
+            placeholder="Habit Label"
+            placeholderTextColor="#555"
+          />
+          <TextInput
+            value={editSub}
+            onChangeText={setEditSub}
+            style={{
+              backgroundColor: '#1a1a1a',
+              borderWidth: 1,
+              borderColor: '#333',
+              borderRadius: 8,
+              paddingHorizontal: 10,
+              paddingVertical: 6,
+              color: '#fff',
+              fontSize: 11,
+            }}
+            placeholder="Subtext"
+            placeholderTextColor="#555"
+          />
+          <TouchableOpacity
+            onPress={handleSave}
+            style={{
+              borderRadius: 8,
+              paddingHorizontal: 10,
+              paddingVertical: 6,
+              backgroundColor: habit.color,
+              alignItems: 'center',
+              marginTop: 4,
+            }}
+          >
+            <Text style={{ color: '#fff', fontWeight: '600', fontSize: 12 }}>Save</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <>
+          <Text style={{ fontSize: 15, fontWeight: '700', color: '#fff', marginBottom: 2 }}>
+            {habit.label}
+          </Text>
+          <Text style={{ fontSize: 11, color: '#aaa', marginBottom: 4 }}>
+            {habit.sub}
+          </Text>
+        </>
+      )}
+
+      {/* Best streak */}
+      <Text style={{ fontSize: 10, color: '#777', marginBottom: 14 }}>
+        Best: {habit.longestStreak}d
+      </Text>
+
+      {/* Bottom row: done status + toggle */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 10, color: isCheckedToday ? habit.color : '#aaa' }}>
+          {isCheckedToday ? `Done today ✓  🔥${currentStreak}` : `Not yet  🔥${currentStreak}`}
+        </Text>
 
         <TouchableOpacity
           onPress={() => toggleHabit(habit.id)}
-          className="w-12 h-8 rounded-lg items-center justify-center border border-[#1e1e1e] active:opacity-80"
-          style={{ backgroundColor: habit.checked ? habit.color : '#161616' }}
+          style={{
+            width: 30,
+            height: 30,
+            borderRadius: 15,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: isCheckedToday ? `${habit.color}22` : 'transparent',
+            borderWidth: 1.5,
+            borderColor: isCheckedToday ? habit.color : '#333',
+          }}
+          activeOpacity={0.7}
         >
-          <Text style={{ color: habit.checked ? '#fff' : '#555', fontSize: 14 }}>
-            {habit.checked ? '✓' : '○'}
-          </Text>
+          {isCheckedToday && (
+            <Text style={{ color: habit.color, fontSize: 12, fontWeight: '700' }}>✓</Text>
+          )}
         </TouchableOpacity>
       </View>
-
-      <View className="flex-row justify-between items-end border-t border-[#181818] pt-4">
-        <View className="gap-1">
-          <Text className="text-[#444] text-[9px] uppercase tracking-widest font-bold">
-            Last 14 Days
-          </Text>
-          <View className="flex-row gap-1">
-            {past14Days.map((dateStr, i) => {
-              const isCompleted = habit.completedDates?.includes(dateStr);
-              return (
-                <View
-                  key={i}
-                  className="w-2.5 h-2.5 rounded-sm"
-                  style={{
-                    backgroundColor: isCompleted ? habit.color : '#1a1a1a',
-                    opacity: isCompleted ? 1 : 0.5,
-                  }}
-                />
-              );
-            })}
-          </View>
-        </View>
-
-        <View className="items-end gap-1">
-          <Text className="text-white font-bold text-lg leading-none">
-            {habit.streak}<Text className="text-[#666] text-[11px] font-normal"> 🔥</Text>
-          </Text>
-        </View>
-      </View>
-
-      {/* Delete button inline for mobile */}
-      <TouchableOpacity 
-        onPress={handleDelete}
-        className="absolute top-4 right-16 p-2"
-      >
-        <Text className="text-[#444] text-xs">🗑️</Text>
-      </TouchableOpacity>
-    </Card>
+    </View>
   );
 }
