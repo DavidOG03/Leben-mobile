@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import BookCard from "./BookCard";
-import type { Book } from "@/store/bookSlice";
 import { PlusIcon } from "@/constants/Icons";
+import type { Book } from "@/store/bookSlice";
+import React from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import BookCard from "./BookCard";
 
 interface ReadingTrackerProps {
   onShowAddBook: (show: boolean) => void;
@@ -27,8 +27,14 @@ const GhostBookCard = ({ opacity }: { opacity: number }) => (
         style={{ backgroundColor: "#222" }}
       />
       <View>
-        <View className="h-3 rounded-full w-3/4 mb-2" style={{ backgroundColor: "#222" }} />
-        <View className="h-2 rounded-full w-1/2" style={{ backgroundColor: "#1a1a1a" }} />
+        <View
+          className="h-3 rounded-full w-3/4 mb-2"
+          style={{ backgroundColor: "#222" }}
+        />
+        <View
+          className="h-2 rounded-full w-1/2"
+          style={{ backgroundColor: "#1a1a1a" }}
+        />
       </View>
     </View>
   </View>
@@ -40,7 +46,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
 }) => {
   return (
     <View className="mb-6 px-4 md:px-0">
-      <View className="flex-row items-center justify-between mb-4">
+      <View className="flex-row items-center justify-between mb-4 flex-wrap">
         <View>
           <Text
             className="font-bold text-white"
@@ -48,7 +54,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           >
             Reading Tracker
           </Text>
-          <Text style={{ fontSize: 12, color: "#555", marginTop: 2 }}>
+          <Text className="text-xs text-[#888] my-2">
             Track every book you're working through.
           </Text>
         </View>
@@ -62,7 +68,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           }}
         >
           <PlusIcon color="#ccc" size={11} />
-          <Text style={{ color: "#ccc", fontSize: 12, fontWeight: 'bold' }}>
+          <Text style={{ color: "#ccc", fontSize: 12, fontWeight: "bold" }}>
             Add Book
           </Text>
         </TouchableOpacity>
@@ -71,10 +77,14 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
       {books.length === 0 ? (
         <View
           className="rounded-2xl overflow-hidden"
-          style={{ borderWidth: 1, borderColor: "#1e1e1e", backgroundColor: "#131313" }}
+          style={{
+            borderWidth: 1,
+            borderColor: "#1e1e1e",
+            backgroundColor: "#131313",
+          }}
         >
           <View className="p-4 flex-row">
-            {[1, 0.65, 0.35].map((op, i) => (
+            {[1, 0.65].map((op, i) => (
               <GhostBookCard key={i} opacity={op} />
             ))}
           </View>
@@ -102,7 +112,11 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           </View>
         </View>
       ) : (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="-mx-4 px-4">
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="-mx-4 px-4"
+        >
           <View className="flex-row gap-4 pr-8">
             {books.map((book: Book) => (
               <View key={book.id} style={{ width: 220 }}>
