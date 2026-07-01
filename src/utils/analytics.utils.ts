@@ -25,13 +25,18 @@ export interface ProductivityData {
   avgDailyScore: number;
 }
 
+export interface AIInsight {
+  icon: string;
+  text: string;
+}
+
 export interface AnalyticsData {
   statCards: StatCard[];
   weekActivity: DayActivity[];
   productivity: ProductivityData;
   topHabits: any[]; // HabitStats type simplified
   goalProgress: any[];
-  aiInsights: any[];
+  aiInsights: AIInsight[];
   hasTaskData: boolean;
   hasHabitData: boolean;
   hasGoalData: boolean;
@@ -190,6 +195,62 @@ export function computeHabitStats(habits: Habit[]): any[] {
     .slice(0, 4);
 }
 
+export function computeGoalStats(goals: any[]): any[] {
+  return goals;
+}
+
+export function computeAIInsights(
+  tasks: Task[],
+  habits: Habit[],
+  goals: any[],
+): AIInsight[] {
+  const insights: AIInsight[] = [];
+
+  const week = currentWeekDates();
+  const dayTaskCounts = week.map(({ isoDate, label }) => ({
+    label,
+    count: tasks.filter((t) => t.completedAt?.startsWith(isoDate)).length,
+  }));
+  const bestDay = dayTaskCounts.reduce(
+    (best, d) => (d.count > best.count ? d : best),
+    { label: "", count: 0 },
+  );
+  if (bestDay.count > 0) {
+    insights.push({
+      icon: "📈",
+      text: `You completed the most tasks on ${bestDay.label} this week. Schedule challenging work on that day.`,
+    });
+  }
+
+  const bestHabit = habits
+    .map((h) => ({ name: h.label, longestStreak: h.longestStreak ?? 0 }))
+    .sort((a, b) => b.longestStreak - a.longestStreak)[0];
+  if (bestHabit && bestHabit.longestStreak > 0) {
+    insights.push({
+      icon: "🔥",
+      text: `Your longest streak is ${bestHabit.longestStreak} days for ${bestHabit.name}. Use that momentum to stay consistent.`,
+    });
+  }
+
+  const closestGoal = goals
+    .map((g) => ({
+      name: g.name || g.title,
+      pct:
+        g.targetValue > 0
+          ? Math.round((g.currentValue / g.targetValue) * 100)
+          : 0,
+    }))
+    .sort((a, b) => b.pct - a.pct)[0];
+  if (closestGoal && closestGoal.pct > 0) {
+    insights.push({
+      icon: "🚀",
+      text: `${closestGoal.name} is ${closestGoal.pct}% complete. You are making real progress.`,
+    });
+  }
+
+  return insights;
+}
+
 export function buildAnalyticsData(
   tasks: Task[],
   habits: Habit[],
@@ -204,8 +265,8 @@ export function buildAnalyticsData(
     weekActivity: computeWeekActivity(tasks, habits),
     productivity: computeProductivity(tasks, habits),
     topHabits: computeHabitStats(habits),
-    goalProgress: [],
-    aiInsights: [],
+    goalProgress: computeGoalStats(goals),
+    aiInsights: computeAIInsights(tasks, habits, goals),
     hasTaskData,
     hasHabitData,
     hasGoalData,

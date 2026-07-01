@@ -46,18 +46,18 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
     <BottomSheet
       visible={visible}
       onClose={onClose}
-      containerStyle={{ backgroundColor: '#161616' }}
+      containerStyle={{ backgroundColor: "#161616" }}
     >
-      <View className="mb-6 flex-row items-center justify-between">
+      <View className="mb-6 flex-row items-center justify-between px-4">
         <Text
-          className="font-black text-white text-[24px]"
+          className="font-black flex items-center gap-2 text-white text-[24px]"
           style={{ letterSpacing: -0.4 }}
         >
           Neural <SparkleIcon size={18} color="#888888" />
         </Text>
       </View>
 
-      <View className="gap-3 mb-4">
+      <View className="gap-3 mb-4 px-4">
         {SUB_LINKS.map((link) => {
           const Icon = link.icon;
           return (

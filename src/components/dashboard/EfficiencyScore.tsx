@@ -201,17 +201,17 @@ export function EfficiencyScore() {
                 strokeWidth="6"
               />
               <Circle
-                cx="70"
-                cy="70"
-                r="54"
+                cx={70}
+                cy={70}
+                r={54}
                 fill="none"
                 stroke="#252525"
-                strokeWidth="6"
+                strokeWidth={6}
                 strokeLinecap="round"
                 strokeDasharray="8 6"
-                originX="70"
-                originY="70"
-                rotation="-90"
+                originX={70}
+                originY={70}
+                rotation={-90}
               />
             </Svg>
             <View className="absolute">
@@ -243,17 +243,17 @@ export function EfficiencyScore() {
                 strokeWidth="8"
               />
               <Circle
-                cx="70"
-                cy="70"
-                r="54"
+                cx={70}
+                cy={70}
+                r={54}
                 fill="none"
                 stroke="#252525"
-                strokeWidth="8"
+                strokeWidth={8}
                 strokeLinecap="round"
                 strokeDasharray="12 8"
-                originX="70"
-                originY="70"
-                rotation="-90"
+                originX={70}
+                originY={70}
+                rotation={-90}
               />
             </Svg>
             <View className="absolute items-center">
@@ -282,17 +282,17 @@ export function EfficiencyScore() {
                 strokeWidth="8"
               />
               <AnimatedCircle
-                cx="70"
-                cy="70"
-                r="54"
+                cx={70}
+                cy={70}
+                r={54}
                 fill="none"
                 stroke="#7c6af0"
-                strokeWidth="8"
+                strokeWidth={8}
                 strokeLinecap="round"
                 strokeDasharray={`${2 * Math.PI * 54}`}
-                originX="70"
-                originY="70"
-                rotation="-90"
+                originX={70}
+                originY={70}
+                rotation={-90}
                 animatedProps={animatedProps}
               />
             </Svg>
