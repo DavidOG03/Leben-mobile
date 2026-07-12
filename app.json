@@ -8,7 +8,7 @@
     "scheme": "lebenmobile",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/icon.png"
     },
     "android": {
       "package": "com.david.lebenmobile",
@@ -29,6 +29,7 @@
       [
         "expo-splash-screen",
         {
+          "image": "./assets/images/splash-icon.png",
           "backgroundColor": "#208AEF",
           "android": {
             "image": "./assets/images/splash-icon.png",

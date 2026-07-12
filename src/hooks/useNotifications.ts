@@ -1,47 +1,75 @@
 // hooks/useNotifications.ts
 import { useEffect, useRef }   from 'react';
-import * as Notifications      from 'expo-notifications';
-import * as Device             from 'expo-device';
 import { Platform }            from 'react-native';
 import { savePushToken }       from '@/lib/supabase/db';
 import { useLebenStore }       from '@/store/useStore';
+import Constants               from 'expo-constants';
+
+// Only import types to avoid triggering the runtime crash in Expo Go
+import type * as NotificationsType from 'expo-notifications';
+
+const isExpoGo = Constants.appOwnership === 'expo';
 
 // Configure how notifications appear when app is in foreground
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldPlaySound:   true,
-    shouldSetBadge:    false,
-    shouldShowAlert:   true,
-    shouldShowBanner:  true,
-    shouldShowList:    true,
-  }),
-});
+// Wrap in an IIFE so it only runs if not in Expo Go
+if (!isExpoGo) {
+  (async () => {
+    try {
+      const Notifications = await import('expo-notifications');
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldPlaySound:   true,
+          shouldSetBadge:    false,
+          shouldShowAlert:   true,
+          shouldShowBanner:  true,
+          shouldShowList:    true,
+        }),
+      });
+    } catch (e) {
+      console.warn('Failed to load expo-notifications', e);
+    }
+  })();
+}
 
 export function useNotifications() {
-  const notificationListener = useRef<Notifications.EventSubscription | null>(null);
-  const responseListener     = useRef<Notifications.EventSubscription | null>(null);
+  const notificationListener = useRef<NotificationsType.EventSubscription | null>(null);
+  const responseListener     = useRef<NotificationsType.EventSubscription | null>(null);
   const userId               = useLebenStore((s) => s.userId);
 
   useEffect(() => {
-    registerForPushNotifications();
+    if (isExpoGo) return;
 
-    // Listen for notifications received while app is open
-    notificationListener.current = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        console.log('[Notification received]', notification.request.content.title);
-      },
-    );
+    let mounted = true;
+    (async () => {
+      try {
+        const Notifications = await import('expo-notifications');
+        
+        await registerForPushNotifications(Notifications);
+        
+        if (!mounted) return;
 
-    // Listen for user tapping a notification
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        const data = response.notification.request.content.data;
-        console.log('[Notification tapped]', data);
-        // TODO: navigate to the relevant screen based on data.screen
-      },
-    );
+        // Listen for notifications received while app is open
+        notificationListener.current = Notifications.addNotificationReceivedListener(
+          (notification) => {
+            console.log('[Notification received]', notification.request.content.title);
+          },
+        );
+
+        // Listen for user tapping a notification
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(
+          (response) => {
+            const data = response.notification.request.content.data;
+            console.log('[Notification tapped]', data);
+            // TODO: navigate to the relevant screen based on data.screen
+          },
+        );
+      } catch (e) {
+        console.warn('Failed to initialize notifications', e);
+      }
+    })();
 
     return () => {
+      mounted = false;
       notificationListener.current?.remove();
       responseListener.current?.remove();
     };
@@ -52,7 +80,8 @@ export function useNotifications() {
 
 // ── Registration ───────────────────────────────────────────────────────────────
 
-async function registerForPushNotifications() {
+async function registerForPushNotifications(Notifications: typeof NotificationsType) {
+  const Device = await import('expo-device');
   if (!Device.isDevice || Platform.OS === 'web') {
     // Push notifications only work on physical mobile devices
     return;
@@ -103,7 +132,10 @@ export async function scheduleReminder(opts: {
   date:      Date;
   screen:    'tasks' | 'habits';
 }): Promise<string | null> {
+  if (isExpoGo) return null;
+  
   try {
+    const Notifications = await import('expo-notifications');
     // Cancel existing notification for this item first
     await cancelReminder(opts.id);
 
@@ -133,10 +165,17 @@ export async function scheduleReminder(opts: {
  * Cancel a previously scheduled notification.
  */
 export async function cancelReminder(itemId: string): Promise<void> {
-  const scheduled = await Notifications.getAllScheduledNotificationsAsync();
-  for (const notif of scheduled) {
-    if (notif.content.data?.itemId === itemId) {
-      await Notifications.cancelScheduledNotificationAsync(notif.identifier);
+  if (isExpoGo) return;
+  
+  try {
+    const Notifications = await import('expo-notifications');
+    const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+    for (const notif of scheduled) {
+      if (notif.content.data?.itemId === itemId) {
+        await Notifications.cancelScheduledNotificationAsync(notif.identifier);
+      }
     }
+  } catch (err) {
+    console.error('[cancelReminder]', err);
   }
 }
