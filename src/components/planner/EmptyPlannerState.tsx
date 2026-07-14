@@ -8,9 +8,8 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
 
   return (
     <View
-      className="flex-col items-center justify-center py-20 px-6 rounded-3xl"
+      className="flex-col items-center justify-center py-20 px-6 rounded-3xl bg-leben-bg"
       style={{
-        backgroundColor: '#0a0a0a',
         borderColor: '#222',
         borderWidth: 1,
         borderStyle: 'dashed',

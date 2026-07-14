@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
-import { useLebenStore } from '@/store/useStore';
-import { ScreenLayout } from '@/components/shared/ScreenLayout';
+import { ScreenLayout } from "@/components/shared/ScreenLayout";
+import { supabase } from "@/lib/supabase/client";
+import { useLebenStore } from "@/store/useStore";
+import { useState } from "react";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
   return (
@@ -11,10 +12,10 @@ function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
       style={{
         width: 42,
         height: 24,
-        backgroundColor: on ? '#7c6af0' : '#2a2a2a',
+        backgroundColor: on ? "#7c6af0" : "#2a2a2a",
         borderRadius: 12,
         padding: 2,
-        justifyContent: 'center',
+        justifyContent: "center",
       }}
     >
       <View
@@ -22,7 +23,7 @@ function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
           width: 20,
           height: 20,
           borderRadius: 10,
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
           transform: [{ translateX: on ? 18 : 0 }],
         }}
       />
@@ -35,9 +36,9 @@ function SectionLabel({ text }: { text: string }) {
     <Text
       style={{
         fontSize: 10,
-        color: '#3a3a3a',
+        color: "#3a3a3a",
         letterSpacing: 1.6,
-        textTransform: 'uppercase',
+        textTransform: "uppercase",
         marginBottom: 16,
         marginTop: 32,
       }}
@@ -64,41 +65,59 @@ export default function SettingsScreen() {
       setNotifs((p) => ({ ...p, push: false }));
     } else {
       Alert.alert(
-        'Push Notifications',
-        'This would request system notification permissions.',
+        "Push Notifications",
+        "This would request system notification permissions.",
         [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Enable', onPress: () => setNotifs((p) => ({ ...p, push: true })) },
-        ]
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Enable",
+            onPress: () => setNotifs((p) => ({ ...p, push: true })),
+          },
+        ],
       );
     }
   };
 
   const handlePurge = () => {
     Alert.alert(
-      'CRITICAL WARNING',
-      'This will permanently delete all tasks, habits, goals, and books from the server. This action is irreversible.\n\nAre you absolutely sure?',
+      "CRITICAL WARNING",
+      "This will permanently delete all tasks, habits, goals, and books from the server. This action is irreversible.\n\nAre you absolutely sure?",
       [
-        { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Purge Core', 
-          style: 'destructive',
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Purge Core",
+          style: "destructive",
           onPress: async () => {
             await purgeAll();
-            Alert.alert('Workspace has been purged.');
-          }
+            Alert.alert("Workspace has been purged.");
+          },
         },
-      ]
+      ],
     );
   };
 
-  const displayName = userFullName || 'Leben User';
-  const displayEmail = userEmail || '---';
+  const displayName = userFullName || "Leben User";
+  const displayEmail = userEmail || "---";
+
+  const handleSignOut = async () => {
+    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Sign Out",
+        style: "destructive",
+        onPress: async () => {
+          const { error } = await supabase.auth.signOut();
+          if (error) {
+            Alert.alert("Error", error.message);
+          }
+        },
+      },
+    ]);
+  };
 
   return (
     <ScreenLayout scrollable>
-      <View className="flex-1 px-4 md:px-10 py-6 md:py-8" style={{ backgroundColor: '#0a0a0a' }}>
-        
+      <ScrollView className="flex-1 bg-leben-bg px-4 md:px-10 py-6 md:py-8">
         {/* Profile section */}
         <View className="flex-row items-start gap-6 mb-8">
           {/* Avatar */}
@@ -108,31 +127,31 @@ export default function SettingsScreen() {
               style={{
                 width: 88,
                 height: 88,
-                backgroundColor: '#1a1a1a',
-                borderColor: '#2a2a2a',
+                backgroundColor: "#1a1a1a",
+                borderColor: "#2a2a2a",
                 borderWidth: 1,
               }}
             >
               {/* Web uses a gradient + SVG. We'll simulate it with a View and Emoji */}
               <View
                 className="w-full h-full items-center justify-center"
-                style={{ backgroundColor: '#1f1f2e' }}
+                style={{ backgroundColor: "#1f1f2e" }}
               >
                 <Text style={{ fontSize: 40 }}>👤</Text>
               </View>
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               className="absolute bottom-1.5 right-1.5 items-center justify-center rounded-full"
               style={{
                 width: 26,
                 height: 26,
-                backgroundColor: '#1e1e1e',
-                borderColor: '#333',
+                backgroundColor: "#1e1e1e",
+                borderColor: "#333",
                 borderWidth: 1,
               }}
             >
-              <Text style={{ fontSize: 12, color: '#888' }}>✏️</Text>
-            </TouchableOpacity>
+               <Text style={{ fontSize: 12, color: "#888" }}>✏️</Text> 
+            </TouchableOpacity> */}
           </View>
 
           {/* Name / badge */}
@@ -141,32 +160,36 @@ export default function SettingsScreen() {
               className="font-black text-white capitalize"
               style={{ fontSize: 26, letterSpacing: -0.5, marginBottom: 4 }}
             >
-              {userId ? displayName : 'Guest'}
+              {userId ? displayName : "Guest"}
             </Text>
-            <Text style={{ fontSize: 13, color: '#555' }}>{displayEmail}</Text>
+            <Text style={{ fontSize: 13, color: "#555" }}>{displayEmail}</Text>
           </View>
         </View>
 
         {/* Display name + Workspace ID */}
         <View className="flex-row flex-wrap gap-4 mb-4">
           {[
-            { label: 'DISPLAY NAME', val: displayName },
+            { label: "DISPLAY NAME", val: displayName },
             {
-              label: 'WORKSPACE ID',
-              val: userId ? `OS-${userId.substring(0, 8).toUpperCase()}` : '--',
+              label: "WORKSPACE ID",
+              val: userId ? `OS-${userId.substring(0, 8).toUpperCase()}` : "--",
             },
           ].map(({ label, val }) => (
             <View
               key={label}
               className="rounded-xl p-4 flex-1 min-w-[150px]"
-              style={{ backgroundColor: '#111', borderColor: '#1e1e1e', borderWidth: 1 }}
+              style={{
+                backgroundColor: "#111",
+                borderColor: "#1e1e1e",
+                borderWidth: 1,
+              }}
             >
               <Text
                 style={{
                   fontSize: 9,
-                  color: '#555',
+                  color: "#555",
                   letterSpacing: 1.4,
-                  textTransform: 'uppercase',
+                  textTransform: "uppercase",
                   marginBottom: 6,
                 }}
               >
@@ -186,7 +209,11 @@ export default function SettingsScreen() {
         <SectionLabel text="System Preferences" />
         <View
           className="rounded-xl p-5 mb-8"
-          style={{ backgroundColor: '#111', borderColor: '#1e1e1e', borderWidth: 1 }}
+          style={{
+            backgroundColor: "#111",
+            borderColor: "#1e1e1e",
+            borderWidth: 1,
+          }}
         >
           <View className="flex-row items-center gap-3 mb-4">
             <View
@@ -194,8 +221,8 @@ export default function SettingsScreen() {
               style={{
                 width: 34,
                 height: 34,
-                backgroundColor: '#1a1a1a',
-                borderColor: '#222',
+                backgroundColor: "#1a1a1a",
+                borderColor: "#222",
                 borderWidth: 1,
               }}
             >
@@ -205,7 +232,7 @@ export default function SettingsScreen() {
               <Text className="font-medium text-white" style={{ fontSize: 14 }}>
                 Notification Channels
               </Text>
-              <Text style={{ fontSize: 11, color: '#555', marginTop: 2 }}>
+              <Text style={{ fontSize: 11, color: "#555", marginTop: 2 }}>
                 Manage how Leben communicates vital updates
               </Text>
             </View>
@@ -213,14 +240,18 @@ export default function SettingsScreen() {
 
           <View className="flex-col gap-6 mt-4">
             <View className="flex-row items-center justify-between">
-              <Text style={{ fontSize: 14, color: '#aaa' }}>Email Reminders</Text>
+              <Text style={{ fontSize: 14, color: "#aaa" }}>
+                Email Reminders
+              </Text>
               <Toggle
                 on={notifs.email}
                 onChange={() => setNotifs((p) => ({ ...p, email: !p.email }))}
               />
             </View>
             <View className="flex-row items-center justify-between">
-              <Text style={{ fontSize: 14, color: '#aaa' }}>Desktop / Mobile Push</Text>
+              <Text style={{ fontSize: 14, color: "#aaa" }}>
+                Desktop / Mobile Push
+              </Text>
               <Toggle on={notifs.push} onChange={handlePushToggle} />
             </View>
           </View>
@@ -229,42 +260,65 @@ export default function SettingsScreen() {
         {/* Danger zone */}
         <View
           className="rounded-xl p-5 mt-4"
-          style={{ backgroundColor: '#110a0a', borderColor: '#2a1515', borderWidth: 1 }}
+          style={{
+            backgroundColor: "#110a0a",
+            borderColor: "#2a1515",
+            borderWidth: 1,
+          }}
         >
           <View className="mb-4">
-            <Text className="font-bold mb-1" style={{ fontSize: 15, color: '#e85555' }}>
+            <Text
+              className="font-bold mb-1"
+              style={{ fontSize: 15, color: "#e85555" }}
+            >
               Workspace Termination
             </Text>
-            <Text style={{ fontSize: 12, color: '#666', lineHeight: 18 }}>
-              Permanently delete all tasks, habits, goals, and books spanning your workspace. This action is irreversible.
+            <Text style={{ fontSize: 12, color: "#666", lineHeight: 18 }}>
+              Permanently delete all tasks, habits, goals, and books spanning
+              your workspace. This action is irreversible.
             </Text>
           </View>
           <TouchableOpacity
             onPress={handlePurge}
             className="items-center justify-center rounded-xl active:opacity-80"
             style={{
-              backgroundColor: '#e85555',
+              backgroundColor: "#e85555",
               paddingVertical: 12,
               paddingHorizontal: 20,
-              alignSelf: 'flex-start',
+              alignSelf: "flex-start",
             }}
           >
-            <Text style={{ color: 'white', fontSize: 13, fontWeight: '600' }}>
+            <Text style={{ color: "white", fontSize: 13, fontWeight: "600" }}>
               Purge Core
             </Text>
           </TouchableOpacity>
         </View>
 
+        {/* Sign Out */}
+        <TouchableOpacity
+          onPress={handleSignOut}
+          className="rounded-xl p-4 mt-4 items-center justify-center flex-row gap-2 active:opacity-80"
+          style={{
+            backgroundColor: "#111",
+            borderColor: "#222",
+            borderWidth: 1,
+          }}
+        >
+          <Text style={{ color: "#fff", fontSize: 14, fontWeight: "600" }}>
+            Sign Out
+          </Text>
+        </TouchableOpacity>
+
         {/* Footer */}
         <View
           className="flex-row items-center justify-between mt-8 pt-4 mb-10"
-          style={{ borderTopColor: '#161616', borderTopWidth: 1 }}
+          style={{ borderTopColor: "#161616", borderTopWidth: 1 }}
         >
-          <Text style={{ fontSize: 10, color: '#2a2a2a', letterSpacing: 1 }}>
+          <Text style={{ fontSize: 10, color: "#2a2a2a", letterSpacing: 1 }}>
             Leben V1.0
           </Text>
         </View>
-      </View>
+      </ScrollView>
     </ScreenLayout>
   );
 }

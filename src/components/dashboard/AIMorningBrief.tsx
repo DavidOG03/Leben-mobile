@@ -107,8 +107,8 @@ export function AIMorningBrief() {
 
             {brief && !loading && (
               <View className="flex-row flex-wrap gap-2">
-                {brief.insights.map((insight, i) => (
-                  <Badge key={i} label={insight} variant="primary" />
+                {brief.insights.slice(0, 2).map((insight, i) => (
+                  <Badge key={i} label={insight} variant="primary" numberOfLines={0} />
                 ))}
               </View>
             )}

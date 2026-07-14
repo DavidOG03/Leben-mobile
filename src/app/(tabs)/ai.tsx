@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import { ScreenLayout } from '@/components/shared/ScreenLayout';
-import { AIChatBox } from '@/components/ai/AIChatBox';
+import AIChatBox from '@/components/ai/AIChatBox';
 
 export default function AIScreen() {
   return (

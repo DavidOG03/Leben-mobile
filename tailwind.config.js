@@ -40,7 +40,10 @@ module.exports = {
         'tag-personal': 'rgba(76,175,125,0.15)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Geist', 'system-ui', 'sans-serif'],
+        'geist-medium': ['Geist-Medium', 'system-ui', 'sans-serif'],
+        'geist-semibold': ['Geist-SemiBold', 'system-ui', 'sans-serif'],
+        'geist-bold': ['Geist-Bold', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         card: '16px',

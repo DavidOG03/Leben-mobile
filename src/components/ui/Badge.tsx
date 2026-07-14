@@ -5,9 +5,10 @@ interface BadgeProps {
   variant?: 'default' | 'success' | 'error' | 'warning' | 'primary' | 'outline';
   className?: string;
   icon?: string;
+  numberOfLines?: number;
 }
 
-export function Badge({ label, variant = 'default', className = '', icon }: BadgeProps) {
+export function Badge({ label, variant = 'default', className = '', icon, numberOfLines = 1 }: BadgeProps) {
   const variantClasses = {
     default: 'bg-leben-bg-element border border-leben-border text-leben-text-2',
     success: 'bg-[rgba(76,175,125,0.12)] border border-[rgba(76,175,125,0.2)] text-leben-success',
@@ -31,7 +32,7 @@ export function Badge({ label, variant = 'default', className = '', icon }: Badg
       {icon && <Text className={`text-xs mr-1 ${textClasses[variant]}`}>{icon}</Text>}
       <Text
         className={`text-[11px] font-medium uppercase tracking-wider ${textClasses[variant]}`}
-        numberOfLines={1}
+        numberOfLines={numberOfLines === 0 ? undefined : numberOfLines}
       >
         {label}
       </Text>

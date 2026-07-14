@@ -8,6 +8,10 @@ import { useAuthSync }      from '@/hooks/useAuthSync';
 import { useLoadUserData }  from '@/hooks/useLoadUserData';
 import { useNotifications } from '@/hooks/useNotifications';
 import { useLebenStore }    from '@/store/useStore';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 // ── Dark theme that matches Leben colours ────────────────────────────────────
 const LebenTheme = {
@@ -41,11 +45,29 @@ function AuthGuard() {
 }
 
 import NotificationManager from '@/components/shared/NotificationManager';
+import NotificationDropdown from '@/components/shared/NotificationDropdown';
 
 export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({
+    'Geist': require('../../assets/fonts/Geist-Regular.otf'),
+    'Geist-Medium': require('../../assets/fonts/Geist-Medium.otf'),
+    'Geist-SemiBold': require('../../assets/fonts/Geist-SemiBold.otf'),
+    'Geist-Bold': require('../../assets/fonts/Geist-Bold.otf'),
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
   useAuthSync();
   useLoadUserData();
   useNotifications();
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   return (
     <ThemeProvider value={LebenTheme}>
@@ -55,6 +77,7 @@ export default function RootLayout() {
         <AuthGuard />
         <Slot />
         <NotificationManager />
+        <NotificationDropdown />
       </View>
     </ThemeProvider>
   );

@@ -187,10 +187,10 @@ export default function AddBookModal({
               >
                 <Text
                   style={{
-                    color: title.trim() && totalPages ? "#0a0a0a" : "#555",
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: "600",
                   }}
+                  className={title.trim() && totalPages ? "text-leben-bg" : "text-[#555]"}
                 >
                   Add Book
                 </Text>

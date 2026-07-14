@@ -199,17 +199,14 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
               <TouchableOpacity
                 onPress={handleAdd}
                 disabled={!label.trim()}
-                className="flex-1 py-3 rounded-xl items-center justify-center"
-                style={{
-                  backgroundColor: label.trim() ? "#f0f0f0" : "#2a2a2a",
-                }}
+                className={`flex-1 py-3 rounded-xl items-center justify-center ${label.trim() ? "bg-white" : "bg-[#2a2a2a]"}`}
               >
                 <Text
                   style={{
-                    color: label.trim() ? "#0a0a0a" : "#555",
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: "600",
                   }}
+                  className={label.trim() ? "text-leben-bg" : "text-[#555]"}
                 >
                   Add Habit
                 </Text>

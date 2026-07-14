@@ -152,7 +152,7 @@ export function HabitStreaks() {
                     placeholder="HH:MM"
                     placeholderTextColor="#555"
                     keyboardType="numbers-and-punctuation"
-                    className="px-3 py-1.5 rounded bg-[#0a0a0a] border border-[#333] text-[#ccc] text-xs flex-1"
+                    className="px-3 py-1.5 rounded bg-leben-bg border border-[#333] text-[#ccc] text-xs flex-1"
                     maxLength={5}
                   />
                   <TouchableOpacity

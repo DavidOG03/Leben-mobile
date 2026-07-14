@@ -220,7 +220,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                   backgroundColor: '#f0f0f0',
                 }}
               >
-                <Text style={{ color: '#0a0a0a', fontSize: 13, fontWeight: '600' }}>Create Goal</Text>
+                <Text className="text-leben-bg font-semibold text-[13px]">Create Goal</Text>
               </TouchableOpacity>
             </View>
           </View>

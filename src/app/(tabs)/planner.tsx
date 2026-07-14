@@ -67,7 +67,7 @@ export default function PlannerScreen() {
 
   return (
     <ScreenLayout scrollable>
-      <View className="flex-col gap-10 px-4 md:px-10 py-6 md:py-8" style={{ backgroundColor: '#0a0a0a' }}>
+      <View className="flex-col gap-10 px-4 md:px-10 py-6 md:py-8 bg-leben-bg">
         
         {/* Page Header */}
         <View className="flex-col md:flex-row items-start justify-between gap-6">

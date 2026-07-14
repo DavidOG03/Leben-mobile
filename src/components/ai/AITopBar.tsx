@@ -11,12 +11,9 @@ export default function AITopBar({ toggleLeftPanel }: { toggleLeftPanel?: () => 
 
   return (
     <View
-      className="flex-row items-center justify-between px-4"
+      className="flex-row items-center justify-between px-5 py-4 border-b border-[#181818] bg-leben-bg"
       style={{
         height: 56,
-        borderBottomWidth: 1,
-        borderBottomColor: '#161616',
-        backgroundColor: '#0a0a0a',
       }}
     >
       <View className="flex-row items-center gap-3">

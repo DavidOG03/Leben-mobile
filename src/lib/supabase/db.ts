@@ -3,9 +3,9 @@
 // Uses the mobile Supabase client (AsyncStorage-backed session)
 
 import { supabase } from "@/lib/supabase/client";
-import type { Task, Habit } from "@/store/useStore";
-import type { Goal } from "@/utils/goals.types";
 import type { Book } from "@/store/bookSlice";
+import type { Habit, Task } from "@/store/useStore";
+import type { Goal } from "@/utils/goals.types";
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -135,7 +135,8 @@ function mapBookToDB(book: Partial<Book>) {
   if (book.totalPages !== undefined) row.total_pages = book.totalPages;
   if (book.coverColor !== undefined) row.cover_color = book.coverColor;
   if (book.status !== undefined) row.status = book.status;
-  if (book.addedAt !== undefined) row.added_at = book.addedAt;
+  if (book.addedAt !== undefined)
+    row.added_at = new Date(book.addedAt).getTime();
   return row;
 }
 

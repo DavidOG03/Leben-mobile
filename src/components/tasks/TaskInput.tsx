@@ -46,7 +46,7 @@ export function TaskInput() {
       <View className="flex-row flex-wrap items-center justify-between gap-4 border-t border-[#1e1e1e] pt-4 mt-2">
         <View className="flex-row items-center gap-2">
           {/* Tag Selector */}
-          <View className="flex-row items-center gap-1.5 p-1 rounded-lg border border-[#1e1e1e]" style={{ backgroundColor: '#0a0a0a' }}>
+          <View className="flex-row items-center gap-1.5 p-1 rounded-lg border border-[#1e1e1e] bg-leben-bg">
             {(['WORK', 'PERSONAL'] as const).map((t) => (
               <TouchableOpacity
                 key={t}
@@ -66,7 +66,7 @@ export function TaskInput() {
             ))}
           </View>
           
-          <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1 p-1.5 bg-[#0a0a0a] rounded-lg border border-[#1e1e1e]">
+          <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1 p-1.5 bg-leben-bg rounded-lg border border-[#1e1e1e]">
             <Text className="text-[#888] text-[10px]">{reminderAt ? new Date(reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "🔔"}</Text>
           </TouchableOpacity>
         </View>
