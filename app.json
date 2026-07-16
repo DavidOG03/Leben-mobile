@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Leben-mobile",
+    "name": "Leben",
     "slug": "Leben-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,7 +8,7 @@
     "scheme": "lebenmobile",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/images/icon.png"
+      "icon": "./assets/images/splash-icon.png"
     },
     "android": {
       "package": "com.david.lebenmobile",
@@ -30,7 +30,7 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
-          "backgroundColor": "#0a0a0a",
+          "backgroundColor": "#ffffff",
           "android": {
             "image": "./assets/images/splash-icon.png",
             "imageWidth": 76
