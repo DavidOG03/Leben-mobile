@@ -1,6 +1,8 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { AIIcon, PlusIcon } from '@/constants/Icons';
+import { Text } from '@/components/ui/Text';
+
 
 export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
   const router = useRouter();
@@ -10,7 +12,7 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
     <View
       className="flex-col items-center justify-center py-20 px-6 rounded-3xl bg-leben-bg"
       style={{
-        borderColor: '#222',
+        borderColor: 'var(--border-primary)',
         borderWidth: 1,
         borderStyle: 'dashed',
       }}
@@ -42,11 +44,11 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
         System Idle
       </Text>
       <Text
-        className="text-[#666] mb-10 text-center"
+        className="text-leben-text-dim mb-10 text-center"
         style={{ fontSize: 14, lineHeight: 22, maxWidth: 300 }}
       >
         The AI Planner requires more contextual input to generate an optimized daily plan. Add{' '}
-        <Text style={{ color: '#7c6af0', fontWeight: 'bold' }}>
+        <Text style={{ color: 'var(--accent-blue)', fontWeight: 'bold' }}>
           {remaining} more {remaining === 1 ? 'task' : 'tasks'}
         </Text>{' '}
         to activate high-performance scheduling.
@@ -57,8 +59,8 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
           onPress={() => router.push('/(tabs)/tasks' as any)}
           className="flex-row items-center justify-center gap-2 px-6 py-3 rounded-xl"
           style={{
-            backgroundColor: '#7c6af0',
-            shadowColor: '#7c6af0',
+            backgroundColor: 'var(--accent-blue)',
+            shadowColor: 'var(--accent-blue)',
             shadowOffset: { width: 0, height: 10 },
             shadowOpacity: 0.4,
             shadowRadius: 20,
@@ -66,13 +68,13 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
           }}
         >
           <PlusIcon color="#fff" size={16} />
-          <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>Add Tasks</Text>
+          <Text style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 'bold' }}>Add Tasks</Text>
         </TouchableOpacity>
 
         <Text
           className="text-center"
           style={{
-            color: '#444',
+            color: 'var(--text-dim)',
             fontSize: 11,
             fontWeight: '600',
             letterSpacing: 1,

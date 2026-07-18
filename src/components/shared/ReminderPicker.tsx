@@ -1,7 +1,9 @@
 import { SparkleIcon } from "@/constants/Icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { , TouchableOpacity, View } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 interface ReminderPickerProps {
   initialValue?: string; // ISO string
@@ -30,7 +32,7 @@ export default function ReminderPicker({
 
   return (
     <View
-      className="p-4 rounded-xl z-9999 bg-[#111] border border-[#222]"
+      className="p-4 rounded-xl z-9999 bg-leben-bg-card border border-leben-border"
       style={{ zIndex: 9999, elevation: 9999 }}
     >
       <View className="flex-row items-center gap-2 mb-4">
@@ -40,12 +42,12 @@ export default function ReminderPicker({
 
       <View className="gap-3 mb-4">
         <View className="gap-1.5">
-          <Text className="text-[#666] text-[10px] uppercase tracking-wider">
+          <Text className="text-leben-text-dim text-[10px] uppercase tracking-wider">
             Date
           </Text>
           <TouchableOpacity
             onPress={() => setShowDatePicker(true)}
-            className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-3"
+            className="w-full bg-leben-bg-secondary border border-leben-border rounded-lg px-3 py-3"
           >
             <Text className="text-white text-[13px]">
               {date.toLocaleDateString()}
@@ -54,12 +56,12 @@ export default function ReminderPicker({
         </View>
 
         <View className="gap-1.5">
-          <Text className="text-[#666] text-[10px] uppercase tracking-wider">
+          <Text className="text-leben-text-dim text-[10px] uppercase tracking-wider">
             Time
           </Text>
           <TouchableOpacity
             onPress={() => setShowTimePicker(true)}
-            className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-3"
+            className="w-full bg-leben-bg-secondary border border-leben-border rounded-lg px-3 py-3"
           >
             <Text className="text-white text-[13px]">
               {date.toLocaleTimeString([], {
@@ -100,16 +102,16 @@ export default function ReminderPicker({
           onPress={handleClear}
           className="px-4 py-2 rounded-lg"
         >
-          <Text className="text-[#555] text-[12px]">Remove</Text>
+          <Text className="text-leben-text-muted text-[12px]">Remove</Text>
         </TouchableOpacity>
 
         <View className="flex-row items-center gap-2">
           <TouchableOpacity onPress={onClose} className="px-4 py-2 rounded-lg">
-            <Text className="text-[#555] text-[12px]">Cancel</Text>
+            <Text className="text-leben-text-muted text-[12px]">Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleSave}
-            className="px-5 py-2 rounded-lg bg-[#7c6af0]"
+            className="px-5 py-2 rounded-lg bg-leben-accent"
             style={{
               shadowColor: "rgba(124,106,240,0.3)",
               shadowOpacity: 1,

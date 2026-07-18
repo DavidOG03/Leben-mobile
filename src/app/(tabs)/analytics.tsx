@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { ScreenLayout } from '@/components/shared/ScreenLayout';
 import { useLebenStore } from '@/store/useStore';
 import { buildAnalyticsData } from '@/utils/analytics.utils';
@@ -11,6 +11,8 @@ import GoalBreakdown from '@/components/analytics/GoalBreakdown';
 import AIInsights from '@/components/analytics/AIInsights';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { Text } from '@/components/ui/Text';
+
 
 export default function AnalyticsScreen() {
   const router = useRouter();
@@ -33,7 +35,7 @@ export default function AnalyticsScreen() {
             <Text className="text-white font-bold text-3xl tracking-tight leading-tight mb-1">
               Analytics
             </Text>
-            <Text className="text-[#555] text-[13px]">
+            <Text className="text-leben-text-muted text-[13px]">
               Data-driven insights on your performance.
             </Text>
           </View>
@@ -60,13 +62,13 @@ export default function AnalyticsScreen() {
                 className="text-white font-bold text-center"
                 style={{ fontSize: 28, letterSpacing: -0.5 }}
               >
-                Deep Performance <Text style={{ color: '#7c6af0' }}>Metrics.</Text>
+                Deep Performance <Text style={{ color: 'var(--accent-blue)' }}>Metrics.</Text>
               </Text>
               <Text
                 className="text-center mt-2"
                 style={{
                   fontSize: 15,
-                  color: '#555',
+                  color: 'var(--text-muted)',
                   lineHeight: 22,
                 }}
               >
@@ -78,7 +80,7 @@ export default function AnalyticsScreen() {
             <TouchableOpacity
               onPress={() => router.push('/(auth)')} // Navigate to your auth screen
               className="flex-row items-center gap-3 px-7 py-3.5 rounded-xl mb-8"
-              style={{ backgroundColor: '#7c6af0' }}
+              style={{ backgroundColor: 'var(--accent-blue)' }}
             >
               <Text className="text-white font-bold" style={{ fontSize: 14 }}>
                 Sign In to View Analytics
@@ -88,18 +90,18 @@ export default function AnalyticsScreen() {
 
             <View className="flex-row w-full gap-4">
               <View className="flex-1 p-4 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.05)', borderWidth: 1 }}>
-                <Text style={{ fontSize: 10, color: '#444', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1, mb: 4 }}>
+                <Text style={{ fontSize: 10, color: 'var(--text-dim)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1, mb: 4 }}>
                   Trends
                 </Text>
-                <Text style={{ fontSize: 11, color: '#666', marginTop: 4 }}>
+                <Text style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4 }}>
                   Visualize your growth over weeks and months.
                 </Text>
               </View>
               <View className="flex-1 p-4 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.05)', borderWidth: 1 }}>
-                <Text style={{ fontSize: 10, color: '#444', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1, mb: 4 }}>
+                <Text style={{ fontSize: 10, color: 'var(--text-dim)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1, mb: 4 }}>
                   Correlations
                 </Text>
-                <Text style={{ fontSize: 11, color: '#666', marginTop: 4 }}>
+                <Text style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4 }}>
                   Find links between habits and task density.
                 </Text>
               </View>

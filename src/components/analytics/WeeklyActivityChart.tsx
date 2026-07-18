@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, } from 'react-native';
 import { DayActivity } from '@/utils/analytics.utils';
 import EmptyState from './EmptyState';
 import { Ionicons } from '@expo/vector-icons';
+import { Text } from '@/components/ui/Text';
+
 
 interface WeeklyActivityChartProps {
   data: DayActivity[];
@@ -30,7 +32,7 @@ function BarChart({ data }: { data: DayActivity[] }) {
                 className="w-full rounded-[3px] rounded-b-[2px]"
                 style={{
                   height: `${(d.tasks / maxTasks) * 60}%`,
-                  backgroundColor: '#7c6af0', // Gradient is hard with just Views in React Native without expo-linear-gradient, using solid color.
+                  backgroundColor: 'var(--accent-blue)', // Gradient is hard with just Views in React Native without expo-linear-gradient, using solid color.
                   minHeight: d.tasks > 0 ? 4 : 0,
                 }}
               />
@@ -38,7 +40,7 @@ function BarChart({ data }: { data: DayActivity[] }) {
             <Text
               style={{
                 fontSize: 9,
-                color: '#555',
+                color: 'var(--text-muted)',
                 letterSpacing: 0.6,
               }}
             >
@@ -49,12 +51,12 @@ function BarChart({ data }: { data: DayActivity[] }) {
       </View>
       <View className="flex-row items-center gap-4 mt-3">
         <View className="flex-row items-center gap-1.5">
-          <View className="rounded-sm w-2.5 h-2.5 bg-[#7c6af0]" />
-          <Text style={{ fontSize: 10, color: '#555' }}>Tasks</Text>
+          <View className="rounded-sm w-2.5 h-2.5 bg-leben-accent" />
+          <Text style={{ fontSize: 10, color: 'var(--text-muted)' }}>Tasks</Text>
         </View>
         <View className="flex-row items-center gap-1.5">
           <View className="rounded-sm w-2.5 h-2.5 bg-[#1e1e3a]" />
-          <Text style={{ fontSize: 10, color: '#555' }}>Focus Hours</Text>
+          <Text style={{ fontSize: 10, color: 'var(--text-muted)' }}>Focus Hours</Text>
         </View>
       </View>
     </View>
@@ -65,14 +67,14 @@ export default function WeeklyActivityChart({ data, hasData }: WeeklyActivityCha
   return (
     <View
       className="rounded-2xl p-5 mb-5"
-      style={{ backgroundColor: '#111', borderColor: '#1e1e1e', borderWidth: 1 }}
+      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
     >
       <View className="flex-row items-center justify-between mb-5">
         <View>
           <Text className="font-semibold text-white" style={{ fontSize: 14 }}>
             Weekly Activity
           </Text>
-          <Text style={{ fontSize: 11, color: '#555', marginTop: 2 }}>
+          <Text style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
             Tasks completed & focus hours
           </Text>
         </View>

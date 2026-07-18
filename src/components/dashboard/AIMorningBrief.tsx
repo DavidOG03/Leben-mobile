@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useRouter }     from 'expo-router';
 import { useLebenStore } from '@/store/useStore';
 import { getAIBrief }    from '@/lib/ai/client';
@@ -7,6 +7,8 @@ import { Card }          from '@/components/ui/Card';
 import { Badge }         from '@/components/ui/Badge';
 import { LC }            from '@/constants/theme';
 import type { AIBriefResponse } from '@/lib/ai/client';
+import { Text } from '@/components/ui/Text';
+
 
 export function AIMorningBrief() {
   const router = useRouter();
@@ -64,7 +66,7 @@ export function AIMorningBrief() {
   }, [hasData, userId, tasks.length, handleGenerate]);
 
   return (
-    <Card className="min-h-[260px] justify-between p-5" style={{ backgroundColor: '#111' }}>
+    <Card className="min-h-[260px] justify-between p-5" style={{ backgroundColor: 'var(--bg-card)' }}>
       <View>
         {/* Header */}
         <View className="flex-row items-center gap-2 mb-4">
@@ -99,7 +101,7 @@ export function AIMorningBrief() {
 
             {unavailable && !loading && (
               <View className="bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.2)] p-3 rounded-xl">
-                <Text className="text-[#f59e0b] text-[13px] leading-snug">
+                <Text className="text-prio-medium text-[13px] leading-snug">
                   ⏳ The AI is experiencing high demand right now. This is temporary — try again in a moment.
                 </Text>
               </View>
@@ -114,13 +116,13 @@ export function AIMorningBrief() {
             )}
 
             {!brief && !loading && !error && (
-              <Text className="text-[#555] text-[13px] leading-relaxed">
+              <Text className="text-leben-text-muted text-[13px] leading-relaxed">
                 Your AI morning brief will appear here. Hit the button below to generate it.
               </Text>
             )}
           </View>
         ) : (
-          <Text className="text-[#555] text-[13px] leading-relaxed">
+          <Text className="text-leben-text-muted text-[13px] leading-relaxed">
             Your AI morning brief will appear here once you've added tasks, habits, and goals. Start by creating your first task.
           </Text>
         )}
@@ -160,7 +162,7 @@ export function AIMorningBrief() {
                 onPress={() => handleGenerate(true)}
                 className="px-4 py-3 rounded-xl border border-leben-border active:opacity-70"
               >
-                <Text className="text-[#555] font-medium text-[13px]">Regenerate</Text>
+                <Text className="text-leben-text-muted font-medium text-[13px]">Regenerate</Text>
               </TouchableOpacity>
             )}
 
@@ -192,7 +194,7 @@ export function AIMorningBrief() {
               onPress={() => router.push('/(tabs)/habits' as any)}
               className="px-4 py-2.5 rounded-lg border border-leben-border active:opacity-70"
             >
-              <Text className="text-[#666] font-medium text-[13px]">Set up habits</Text>
+              <Text className="text-leben-text-dim font-medium text-[13px]">Set up habits</Text>
             </TouchableOpacity>
           </>
         )}

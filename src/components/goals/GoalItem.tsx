@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, TouchableOpacity, TextInput } from 'react-native';
 import { Goal, deriveGoalStats, Milestone, generateMilestoneId } from '@/utils/goals.types';
 import { useLebenStore } from '@/store/useStore';
 import { Card } from '@/components/ui/Card';
+import { Text } from '@/components/ui/Text';
+
 
 interface GoalItemProps {
   goal: Goal;
@@ -40,7 +42,7 @@ export function GoalItem({ goal }: GoalItemProps) {
   };
 
   return (
-    <Card className="p-5 mb-4" style={{ backgroundColor: '#111', borderColor: '#1e1e1e' }}>
+    <Card className="p-5 mb-4" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
       {/* Header Row */}
       <View className="flex-row items-start justify-between mb-4">
         <View
@@ -52,10 +54,10 @@ export function GoalItem({ goal }: GoalItemProps) {
 
         <View className="flex-row items-center gap-3">
           <TouchableOpacity onPress={handleEditToggle}>
-            <Text className="text-[#888] text-sm">✏️</Text>
+            <Text className="text-leben-text-muted text-sm">✏️</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => removeGoal(goal.id)}>
-            <Text className="text-[#888] text-sm">🗑️</Text>
+            <Text className="text-leben-text-muted text-sm">🗑️</Text>
           </TouchableOpacity>
           <View
             className="px-2 py-1 rounded"
@@ -77,7 +79,7 @@ export function GoalItem({ goal }: GoalItemProps) {
           <TextInput
             value={editTitle}
             onChangeText={setEditTitle}
-            className="bg-[#1a1a1a] border border-[#333] text-white px-3 py-2 rounded-lg text-[14px]"
+            className="bg-leben-bg-secondary border border-leben-border text-white px-3 py-2 rounded-lg text-[14px]"
             placeholder="Goal Title"
             placeholderTextColor="#666"
             autoFocus
@@ -85,7 +87,7 @@ export function GoalItem({ goal }: GoalItemProps) {
           <TextInput
             value={editDeadline}
             onChangeText={setEditDeadline}
-            className="bg-[#1a1a1a] border border-[#333] text-white px-3 py-2 rounded-lg text-[11px]"
+            className="bg-leben-bg-secondary border border-leben-border text-white px-3 py-2 rounded-lg text-[11px]"
             placeholder="Deadline (e.g. Dec 2025)"
             placeholderTextColor="#666"
           />
@@ -95,7 +97,7 @@ export function GoalItem({ goal }: GoalItemProps) {
           <Text className="text-white font-bold text-[20px] tracking-tight leading-tight mb-1">
             {goal.title}
           </Text>
-          <Text className="text-[#555] text-[11px]">
+          <Text className="text-leben-text-muted text-[11px]">
             Deadline: {goal.deadline}
           </Text>
         </View>
@@ -104,19 +106,19 @@ export function GoalItem({ goal }: GoalItemProps) {
       {/* Progress Bar */}
       <View className="mb-5">
         <View className="flex-row justify-between mb-2">
-          <Text className="text-[#555] text-[11px] font-medium">Progress</Text>
-          <Text className="text-[#888] text-[11px] font-medium">{progress}%</Text>
+          <Text className="text-leben-text-muted text-[11px] font-medium">Progress</Text>
+          <Text className="text-leben-text-muted text-[11px] font-medium">{progress}%</Text>
         </View>
         <View className="h-[3px] rounded-full bg-[#1e1e1e] overflow-hidden">
           <View
             className="h-full rounded-full"
-            style={{ width: `${progress}%`, backgroundColor: '#7c6af0' }}
+            style={{ width: `${progress}%`, backgroundColor: 'var(--accent-blue)' }}
           />
         </View>
       </View>
 
       {/* Milestones label */}
-      <Text className="text-[#444] text-[9px] uppercase tracking-widest font-bold mb-3">
+      <Text className="text-leben-text-dim text-[9px] uppercase tracking-widest font-bold mb-3">
         Milestones
       </Text>
 
@@ -126,14 +128,14 @@ export function GoalItem({ goal }: GoalItemProps) {
             {editMilestones.map((m, index) => (
               <View
                 key={m.id}
-                className="flex-row items-center gap-2 mb-2 pb-2 border-b border-[#222]"
+                className="flex-row items-center gap-2 mb-2 pb-2 border-b border-leben-border"
               >
                 {/* Done indicator (non-interactive in edit mode) */}
                 <View
                   className="w-4 h-4 rounded-full"
                   style={{
                     backgroundColor: m.done ? 'rgba(124,106,240,0.2)' : 'transparent',
-                    borderColor:     m.done ? '#7c6af0' : '#333',
+                    borderColor:     m.done ? 'var(--accent-blue)' : 'var(--border-primary)',
                     borderWidth: 1,
                   }}
                 />
@@ -144,7 +146,7 @@ export function GoalItem({ goal }: GoalItemProps) {
                     newM[index] = { ...newM[index], label: text };
                     setEditMilestones(newM);
                   }}
-                  className="flex-1 bg-[#1a1a1a] text-[#eee] text-[12px] px-2 py-1.5 rounded border border-[#333]"
+                  className="flex-1 bg-leben-bg-secondary text-[#eee] text-[12px] px-2 py-1.5 rounded border border-leben-border"
                   placeholder="Milestone label"
                   placeholderTextColor="#555"
                 />
@@ -184,7 +186,7 @@ export function GoalItem({ goal }: GoalItemProps) {
           </>
         ) : (
           safeGoal.milestones.length === 0 ? (
-            <Text className="text-[#333] text-[12px]">No milestones yet.</Text>
+            <Text className="text-leben-text-dim text-[12px]">No milestones yet.</Text>
           ) : (
             safeGoal.milestones.map((m) => (
               <View key={m.id} className="flex-row items-center gap-3 w-full">
@@ -194,7 +196,7 @@ export function GoalItem({ goal }: GoalItemProps) {
                   className="w-4 h-4 rounded-full items-center justify-center shrink-0"
                   style={{
                     backgroundColor: m.done ? 'rgba(124,106,240,0.2)' : 'transparent',
-                    borderColor:     m.done ? '#7c6af0' : '#333',
+                    borderColor:     m.done ? 'var(--accent-blue)' : 'var(--border-primary)',
                     borderWidth: 1,
                   }}
                 >
@@ -209,7 +211,7 @@ export function GoalItem({ goal }: GoalItemProps) {
                   <Text
                     className="text-[12px] leading-snug"
                     style={{
-                      color:               m.done ? '#888' : '#ccc',
+                      color:               m.done ? 'var(--text-muted)' : 'var(--text-secondary)',
                       textDecorationLine:  m.done ? 'line-through' : 'none',
                     }}
                   >

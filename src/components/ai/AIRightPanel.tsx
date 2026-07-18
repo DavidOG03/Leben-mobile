@@ -1,4 +1,6 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 export default function AIRightPanel() {
   return (
@@ -8,7 +10,7 @@ export default function AIRightPanel() {
         width: 240,
         backgroundColor: '#0c0c0c',
         borderLeftWidth: 1,
-        borderLeftColor: '#161616',
+        borderLeftColor: 'var(--bg-card)',
       }}
     >
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
@@ -25,7 +27,7 @@ export default function AIRightPanel() {
             Today's Focus
           </Text>
           {/* Empty state or placeholders can go here */}
-          <Text style={{ fontSize: 11, color: '#555' }}>
+          <Text style={{ fontSize: 11, color: 'var(--text-muted)' }}>
             No focus blocks scheduled yet.
           </Text>
         </View>

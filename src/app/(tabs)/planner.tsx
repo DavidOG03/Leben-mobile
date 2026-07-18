@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useLebenStore } from '@/store/useStore';
 import { Timeline } from '@/components/planner/Timeline';
 import { AIInsightsCard } from '@/components/planner/AIInsightsCard';
@@ -10,6 +10,8 @@ import { RefreshIcon, PlusIcon, TrashIcon } from '@/constants/Icons';
 import { generateDayPlan } from '@/lib/ai/aiPlanner';
 import { useRouter } from 'expo-router';
 import { ScreenLayout } from '@/components/shared/ScreenLayout';
+import { Text } from '@/components/ui/Text';
+
 
 export default function PlannerScreen() {
   const tasks = useLebenStore((s) => s.tasks);
@@ -80,7 +82,7 @@ export default function PlannerScreen() {
                   borderColor: 'rgba(124, 106, 240, 0.2)',
                 }}
               >
-                <Text style={{ color: '#7c6af0', fontSize: 9, fontWeight: 'bold', letterSpacing: 1 }}>
+                <Text style={{ color: 'var(--accent-blue)', fontSize: 9, fontWeight: 'bold', letterSpacing: 1 }}>
                   AI GENERATED
                 </Text>
               </View>
@@ -91,7 +93,7 @@ export default function PlannerScreen() {
             >
               Your Day, Planned
             </Text>
-            <Text className="text-[#666]" style={{ fontSize: 14, lineHeight: 22, maxWidth: 480 }}>
+            <Text className="text-leben-text-dim" style={{ fontSize: 14, lineHeight: 22, maxWidth: 480 }}>
               Optimized for your current energy peaks and high-priority deliverables.
             </Text>
           </View>
@@ -101,8 +103,8 @@ export default function PlannerScreen() {
             disabled={isRegenerating}
             className="flex-row items-center gap-2 px-5 py-2.5 rounded-xl border"
             style={{
-              backgroundColor: '#161616',
-              borderColor: '#222',
+              backgroundColor: 'var(--bg-card)',
+              borderColor: 'var(--border-primary)',
               opacity: isRegenerating ? 0.5 : 1,
             }}
           >
@@ -137,16 +139,16 @@ export default function PlannerScreen() {
             <TouchableOpacity
               onPress={() => router.push('/(tabs)/tasks' as any)}
               className="flex-row items-center justify-center gap-2 px-5 py-3 rounded-xl border flex-1 min-w-[140px]"
-              style={{ backgroundColor: '#111', borderColor: '#1e1e1e' }}
+              style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}
             >
               <PlusIcon color="#666" size={16} />
-              <Text style={{ color: '#666', fontSize: 13, fontWeight: 'bold' }}>Add Task</Text>
+              <Text style={{ color: 'var(--text-dim)', fontSize: 13, fontWeight: 'bold' }}>Add Task</Text>
             </TouchableOpacity>
             
             <TouchableOpacity
               onPress={() => setSchedule([])}
               className="flex-row items-center justify-center gap-2 px-5 py-3 rounded-xl border flex-1 min-w-[140px]"
-              style={{ backgroundColor: '#111', borderColor: '#1e1e1e' }}
+              style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}
             >
               <TrashIcon color="#e85555" size={14} />
               <Text style={{ color: '#e85555', fontSize: 13, fontWeight: 'bold' }}>Clear Schedule</Text>

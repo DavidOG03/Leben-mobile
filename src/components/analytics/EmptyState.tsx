@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 interface EmptyStateProps {
   icon: string | React.ReactNode;
@@ -15,11 +17,11 @@ export default function EmptyState({ icon, message, hint }: EmptyStateProps) {
       ) : (
         <View style={{ opacity: 0.4 }}>{icon}</View>
       )}
-      <Text className="text-[#444] font-medium" style={{ fontSize: 12 }}>
+      <Text className="text-leben-text-dim font-medium" style={{ fontSize: 12 }}>
         {message}
       </Text>
       <Text
-        className="text-center text-[#333]"
+        className="text-center text-leben-text-dim"
         style={{ fontSize: 10, maxWidth: 160, lineHeight: 15 }}
       >
         {hint}

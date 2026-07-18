@@ -2,13 +2,12 @@ import ReminderPicker from "@/components/shared/ReminderPicker";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { useLebenStore } from "@/store/useStore";
 import { useState } from "react";
-import {
-  ScrollView,
-  Text,
+import { ScrollView,
+import { Text } from '@/components/ui/Text';
+
   TextInput,
   TouchableOpacity,
-  View,
-} from "react-native";
+  View, } from 'react-native';
 
 interface AddHabitSheetProps {
   visible: boolean;
@@ -167,9 +166,9 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
           <View className="flex-row items-center justify-between mt-4">
             <TouchableOpacity
               onPress={() => setShowReminder(true)}
-              className="flex-row items-center gap-1.5 p-2 bg-[#1a1a1a] rounded-lg border border-[#2a2a2a]"
+              className="flex-row items-center gap-1.5 p-2 bg-leben-bg-secondary rounded-lg border border-leben-border"
             >
-              <Text className="text-[#888] text-[12px]">
+              <Text className="text-leben-text-muted text-[12px]">
                 {reminderAt
                   ? new Date(reminderAt).toLocaleTimeString([], {
                       hour: "2-digit",
@@ -206,7 +205,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
                     fontSize: 14,
                     fontWeight: "600",
                   }}
-                  className={label.trim() ? "text-leben-bg" : "text-[#555]"}
+                  className={label.trim() ? "text-leben-bg" : "text-leben-text-muted"}
                 >
                   Add Habit
                 </Text>

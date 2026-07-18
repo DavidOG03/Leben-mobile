@@ -4,26 +4,27 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './app/**/*.{js,jsx,ts,tsx}'],
   presets: [require('nativewind/preset')],
   theme: {
+    darkMode: 'class',
     extend: {
       colors: {
-        // ── Leben Brand Palette (matches web globals.css exactly) ──────────
-        'leben-bg': '#0a0a0a',
-        'leben-bg-card': '#161616',
-        'leben-bg-secondary': '#1a1a1a',
-        'leben-bg-element': '#212225',
-        'leben-border': '#222222',
-        'leben-border-subtle': '#1a1a1a',
+        // ── Leben Brand Palette ──────────
+        'leben-bg': 'var(--bg-primary)',
+        'leben-bg-card': 'var(--bg-card)',
+        'leben-bg-secondary': 'var(--bg-secondary)',
+        'leben-bg-element': 'var(--bg-element)',
+        'leben-border': 'var(--border-primary)',
+        'leben-border-subtle': 'var(--border-subtle)',
 
-        // Accent — #7c6af0 used in sidebar active, #6b7fff in CSS vars
-        'leben-accent': '#7c6af0',
-        'leben-accent-light': '#9d8ff5',
+        // Accent
+        'leben-accent': 'var(--accent-blue)',
+        'leben-accent-light': 'var(--accent-blue-light)',
         'leben-accent-dim': 'rgba(107,127,255,0.12)',
 
         // Text
-        'leben-text': '#f0f0f0',
-        'leben-text-2': '#acacac',
-        'leben-text-muted': '#888888',
-        'leben-text-dim': '#444444',
+        'leben-text': 'var(--text-primary)',
+        'leben-text-2': 'var(--text-secondary)',
+        'leben-text-muted': 'var(--text-muted)',
+        'leben-text-dim': 'var(--text-dim)',
 
         // Semantic
         'leben-success': '#4caf7d',

@@ -1,5 +1,7 @@
-import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import type { TouchableOpacityProps } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 interface ButtonProps extends TouchableOpacityProps {
   label: string;
@@ -49,7 +51,7 @@ export function Button({
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'secondary' || variant === 'ghost' ? '#7c6af0' : '#fff'} size="small" />
+        <ActivityIndicator color={variant === 'secondary' || variant === 'ghost' ? 'var(--accent-blue)' : 'var(--text-primary)'} size="small" />
       ) : (
         <Text className={`${textClasses[variant]} ${size === 'sm' ? 'text-sm' : 'text-[15px]'}`}>
           {label}

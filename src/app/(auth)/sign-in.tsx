@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import {
-  View, Text, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ActivityIndicator, Alert,
-} from 'react-native';
+import { View, TextInput, TouchableOpacity,
+  KeyboardAvoidingView, Platform, ActivityIndicator, Alert, } from 'react-native';
 import { useRouter }  from 'expo-router';
 import { supabase }   from '@/lib/supabase/client';
 
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import { Feather } from '@expo/vector-icons';
+import { Text } from '@/components/ui/Text';
+
 
 // Complete auth session for web/browser
 WebBrowser.maybeCompleteAuthSession();

@@ -1,4 +1,6 @@
-import { View, Text } from 'react-native';
+import { View, } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 interface FocusItem {
   title: string;
@@ -14,8 +16,8 @@ export function TodaysFocusCard({ focusItems }: TodaysFocusCardProps) {
     <View
       className="rounded-2xl p-6 flex-col gap-5"
       style={{
-        backgroundColor: '#111',
-        borderColor: '#1e1e1e',
+        backgroundColor: 'var(--bg-card)',
+        borderColor: 'var(--border-primary)',
         borderWidth: 1,
       }}
     >
@@ -25,7 +27,7 @@ export function TodaysFocusCard({ focusItems }: TodaysFocusCardProps) {
 
       <View className="flex-col gap-4">
         {focusItems.length === 0 ? (
-          <Text style={{ color: '#444', fontSize: 12 }}>
+          <Text style={{ color: 'var(--text-dim)', fontSize: 12 }}>
             No high-priority focus set.
           </Text>
         ) : (
@@ -37,12 +39,12 @@ export function TodaysFocusCard({ focusItems }: TodaysFocusCardProps) {
                   width: 32,
                   height: 32,
                   borderRadius: 8,
-                  backgroundColor: '#161616',
-                  borderColor: '#222',
+                  backgroundColor: 'var(--bg-card)',
+                  borderColor: 'var(--border-primary)',
                   borderWidth: 1,
                 }}
               >
-                <Text style={{ color: '#555', fontSize: 12, fontWeight: 'bold' }}>
+                <Text style={{ color: 'var(--text-muted)', fontSize: 12, fontWeight: 'bold' }}>
                   0{i + 1}
                 </Text>
               </View>
@@ -56,7 +58,7 @@ export function TodaysFocusCard({ focusItems }: TodaysFocusCardProps) {
                 <Text
                   style={{
                     fontSize: 9,
-                    color: '#666',
+                    color: 'var(--text-dim)',
                     letterSpacing: 1,
                     textTransform: 'uppercase',
                   }}

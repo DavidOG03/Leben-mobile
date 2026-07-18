@@ -1,11 +1,16 @@
 import { useState } from 'react';
-import {
-  View, Text, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ActivityIndicator, Alert, ScrollView,
-} from 'react-native';
+import { View, TextInput, TouchableOpacity,
+  KeyboardAvoidingView, Platform, ActivityIndicator, Alert, ScrollView, } from 'react-native';
 import { useRouter } from 'expo-router';
 import { supabase }  from '@/lib/supabase/client';
 import { Feather } from '@expo/vector-icons';
+import * as WebBrowser from 'expo-web-browser';
+import * as Linking from 'expo-linking';
+import { Text } from '@/components/ui/Text';
+
+
+// Complete auth session for web/browser
+WebBrowser.maybeCompleteAuthSession();
 
 function passwordStrength(pw: string): { label: string; color: string; pct: number } {
   if (pw.length === 0)  return { label: '',       color: 'transparent',    pct: 0 };
@@ -69,12 +74,44 @@ export default function SignUpScreen() {
   const handleGoogleSignIn = async () => {
     setErrorMessage(null);
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: 'leben://auth/callback' },
-    });
-    setLoading(false);
-    if (error) setErrorMessage(getFriendlyErrorMessage(error.message));
+    try {
+      const redirectUrl = Linking.createURL('/(auth)/callback');
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: redirectUrl,
+          skipBrowserRedirect: true,
+        },
+      });
+
+      if (error) throw error;
+      if (!data.url) throw new Error('No OAuth URL returned');
+
+      const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
+
+      if (result.type === 'success') {
+        const { url } = result;
+        // Parse the URL to pass the hash to Supabase
+        const params = new URL(url.replace('#', '?')).searchParams;
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+
+        if (accessToken && refreshToken) {
+          await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+        } else {
+          // Alternative fallback for implicit grant parsing
+          await supabase.auth.getSession();
+        }
+      }
+    } catch (err: any) {
+      setErrorMessage(getFriendlyErrorMessage(err.message));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

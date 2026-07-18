@@ -2,7 +2,9 @@ import { getTaskPriority, TaskPrioritySuggestion } from "@/lib/ai/client";
 import { useLebenStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 export function SmartSuggestion() {
   const router = useRouter();

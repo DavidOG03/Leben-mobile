@@ -1,56 +1,72 @@
-# Welcome to your Expo app 👋
+# Leben Mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+![Expo](https://img.shields.io/badge/Expo-1B1F23?style=for-the-badge&logo=expo&logoColor=white)
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
-## Get started
+**Leben Mobile** is the mobile application counterpart to the **Leben** web platform. It brings the core features of the Leben ecosystem to your mobile device. Because it is built with React Native, the underlying codebase supports **both Android and iOS**. Depending on your testing setup, you can build and run it on either platform.
 
-1. Install dependencies
+## 🔗 The Original Leben Project
 
+This project is an official offshoot of the original **Leben** web application. While the original project focuses on delivering a comprehensive web-based interface, this repository adapts its capabilities for a mobile-first environment.
+
+- **Main Web Repository:** [DavidOG03/Leben](https://github.com/DavidOG03/Leben)
+
+## 🚀 Getting Started
+
+**Important Note on Expo Go:** Because this project uses native modules that are not included in the standard Expo Go app (such as Expo Notifications), you **cannot** run it using Expo Go. You must create and use a **Custom Development Build**.
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) installed
+- [EAS CLI](https://docs.expo.dev/build/setup/) installed globally (`npm install -g eas-cli`)
+- An active Expo account (log in via `eas login`)
+- Android Studio / Android Emulator (for Android) or Xcode / iOS Simulator (for iOS) installed on your machine.
+
+### Installation & Running the Development Build
+
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repository-url>
+   cd Leben-mobile
+   ```
+
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. **Create the Development Build:**
+   You need to build a custom development client for your target platform. 
+   
+   *For Android:*
    ```bash
-   npx expo start
+   eas build --profile development --platform android
    ```
+   *For iOS:*
+   ```bash
+   eas build --profile development --platform ios
+   ```
+   *(Alternatively, if you have your local environment completely set up, you can build locally without EAS by running `npx expo run:android` or `npx expo run:ios`)*
 
-In the output, you'll find options to open the app in a
+4. **Install the Build on your Device/Emulator:**
+   Once the EAS build finishes, download the resulting application file (e.g., `.apk` for Android) and install it on your physical device or emulator.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+5. **Start the Development Server:**
+   After the custom dev client is installed, start your local Metro bundler with the dev client flag:
+   ```bash
+   npx expo start --dev-client
+   ```
+   Open the installed app on your device, and it will automatically connect to your local Metro server.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🛠 Tech Stack
 
-## Get a fresh project
+- **Framework:** [React Native](https://reactnative.dev/)
+- **Toolkit:** [Expo](https://expo.dev/) (Custom Development Builds)
+- **Routing:** [Expo Router](https://docs.expo.dev/router/introduction/) (File-based routing)
 
-When you're ready, run:
+## 🤝 Contributing
 
-```bash
-npm run reset-project
-```
+Contributions, issues, and feature requests are welcome! If you're interested in improving the app, feel free to submit a pull request or open an issue.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 📝 License
 
-### Other setup steps
-
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project is open-source and available under the terms of the MIT License.

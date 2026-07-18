@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { SparkleIcon } from '@/constants/Icons';
 import {
   getImportStateKey,
@@ -8,6 +8,8 @@ import {
   parseStructuredListItems,
 } from '@/utils/aiChatImportUtils';
 import type { ChatMessage, ImportKind } from '@/utils/aiChatTypes';
+import { Text } from '@/components/ui/Text';
+
 
 function renderInlineFormatting(text: string) {
   const parts: Array<string | React.JSX.Element> = [];
@@ -35,8 +37,8 @@ function renderAssistantMessage(message: string) {
       <View key={`list-${index}`} className="ml-4 space-y-1 mt-2">
         {block.content.map((item: string, itemIndex: number) => (
           <View key={`item-${index}-${itemIndex}`} className="flex-row">
-            <Text className="text-[#ccc] text-[14px] mr-2">•</Text>
-            <Text className="text-[#ccc] text-[14px] leading-relaxed flex-1">
+            <Text className="text-leben-text-2 text-[14px] mr-2">•</Text>
+            <Text className="text-leben-text-2 text-[14px] leading-relaxed flex-1">
               {renderInlineFormatting(item)}
             </Text>
           </View>
@@ -45,7 +47,7 @@ function renderAssistantMessage(message: string) {
     ) : (
       <Text
         key={`para-${index}`}
-        className="text-[#ccc] text-[14px] leading-relaxed mt-2"
+        className="text-leben-text-2 text-[14px] leading-relaxed mt-2"
       >
         {block.content.map((line: string, lineIndex: number) => (
           <React.Fragment key={`line-${index}-${lineIndex}`}>
@@ -117,9 +119,9 @@ export default function AIChatMessages({
                 <View
                   className="rounded-2xl px-5 py-4"
                   style={{
-                    backgroundColor: '#161616',
+                    backgroundColor: 'var(--bg-card)',
                     borderWidth: 1,
-                    borderColor: '#1e1e1e',
+                    borderColor: 'var(--border-primary)',
                   }}
                 >
                   <View>
@@ -132,14 +134,14 @@ export default function AIChatMessages({
                       disabled={isImported}
                       className="self-start rounded-lg px-3 py-2 mt-4"
                       style={{
-                        backgroundColor: isImported ? '#2a2a2a' : '#2d2480',
+                        backgroundColor: isImported ? 'var(--border-primary)' : '#2d2480',
                         borderWidth: 1,
                         borderColor: isImported ? '#3a3a3a' : '#6258f2',
                       }}
                     >
                       <Text
                         style={{
-                          color: isImported ? '#888' : '#fff',
+                          color: isImported ? 'var(--text-muted)' : 'var(--text-primary)',
                           fontSize: 11,
                           fontWeight: '600',
                         }}
@@ -158,7 +160,7 @@ export default function AIChatMessages({
                     borderColor: 'rgba(124,106,240,0.2)',
                   }}
                 >
-                  <Text className="text-[#e0e0e0] text-[14px] leading-relaxed">
+                  <Text className="text-leben-text text-[14px] leading-relaxed">
                     {msg.content}
                   </Text>
                   <Text
@@ -195,9 +197,9 @@ export default function AIChatMessages({
           </View>
           <View
             className="rounded-2xl px-5 py-4 justify-center"
-            style={{ backgroundColor: '#161616', borderWidth: 1, borderColor: '#1e1e1e' }}
+            style={{ backgroundColor: 'var(--bg-card)', borderWidth: 1, borderColor: 'var(--border-primary)' }}
           >
-            <Text className="text-[12px] text-[#555] font-medium italic">
+            <Text className="text-[12px] text-leben-text-muted font-medium italic">
               Neural engine processing...
             </Text>
           </View>

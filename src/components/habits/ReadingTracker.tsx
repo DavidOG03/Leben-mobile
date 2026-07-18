@@ -1,8 +1,10 @@
 import { PlusIcon } from "@/constants/Icons";
 import type { Book } from "@/store/bookSlice";
 import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import BookCard from "./BookCard";
+import { Text } from '@/components/ui/Text';
+
 
 interface ReadingTrackerProps {
   onShowAddBook: (show: boolean) => void;
@@ -54,7 +56,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           >
             Reading Tracker
           </Text>
-          <Text className="text-xs text-[#888] my-2">
+          <Text className="text-xs text-leben-text-muted my-2">
             Track every book you're working through.
           </Text>
         </View>

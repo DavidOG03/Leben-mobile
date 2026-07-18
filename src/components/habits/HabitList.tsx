@@ -1,6 +1,8 @@
 import { useLebenStore } from "@/store/useStore";
-import { Text, View } from "react-native";
+import { , View } from 'react-native';
 import { HabitItem } from "./HabitItem";
+import { Text } from '@/components/ui/Text';
+
 
 export function HabitList() {
   const habits = useLebenStore((s) => s.habits);

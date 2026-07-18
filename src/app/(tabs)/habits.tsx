@@ -5,7 +5,9 @@ import AddBookModal from "@/components/habits/AddBookModal";
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { useState } from "react";
 import { useLebenStore } from "@/store/useStore";
-import { Text, TouchableOpacity, View } from "react-native";
+import { , TouchableOpacity, View } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 export default function HabitsScreen() {
   const [showAddSheet, setShowAddSheet] = useState(false);
@@ -25,7 +27,7 @@ export default function HabitsScreen() {
             >
               Daily Rituals
             </Text>
-            <Text className="text-[#888] text-[12px] mt-0.5 mb-1 text-wrap">
+            <Text className="text-leben-text-muted text-[12px] mt-0.5 mb-1 text-wrap">
               Consistency is the bridge between goals and accomplishment.
             </Text>
           </View>
@@ -39,7 +41,7 @@ export default function HabitsScreen() {
               borderColor: "#2a2a2a",
             }}
           >
-            <Text className="text-[#ccc] text-[12px] font-medium">
+            <Text className="text-leben-text-2 text-[12px] font-medium">
               ＋ Add Habit
             </Text>
           </TouchableOpacity>

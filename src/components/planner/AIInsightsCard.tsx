@@ -1,5 +1,7 @@
-import { View, Text } from 'react-native';
+import { View, } from 'react-native';
 import { SparkleIcon } from '@/constants/Icons';
+import { Text } from '@/components/ui/Text';
+
 
 interface AIInsightsCardProps {
   insights: string[];
@@ -29,7 +31,7 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
           </Text>
         </View>
         <Text
-          className="text-[#888]"
+          className="text-leben-text-muted"
           style={{ fontSize: 12, lineHeight: 19 }}
         >
           Generating your personalized day plan...
@@ -52,14 +54,14 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
           className="p-1.5 rounded-lg"
           style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
         >
-          <Text style={{ color: '#7c6af0', fontSize: 16 }}>✨</Text>
+          <Text style={{ color: 'var(--accent-blue)', fontSize: 16 }}>✨</Text>
         </View>
         <Text className="text-white font-semibold" style={{ fontSize: 14 }}>
           AI Insights
         </Text>
       </View>
 
-      <Text className="text-[#888]" style={{ fontSize: 12, lineHeight: 19 }}>
+      <Text className="text-leben-text-muted" style={{ fontSize: 12, lineHeight: 19 }}>
         {insights[0] || "No insights generated yet."}
       </Text>
 
@@ -72,7 +74,7 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
                 width: 14,
                 height: 14,
                 borderRadius: 7,
-                borderColor: '#7c6af0',
+                borderColor: 'var(--accent-blue)',
                 borderWidth: 1,
               }}
             >
@@ -81,7 +83,7 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
                   width: 6,
                   height: 6,
                   borderRadius: 3,
-                  backgroundColor: '#7c6af0',
+                  backgroundColor: 'var(--accent-blue)',
                 }}
               />
             </View>

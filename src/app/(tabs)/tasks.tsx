@@ -3,7 +3,9 @@ import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { SmartSuggestion } from "@/components/tasks/SmartSuggestion";
 import { TaskInput } from "@/components/tasks/TaskInput";
 import { TaskList } from "@/components/tasks/TaskList";
-import { Text, View } from "react-native";
+import { , View } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 export default function TasksScreen() {
   return (
@@ -15,7 +17,7 @@ export default function TasksScreen() {
           <Text className="text-white font-bold text-3xl tracking-tight leading-tight mb-1">
             Daily Tasks
           </Text>
-          <Text className="text-[#555] text-[13px]">
+          <Text className="text-leben-text-muted text-[13px]">
             Focused execution for today's intentions.
           </Text>
         </View>

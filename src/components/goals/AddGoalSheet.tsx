@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useLebenStore } from '@/store/useStore';
 import { GoalFormData } from '@/utils/goals.types';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import ReminderPicker from '@/components/shared/ReminderPicker';
+import { Text } from '@/components/ui/Text';
+
 
 const ICON_OPTIONS = [
   "🌐", "🏃", "🚀", "💰", "📚",
@@ -94,7 +96,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
           
           {/* Icon picker */}
           <View>
-            <Text style={{ fontSize: 10, color: '#555', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+            <Text style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
               Icon
             </Text>
             <View className="flex-row flex-wrap gap-2">
@@ -107,8 +109,8 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                     width: 36,
                     height: 36,
                     borderWidth: 1,
-                    borderColor: form.icon === icon ? '#7c6af0' : '#2a2a2a',
-                    backgroundColor: form.icon === icon ? 'rgba(124,106,240,0.15)' : '#161616',
+                    borderColor: form.icon === icon ? 'var(--accent-blue)' : 'var(--border-primary)',
+                    backgroundColor: form.icon === icon ? 'rgba(124,106,240,0.15)' : 'var(--bg-card)',
                   }}
                 >
                   <Text style={{ fontSize: 18 }}>{icon}</Text>
@@ -119,7 +121,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
 
           {/* Title */}
           <View>
-            <Text style={{ fontSize: 10, color: '#555', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+            <Text style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
               Goal Title
             </Text>
             <TextInput
@@ -129,9 +131,9 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               placeholderTextColor="#555"
               className="w-full rounded-xl px-4 py-3 text-white"
               style={{
-                backgroundColor: '#161616',
+                backgroundColor: 'var(--bg-card)',
                 borderWidth: 1,
-                borderColor: errors.title ? '#e05c5c' : '#2a2a2a',
+                borderColor: errors.title ? '#e05c5c' : 'var(--border-primary)',
                 fontSize: 14,
               }}
             />
@@ -142,7 +144,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
 
           {/* Deadline */}
           <View>
-            <Text style={{ fontSize: 10, color: '#555', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+            <Text style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
               Deadline
             </Text>
             <TextInput
@@ -152,9 +154,9 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               placeholderTextColor="#555"
               className="w-full rounded-xl px-4 py-3 text-white"
               style={{
-                backgroundColor: '#161616',
+                backgroundColor: 'var(--bg-card)',
                 borderWidth: 1,
-                borderColor: errors.deadline ? '#e05c5c' : '#2a2a2a',
+                borderColor: errors.deadline ? '#e05c5c' : 'var(--border-primary)',
                 fontSize: 14,
               }}
             />
@@ -165,7 +167,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
 
           {/* Milestones */}
           <View>
-            <Text style={{ fontSize: 10, color: '#555', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+            <Text style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
               Milestones
             </Text>
             <View className="gap-2">
@@ -178,9 +180,9 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                   placeholderTextColor="#555"
                   className="w-full rounded-xl px-4 py-3 text-white"
                   style={{
-                    backgroundColor: '#161616',
+                    backgroundColor: 'var(--bg-card)',
                     borderWidth: 1,
-                    borderColor: '#2a2a2a',
+                    borderColor: 'var(--border-primary)',
                     fontSize: 13,
                   }}
                 />
@@ -190,14 +192,14 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.milestones}</Text>
             ) : null}
             <TouchableOpacity onPress={addMilestoneField} className="mt-3">
-              <Text style={{ fontSize: 12, color: '#7c6af0' }}>+ Add milestone</Text>
+              <Text style={{ fontSize: 12, color: 'var(--accent-blue)' }}>+ Add milestone</Text>
             </TouchableOpacity>
           </View>
 
           {/* Actions */}
           <View className="flex-row items-center justify-between mt-4">
-            <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1.5 p-2 bg-[#1a1a1a] rounded-lg border border-[#2a2a2a]">
-              <Text className="text-[#888] text-[12px]">{form.reminderAt ? new Date(form.reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Add Reminder"}</Text>
+            <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1.5 p-2 bg-leben-bg-secondary rounded-lg border border-leben-border">
+              <Text className="text-leben-text-muted text-[12px]">{form.reminderAt ? new Date(form.reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Add Reminder"}</Text>
             </TouchableOpacity>
 
             <View className="flex-row gap-3 flex-1 ml-3">
@@ -205,19 +207,19 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                 onPress={handleCancel}
                 className="flex-1 py-3 rounded-xl items-center justify-center"
                 style={{
-                  backgroundColor: '#161616',
+                  backgroundColor: 'var(--bg-card)',
                   borderWidth: 1,
-                  borderColor: '#2a2a2a',
+                  borderColor: 'var(--border-primary)',
                 }}
               >
-                <Text style={{ color: '#888', fontSize: 13, fontWeight: '600' }}>Cancel</Text>
+                <Text style={{ color: 'var(--text-muted)', fontSize: 13, fontWeight: '600' }}>Cancel</Text>
               </TouchableOpacity>
               
               <TouchableOpacity
                 onPress={handleSubmit}
                 className="flex-1 py-3 rounded-xl items-center justify-center"
                 style={{
-                  backgroundColor: '#f0f0f0',
+                  backgroundColor: 'var(--text-primary)',
                 }}
               >
                 <Text className="text-leben-bg font-semibold text-[13px]">Create Goal</Text>

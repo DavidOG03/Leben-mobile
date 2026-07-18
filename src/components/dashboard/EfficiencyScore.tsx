@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from 'react-native';
 import { useRouter } from "expo-router";
 import Svg, { Circle } from "react-native-svg";
 import Animated, {
@@ -10,6 +10,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { useLebenStore } from "@/store/useStore";
 import { Card } from "@/components/ui/Card";
+import { Text } from '@/components/ui/Text';
+
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -166,7 +168,7 @@ export function EfficiencyScore() {
       className="min-h-[260px] items-center justify-center p-7"
       style={{ backgroundColor: "#121212", borderColor: "#1e1e1e" }}
     >
-      <Text className="uppercase tracking-widest text-[#444] text-[10px] font-semibold mb-6">
+      <Text className="uppercase tracking-widest text-leben-text-dim text-[10px] font-semibold mb-6">
         Efficiency Score
       </Text>
 
@@ -215,10 +217,10 @@ export function EfficiencyScore() {
               />
             </Svg>
             <View className="absolute">
-              <Text className="text-[#333] text-2xl">🔒</Text>
+              <Text className="text-leben-text-dim text-2xl">🔒</Text>
             </View>
           </View>
-          <Text className="text-[#555] text-xs text-center leading-relaxed mb-4">
+          <Text className="text-leben-text-muted text-xs text-center leading-relaxed mb-4">
             Sign in to analyze{"\n"}your daily performance.
           </Text>
           <TouchableOpacity
@@ -265,7 +267,7 @@ export function EfficiencyScore() {
               </Text>
             </View>
           </View>
-          <Text className="text-[#333] text-[11px] text-center leading-relaxed">
+          <Text className="text-leben-text-dim text-[11px] text-center leading-relaxed">
             Score appears after{"\n"}your first active week
           </Text>
         </View>
@@ -297,7 +299,7 @@ export function EfficiencyScore() {
               />
             </Svg>
             <View className="absolute items-center">
-              <Text className="text-[#f0f0f0] text-3xl font-extrabold tracking-tight">
+              <Text className="text-leben-text text-3xl font-extrabold tracking-tight">
                 {analytics.score}%
               </Text>
               <Text className="text-leben-accent text-[10px] uppercase tracking-widest font-semibold mt-1">
@@ -305,7 +307,7 @@ export function EfficiencyScore() {
               </Text>
             </View>
           </View>
-          <Text className="text-[#666] text-xs text-center leading-relaxed">
+          <Text className="text-leben-text-dim text-xs text-center leading-relaxed">
             Based on your activity{"\n"}over the last 7 days.
           </Text>
         </View>

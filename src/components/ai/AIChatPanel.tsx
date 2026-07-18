@@ -1,16 +1,15 @@
 import { useAIChatPanel } from "@/hooks/useAIChatPanel";
 import { useRef } from "react";
-import {
-  KeyboardAvoidingView,
+import { KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Text,
   TextInput,
   TouchableOpacity,
-  View,
-} from "react-native";
+  View, } from 'react-native';
 import { SendIcon } from "../../constants/Icons";
 import AIChatMessages from "./AIChatMessages";
+import { Text } from '@/components/ui/Text';
+
 
 const suggestions = [
   { label: "Analyze my productivity" },
@@ -55,7 +54,7 @@ export default function AIChatPanel() {
             <TouchableOpacity
               key={suggestion.label}
               onPress={() => sendMessage(suggestion.label)}
-              className="px-4 py-2 rounded-xl border border-[#1a1a1a]"
+              className="px-4 py-2 rounded-xl border border-leben-border-subtle"
               style={{ backgroundColor: "#0e0e0e" }}
             >
               <Text style={{ color: "#888", fontSize: 12 }}>

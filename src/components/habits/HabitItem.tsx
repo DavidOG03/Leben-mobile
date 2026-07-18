@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useLebenStore, Habit } from '@/store/useStore';
 import { calcStreak } from '@/utils/habits';
+import { Text } from '@/components/ui/Text';
+
 
 interface HabitItemProps {
   habit: Habit;
@@ -42,11 +44,11 @@ export function HabitItem({ habit }: HabitItemProps) {
   return (
     <View
       style={{
-        backgroundColor: '#111',
+        backgroundColor: 'var(--bg-card)',
         borderRadius: 16,
         padding: 20,
         borderWidth: 1,
-        borderColor: isCheckedToday ? `${habit.color}55` : '#1e1e1e',
+        borderColor: isCheckedToday ? `${habit.color}55` : 'var(--border-primary)',
       }}
     >
       {/* Top row: icon + actions */}
@@ -93,13 +95,13 @@ export function HabitItem({ habit }: HabitItemProps) {
             value={editLabel}
             onChangeText={setEditLabel}
             style={{
-              backgroundColor: '#1a1a1a',
+              backgroundColor: 'var(--bg-secondary)',
               borderWidth: 1,
-              borderColor: '#333',
+              borderColor: 'var(--border-primary)',
               borderRadius: 8,
               paddingHorizontal: 10,
               paddingVertical: 6,
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: 14,
             }}
             placeholder="Habit Label"
@@ -109,13 +111,13 @@ export function HabitItem({ habit }: HabitItemProps) {
             value={editSub}
             onChangeText={setEditSub}
             style={{
-              backgroundColor: '#1a1a1a',
+              backgroundColor: 'var(--bg-secondary)',
               borderWidth: 1,
-              borderColor: '#333',
+              borderColor: 'var(--border-primary)',
               borderRadius: 8,
               paddingHorizontal: 10,
               paddingVertical: 6,
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: 11,
             }}
             placeholder="Subtext"
@@ -132,15 +134,15 @@ export function HabitItem({ habit }: HabitItemProps) {
               marginTop: 4,
             }}
           >
-            <Text style={{ color: '#fff', fontWeight: '600', fontSize: 12 }}>Save</Text>
+            <Text style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: 12 }}>Save</Text>
           </TouchableOpacity>
         </View>
       ) : (
         <>
-          <Text style={{ fontSize: 15, fontWeight: '700', color: '#fff', marginBottom: 2 }}>
+          <Text style={{ fontSize: 15, fontWeight: '700', color: 'var(--text-primary)', marginBottom: 2 }}>
             {habit.label}
           </Text>
-          <Text style={{ fontSize: 11, color: '#aaa', marginBottom: 4 }}>
+          <Text style={{ fontSize: 11, color: 'var(--text-secondary)', marginBottom: 4 }}>
             {habit.sub}
           </Text>
         </>
@@ -153,7 +155,7 @@ export function HabitItem({ habit }: HabitItemProps) {
 
       {/* Bottom row: done status + toggle */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Text style={{ fontSize: 10, color: isCheckedToday ? habit.color : '#aaa' }}>
+        <Text style={{ fontSize: 10, color: isCheckedToday ? habit.color : 'var(--text-secondary)' }}>
           {isCheckedToday ? `Done today ✓  🔥${currentStreak}` : `Not yet  🔥${currentStreak}`}
         </Text>
 
@@ -167,7 +169,7 @@ export function HabitItem({ habit }: HabitItemProps) {
             justifyContent: 'center',
             backgroundColor: isCheckedToday ? `${habit.color}22` : 'transparent',
             borderWidth: 1.5,
-            borderColor: isCheckedToday ? habit.color : '#333',
+            borderColor: isCheckedToday ? habit.color : 'var(--border-primary)',
           }}
           activeOpacity={0.7}
         >

@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Animated, { FadeInUp, FadeOutRight } from "react-native-reanimated";
 import { useLebenStore } from "@/store/useStore";
 import * as Notifications from "expo-notifications";
 import { SparkleIcon } from "@/constants/Icons"; // we'll use a generic icon for the toast
+import { Text } from '@/components/ui/Text';
+
 
 interface Toast {
   id: string;

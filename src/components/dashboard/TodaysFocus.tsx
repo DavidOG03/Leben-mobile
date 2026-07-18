@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useLebenStore } from '@/store/useStore';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { scheduleReminder, cancelReminder } from '@/hooks/useNotifications';
+import { Text } from '@/components/ui/Text';
+
 
 function truncateWords(text: string, maxWords = 4) {
   const words = text.trim().split(/\s+/);
@@ -62,7 +64,7 @@ export function TodaysFocus() {
   };
 
   return (
-    <Card className="min-h-[200px] p-0 overflow-hidden" style={{ backgroundColor: '#121212', borderColor: '#1e1e1e' }}>
+    <Card className="min-h-[200px] p-0 overflow-hidden" style={{ backgroundColor: '#121212', borderColor: 'var(--border-primary)' }}>
       {/* Header */}
       <View className="flex-row items-center justify-between p-6 pb-4">
         <Text className="text-white font-semibold text-[15px]">
@@ -80,15 +82,15 @@ export function TodaysFocus() {
       {/* Content */}
       {tasks.length === 0 ? (
         <View className="flex-1 items-center justify-center py-6 gap-3">
-          <Text className="text-[#333] text-2xl">十</Text>
-          <Text className="text-[#333] text-xs text-center leading-relaxed">
+          <Text className="text-leben-text-dim text-2xl">十</Text>
+          <Text className="text-leben-text-dim text-xs text-center leading-relaxed">
             No tasks yet
           </Text>
           <TouchableOpacity
             onPress={() => router.push('/(tabs)/tasks' as any)}
-            className="px-4 py-1.5 rounded-lg border border-[#222] active:opacity-70"
+            className="px-4 py-1.5 rounded-lg border border-leben-border active:opacity-70"
           >
-            <Text className="text-[#666] text-[11px]">Add your first task</Text>
+            <Text className="text-leben-text-dim text-[11px]">Add your first task</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -100,7 +102,7 @@ export function TodaysFocus() {
             return (
               <View key={task.id}>
                 <View 
-                  className={`flex-row items-center gap-3 px-5 py-4 ${!isLast ? 'border-b border-[#181818]' : ''}`}
+                  className={`flex-row items-center gap-3 px-5 py-4 ${!isLast ? 'border-b border-leben-border-subtle' : ''}`}
                 >
                   {/* Checkbox */}
                   <TouchableOpacity
@@ -108,19 +110,19 @@ export function TodaysFocus() {
                     className="w-[18px] h-[18px] rounded-[5px] items-center justify-center"
                     style={{
                       borderWidth: 1,
-                      borderColor: task.completed ? '#3a7a4a' : '#2a2a2a',
-                      backgroundColor: task.completed ? '#1e3d26' : '#1a1a1a',
+                      borderColor: task.completed ? '#3a7a4a' : 'var(--border-primary)',
+                      backgroundColor: task.completed ? '#1e3d26' : 'var(--bg-secondary)',
                     }}
                     activeOpacity={0.7}
                   >
-                    {task.completed && <Text className="text-[#4caf70] text-[10px]">✓</Text>}
+                    {task.completed && <Text className="text-leben-success text-[10px]">✓</Text>}
                   </TouchableOpacity>
 
                   {/* Title */}
                   <Text
                     className="flex-1 text-[13px] leading-snug"
                     style={{
-                      color: task.completed ? '#444' : '#ccc',
+                      color: task.completed ? 'var(--text-dim)' : 'var(--text-secondary)',
                       textDecorationLine: task.completed ? 'line-through' : 'none',
                     }}
                     numberOfLines={1}
@@ -148,7 +150,7 @@ export function TodaysFocus() {
                       </View>
                     )}
                     {task.date && (
-                      <Text className="text-[10px] text-[#333]">
+                      <Text className="text-[10px] text-leben-text-dim">
                         {task.date}
                       </Text>
                     )}
@@ -160,11 +162,11 @@ export function TodaysFocus() {
                     className="w-7 h-7 rounded-md items-center justify-center ml-1"
                     style={{
                       backgroundColor: task.reminderAt ? 'rgba(124, 106, 240, 0.15)' : 'transparent',
-                      borderColor: task.reminderAt ? '#7c6af0' : 'transparent',
+                      borderColor: task.reminderAt ? 'var(--accent-blue)' : 'transparent',
                       borderWidth: 1,
                     }}
                   >
-                    <Text className={task.reminderAt ? 'text-leben-accent' : 'text-[#444]'}>
+                    <Text className={task.reminderAt ? 'text-leben-accent' : 'text-leben-text-dim'}>
                       🔔
                     </Text>
                   </TouchableOpacity>
@@ -174,7 +176,7 @@ export function TodaysFocus() {
                     onPress={() => deleteTask(task.id)}
                     className="w-7 h-7 items-center justify-center"
                   >
-                    <Text className="text-[#444] text-xs">🗑️</Text>
+                    <Text className="text-leben-text-dim text-xs">🗑️</Text>
                   </TouchableOpacity>
                 </View>
 
@@ -187,7 +189,7 @@ export function TodaysFocus() {
                       placeholder="HH:MM"
                       placeholderTextColor="#555"
                       keyboardType="numbers-and-punctuation"
-                      className="px-3 py-1.5 rounded bg-leben-bg border border-[#333] text-[#ccc] text-xs w-20"
+                      className="px-3 py-1.5 rounded bg-leben-bg border border-leben-border text-leben-text-2 text-xs w-20"
                       maxLength={5}
                     />
                     <TouchableOpacity
@@ -195,8 +197,8 @@ export function TodaysFocus() {
                       disabled={!reminderTime}
                       className="px-4 py-1.5 rounded"
                       style={{
-                        backgroundColor: reminderTime ? '#7c6af0' : 'transparent',
-                        borderColor: '#7c6af0',
+                        backgroundColor: reminderTime ? 'var(--accent-blue)' : 'transparent',
+                        borderColor: 'var(--accent-blue)',
                         borderWidth: 1,
                         opacity: reminderTime ? 1 : 0.5,
                       }}
@@ -206,9 +208,9 @@ export function TodaysFocus() {
                     {task.reminderAt && (
                       <TouchableOpacity
                         onPress={() => handleClearReminder(task.id)}
-                        className="px-4 py-1.5 rounded border border-[#555]"
+                        className="px-4 py-1.5 rounded border border-leben-border"
                       >
-                        <Text className="text-[#999] text-xs">Clear</Text>
+                        <Text className="text-leben-text-muted text-xs">Clear</Text>
                       </TouchableOpacity>
                     )}
                   </View>

@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Modal, Pressable } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Modal, Pressable } from 'react-native';
 import { BoltIcon } from '@/constants/Icons';
 import { useAIChatPanel } from '@/hooks/useAIChatPanel';
+import { Text } from '@/components/ui/Text';
+
 
 const navItems = [
   { label: 'Quick Prompt', icon: <BoltIcon />, active: true },
@@ -45,7 +47,7 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
           >
             Leben AI
           </Text>
-          <Text style={{ fontSize: 11, color: '#555' }}>Productivity Engine</Text>
+          <Text style={{ fontSize: 11, color: 'var(--text-muted)' }}>Productivity Engine</Text>
         </View>
       </View>
 
@@ -56,7 +58,7 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
             key={item.label}
             className="flex-row items-center gap-2.5 px-3 py-2 rounded-lg"
             style={{
-              backgroundColor: item.active ? '#1e1e1e' : 'transparent',
+              backgroundColor: item.active ? 'var(--border-primary)' : 'transparent',
             }}
           >
             <View style={{ opacity: item.active ? 1 : 0.6 }}>
@@ -64,7 +66,7 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
             </View>
             <Text
               style={{
-                color: item.active ? '#f0f0f0' : '#555',
+                color: item.active ? 'var(--text-primary)' : 'var(--text-muted)',
                 fontSize: 13,
                 fontWeight: item.active ? '500' : '400',
               }}
@@ -78,7 +80,7 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
       {/* Quick Prompts */}
       <View className="px-5 flex-1">
         <View className="flex-row items-center gap-2 mb-3">
-          <View className="w-1.5 h-1.5 rounded-full bg-[#7c6af0]" />
+          <View className="w-1.5 h-1.5 rounded-full bg-leben-accent" />
           <Text
             className="uppercase"
             style={{
@@ -95,7 +97,7 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
             <TouchableOpacity
               key={p.title}
               onPress={() => handlePrompt(p.title)}
-              className="rounded-xl px-4 py-3 border border-[#1e1e1e] bg-[#141414]"
+              className="rounded-xl px-4 py-3 border border-leben-border bg-leben-bg-card"
             >
               <Text
                 className="font-medium text-white"
@@ -103,7 +105,7 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
               >
                 {p.title}
               </Text>
-              <Text style={{ fontSize: 11, color: '#555', marginTop: 2 }}>
+              <Text style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
                 {p.sub}
               </Text>
             </TouchableOpacity>
@@ -128,7 +130,7 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
               width: 260,
               backgroundColor: '#0c0c0c',
               borderRightWidth: 1,
-              borderRightColor: '#161616',
+              borderRightColor: 'var(--bg-card)',
             }}
           >
             <ScrollView>{panelContent}</ScrollView>
@@ -143,7 +145,7 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
           width: 250,
           backgroundColor: '#0c0c0c',
           borderRightWidth: 1,
-          borderRightColor: '#161616',
+          borderRightColor: 'var(--bg-card)',
         }}
       >
         <ScrollView>{panelContent}</ScrollView>

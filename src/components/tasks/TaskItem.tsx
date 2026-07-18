@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useLebenStore } from '@/store/useStore';
 import { scheduleReminder, cancelReminder } from '@/hooks/useNotifications';
 import { LC } from '@/constants/theme';
+import { Text } from '@/components/ui/Text';
+
 
 interface TaskItemProps {
   taskId: string;
@@ -72,7 +74,7 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
   };
 
   return (
-    <View className={`border-[#181818] ${!isLast ? 'border-b' : ''}`}>
+    <View className={`border-leben-border-subtle ${!isLast ? 'border-b' : ''}`}>
       <View className="flex-row items-center gap-3 px-4 py-3.5 bg-transparent active:bg-white/[0.02]">
         {/* Checkbox */}
         <TouchableOpacity
@@ -80,12 +82,12 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
           className="w-[18px] h-[18px] rounded-[5px] items-center justify-center"
           style={{
             borderWidth: 1,
-            borderColor: task.completed ? '#3a7a4a' : '#2a2a2a',
-            backgroundColor: task.completed ? '#1e3d26' : '#1a1a1a',
+            borderColor: task.completed ? '#3a7a4a' : 'var(--border-primary)',
+            backgroundColor: task.completed ? '#1e3d26' : 'var(--bg-secondary)',
           }}
           activeOpacity={0.7}
         >
-          {task.completed && <Text className="text-[#4caf70] text-[10px]">✓</Text>}
+          {task.completed && <Text className="text-leben-success text-[10px]">✓</Text>}
         </TouchableOpacity>
 
         {/* Priority dot */}
@@ -109,7 +111,7 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
               onBlur={handleSaveEdit}
               onSubmitEditing={handleSaveEdit}
               autoFocus
-              className="text-[#ccc] text-[13px] border-b border-[#3a3a9e] py-1"
+              className="text-leben-text-2 text-[13px] border-b border-leben-accent py-1"
               style={{ lineHeight: 18 }}
             />
           ) : (
@@ -117,7 +119,7 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
               <Text 
                 className="text-[13px]"
                 style={{
-                  color: task.completed ? '#444' : '#ccc',
+                  color: task.completed ? 'var(--text-dim)' : 'var(--text-secondary)',
                   textDecorationLine: task.completed ? 'line-through' : 'none',
                   lineHeight: 18,
                 }}
@@ -129,8 +131,8 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
 
           {task.reminderAt && !isEditing && (
             <View className="flex-row items-center gap-1 mt-1">
-              <Text className="text-[#7c6af0] text-[10px]">🔔</Text>
-              <Text className="text-[#7c6af0] text-[10px]">
+              <Text className="text-leben-accent text-[10px]">🔔</Text>
+              <Text className="text-leben-accent text-[10px]">
                 {new Date(task.reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </Text>
             </View>
@@ -142,20 +144,20 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
           onPress={() => setIsExpanded(!isExpanded)}
           className="w-7 h-7 items-center justify-center rounded-lg active:bg-white/5"
         >
-          <Text className="text-[#555] text-lg leading-none">⋮</Text>
+          <Text className="text-leben-text-muted text-lg leading-none">⋮</Text>
         </TouchableOpacity>
       </View>
 
       {/* Expanded Actions */}
       {isExpanded && (
-        <View className="flex-row items-center gap-2 px-4 pb-3 border-t border-[#1a1a1a] pt-3">
+        <View className="flex-row items-center gap-2 px-4 pb-3 border-t border-leben-border-subtle pt-3">
           <TouchableOpacity
             onPress={() => setShowReminder(!showReminder)}
-            className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#222] bg-white/[0.04]"
+            className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-leben-border bg-white/[0.04]"
             style={task.reminderAt ? { backgroundColor: 'rgba(124,106,240,0.15)', borderColor: 'rgba(124,106,240,0.2)' } : {}}
           >
-            <Text className={task.reminderAt ? 'text-[#7c6af0]' : 'text-[#666]'}>🔔</Text>
-            <Text className={`text-[11px] font-medium ${task.reminderAt ? 'text-[#7c6af0]' : 'text-[#666]'}`}>Reminder</Text>
+            <Text className={task.reminderAt ? 'text-leben-accent' : 'text-leben-text-dim'}>🔔</Text>
+            <Text className={`text-[11px] font-medium ${task.reminderAt ? 'text-leben-accent' : 'text-leben-text-dim'}`}>Reminder</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -164,18 +166,18 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
               setIsEditing(true);
               setIsExpanded(false);
             }}
-            className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#222] bg-white/[0.04]"
+            className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-leben-border bg-white/[0.04]"
           >
-            <Text className="text-[#666]">✎</Text>
-            <Text className="text-[11px] font-medium text-[#666]">Edit</Text>
+            <Text className="text-leben-text-dim">✎</Text>
+            <Text className="text-[11px] font-medium text-leben-text-dim">Edit</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => removeTask(task.id)}
             className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[rgba(239,68,68,0.1)] bg-[rgba(239,68,68,0.05)]"
           >
-            <Text className="text-[#ef4444] opacity-80">🗑</Text>
-            <Text className="text-[11px] font-medium text-[#ef4444] opacity-80">Delete</Text>
+            <Text className="text-leben-error opacity-80">🗑</Text>
+            <Text className="text-[11px] font-medium text-leben-error opacity-80">Delete</Text>
           </TouchableOpacity>
 
           <View className="flex-1" />
@@ -207,23 +209,23 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
             placeholder="HH:MM"
             placeholderTextColor="#555"
             keyboardType="numbers-and-punctuation"
-            className="px-3 py-1.5 rounded bg-leben-bg border border-[#333] text-[#ccc] text-xs w-20"
+            className="px-3 py-1.5 rounded bg-leben-bg border border-leben-border text-leben-text-2 text-xs w-20"
             maxLength={5}
           />
           <TouchableOpacity
             onPress={handleSetReminder}
             disabled={!reminderTime}
-            className="px-4 py-1.5 rounded border border-[#7c6af0]"
-            style={{ backgroundColor: reminderTime ? '#7c6af0' : 'transparent', opacity: reminderTime ? 1 : 0.5 }}
+            className="px-4 py-1.5 rounded border border-leben-accent"
+            style={{ backgroundColor: reminderTime ? 'var(--accent-blue)' : 'transparent', opacity: reminderTime ? 1 : 0.5 }}
           >
             <Text className="text-white text-xs">Set</Text>
           </TouchableOpacity>
           {task.reminderAt && (
             <TouchableOpacity
               onPress={handleClearReminder}
-              className="px-4 py-1.5 rounded border border-[#555]"
+              className="px-4 py-1.5 rounded border border-leben-border"
             >
-              <Text className="text-[#999] text-xs">Clear</Text>
+              <Text className="text-leben-text-muted text-xs">Clear</Text>
             </TouchableOpacity>
           )}
         </View>

@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, } from 'react-native';
 import { AIInsight } from '@/utils/analytics.utils';
 import EmptyState from './EmptyState';
 import { Ionicons } from '@expo/vector-icons';
+import { Text } from '@/components/ui/Text';
+
 
 interface AIInsightsProps {
   insights: AIInsight[];
@@ -13,7 +15,7 @@ export default function AIInsights({ insights, hasData }: AIInsightsProps) {
   return (
     <View
       className="rounded-2xl p-5 mb-5"
-      style={{ backgroundColor: '#111', borderColor: '#1e1e1e', borderWidth: 1 }}
+      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
     >
       <View className="flex-row items-center gap-2 mb-4">
         <View
@@ -40,13 +42,13 @@ export default function AIInsights({ insights, hasData }: AIInsightsProps) {
               key={i}
               className="flex-row gap-2.5 rounded-xl p-3"
               style={{
-                backgroundColor: '#161616',
-                borderColor: '#1e1e1e',
+                backgroundColor: 'var(--bg-card)',
+                borderColor: 'var(--border-primary)',
                 borderWidth: 1,
               }}
             >
               <Text style={{ fontSize: 14, marginTop: 1 }}>{insight.icon}</Text>
-              <Text style={{ fontSize: 11, color: '#888', lineHeight: 16.5, flexShrink: 1 }}>
+              <Text style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 16.5, flexShrink: 1 }}>
                 {insight.text}
               </Text>
             </View>

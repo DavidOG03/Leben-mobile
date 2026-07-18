@@ -1,11 +1,13 @@
 // app/(tabs)/_layout.tsx
 // Bottom tab navigator with 5 tabs + Neural dropup for Planner / AI / Analytics
 import { useState, useCallback } from 'react';
-import { View, TouchableOpacity, Text, Platform } from 'react-native';
+import { View, TouchableOpacity, Platform } from 'react-native';
 import { Tabs, usePathname }     from 'expo-router';
 import { useSafeAreaInsets }     from 'react-native-safe-area-context';
 import { NeuralDropup }          from '@/components/shared/NeuralDropup';
 import {
+import { Text } from '@/components/ui/Text';
+
   GridIcon,
   TaskIcon,
   HabitIcon,
@@ -82,7 +84,7 @@ function CustomTabBar() {
         >
           <SparkleIcon
             size={22}
-            color={isNeuralActive || dropupOpen ? '#7c6af0' : '#888888'}
+            color={isNeuralActive || dropupOpen ? 'var(--accent-blue)' : '#888888'}
           />
           <Text
             className={`text-[10px] mt-1.5 font-medium ${
@@ -113,7 +115,7 @@ function TabButton({ tab, active, onPress }: { tab: TabItem; active: boolean; on
       }}
       activeOpacity={0.7}
     >
-      <Icon size={22} color={active ? '#7c6af0' : '#888888'} />
+      <Icon size={22} color={active ? 'var(--accent-blue)' : '#888888'} />
       <Text
         className={`text-[10px] mt-1.5 font-medium ${
           active ? 'text-leben-accent' : 'text-leben-text-dim'

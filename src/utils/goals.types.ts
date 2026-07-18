@@ -48,9 +48,9 @@ export type GoalStatus =
   | 'COMPLETE';
 
 export const STATUS_COLORS: Record<GoalStatus, string> = {
-  ACTIVE:       '#7c6af0',
-  STEADY:       '#888',
-  ACCELERATED:  '#9d8ff5',
+  ACTIVE:       'var(--accent-blue)',
+  STEADY:       'var(--text-muted)',
+  ACCELERATED:  'var(--accent-blue-light)',
   'AT RISK':    '#e05c5c',
   COMPLETE:     '#4caf8a',
 };

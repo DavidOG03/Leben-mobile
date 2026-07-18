@@ -1,9 +1,11 @@
 import { BOOK_COLORS } from "@/constants/habits";
 import type { BookFormData } from "@/store/bookSlice";
 import { useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import ReminderPicker from "@/components/shared/ReminderPicker";
+import { Text } from '@/components/ui/Text';
+
 
 interface AddBookModalProps {
   visible: boolean;
@@ -160,8 +162,8 @@ export default function AddBookModal({
           />
           {/* Buttons */}
           <View className="flex-row items-center justify-between mt-4">
-            <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1.5 p-2 bg-[#1a1a1a] rounded-lg border border-[#2a2a2a]">
-              <Text className="text-[#888] text-[12px]">{reminderAt ? new Date(reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Add Reminder"}</Text>
+            <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1.5 p-2 bg-leben-bg-secondary rounded-lg border border-leben-border">
+              <Text className="text-leben-text-muted text-[12px]">{reminderAt ? new Date(reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Add Reminder"}</Text>
             </TouchableOpacity>
 
             <View className="flex-row gap-3 flex-1 ml-3">
@@ -190,7 +192,7 @@ export default function AddBookModal({
                     fontSize: 14,
                     fontWeight: "600",
                   }}
-                  className={title.trim() && totalPages ? "text-leben-bg" : "text-[#555]"}
+                  className={title.trim() && totalPages ? "text-leben-bg" : "text-leben-text-muted"}
                 >
                   Add Book
                 </Text>

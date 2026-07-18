@@ -1,7 +1,9 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { useLebenStore, ScheduleItem } from '@/store/useStore';
 import { useState } from 'react';
 import { BellIcon } from '@/constants/Icons';
+import { Text } from '@/components/ui/Text';
+
 // import ReminderPicker from '../shared/ReminderPicker'; // You can add your modal/picker equivalent here
 
 interface TimelineItemProps {
@@ -21,7 +23,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
       {/* Time label and dot */}
       <View className="flex-col items-center w-12 pt-1 pb-4">
         <Text
-          className="text-[#555] font-bold"
+          className="text-leben-text-muted font-bold"
           style={{ fontSize: 11 }}
         >
           {item.start}
@@ -32,10 +34,10 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
             width: 8,
             height: 8,
             borderRadius: 4,
-            backgroundColor: isCurrent ? '#7c6af0' : '#222',
-            borderColor: isCurrent ? '#000' : '#333',
+            backgroundColor: isCurrent ? 'var(--accent-blue)' : 'var(--border-primary)',
+            borderColor: isCurrent ? '#000' : 'var(--border-primary)',
             borderWidth: isCurrent ? 2 : 1,
-            shadowColor: isCurrent ? '#7c6af0' : 'transparent',
+            shadowColor: isCurrent ? 'var(--accent-blue)' : 'transparent',
             shadowOpacity: isCurrent ? 0.8 : 0,
             shadowRadius: 5,
           }}
@@ -52,8 +54,8 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
       <View
         className="flex-1 rounded-2xl p-5"
         style={{
-          backgroundColor: isCurrent ? '#15151f' : '#111',
-          borderColor: isCurrent ? 'rgba(124, 106, 240, 0.2)' : '#1a1a1a',
+          backgroundColor: isCurrent ? '#15151f' : 'var(--bg-card)',
+          borderColor: isCurrent ? 'rgba(124, 106, 240, 0.2)' : 'var(--bg-secondary)',
           borderWidth: 1,
         }}
       >
@@ -63,8 +65,8 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
               <View
                 className="px-2 py-0.5 rounded"
                 style={{
-                  backgroundColor: isDeepWork ? '#1e1e2e' : isRecharge ? '#1e2e22' : '#1a1a1a',
-                  borderColor: isDeepWork ? '#2a2a4a' : isRecharge ? '#2a4a33' : '#222',
+                  backgroundColor: isDeepWork ? '#1e1e2e' : isRecharge ? '#1e2e22' : 'var(--bg-secondary)',
+                  borderColor: isDeepWork ? '#2a2a4a' : isRecharge ? '#2a4a33' : 'var(--border-primary)',
                   borderWidth: 1,
                 }}
               >
@@ -72,7 +74,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
                   className="font-bold uppercase tracking-widest"
                   style={{
                     fontSize: 9,
-                    color: isDeepWork ? '#7c6af0' : isRecharge ? '#4caf70' : '#888',
+                    color: isDeepWork ? 'var(--accent-blue)' : isRecharge ? '#4caf70' : 'var(--text-muted)',
                   }}
                 >
                   {item.tag}
@@ -81,7 +83,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
               {item.reminderAt && (
                 <View className="flex-row items-center gap-1">
                   <BellIcon color="currentColor" size={9} />
-                  <Text style={{ color: '#7c6af0', fontSize: 9, fontWeight: 'bold' }}>Reminder set</Text>
+                  <Text style={{ color: 'var(--accent-blue)', fontSize: 9, fontWeight: 'bold' }}>Reminder set</Text>
                 </View>
               )}
             </View>
@@ -101,8 +103,8 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
                 width: 20,
                 height: 20,
                 borderWidth: 1,
-                borderColor: item.status === 'completed' ? '#7c6af0' : '#444',
-                backgroundColor: item.status === 'completed' ? '#7c6af0' : 'transparent',
+                borderColor: item.status === 'completed' ? 'var(--accent-blue)' : 'var(--text-dim)',
+                backgroundColor: item.status === 'completed' ? 'var(--accent-blue)' : 'transparent',
               }}
             >
               {item.status === 'completed' && (
@@ -120,11 +122,11 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
         </Text>
 
         <View className="flex-row gap-2 mt-5">
-          <View className="px-3 py-1 rounded-full bg-[#1a1a1a] border border-[#222]">
-            <Text className="text-[#666] font-medium" style={{ fontSize: 10 }}>{item.tag}</Text>
+          <View className="px-3 py-1 rounded-full bg-leben-bg-secondary border border-leben-border">
+            <Text className="text-leben-text-dim font-medium" style={{ fontSize: 10 }}>{item.tag}</Text>
           </View>
-          <View className="px-3 py-1 rounded-full bg-[#1a1a1a] border border-[#222]">
-            <Text className="text-[#666] font-medium" style={{ fontSize: 10 }}>{item.priority.toUpperCase()}</Text>
+          <View className="px-3 py-1 rounded-full bg-leben-bg-secondary border border-leben-border">
+            <Text className="text-leben-text-dim font-medium" style={{ fontSize: 10 }}>{item.priority.toUpperCase()}</Text>
           </View>
         </View>
       </View>

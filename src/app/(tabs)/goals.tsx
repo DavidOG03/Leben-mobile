@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { ScreenLayout } from '@/components/shared/ScreenLayout';
 import { GoalList } from '@/components/goals/GoalList';
 import { AddGoalSheet } from '@/components/goals/AddGoalSheet';
+import { Text } from '@/components/ui/Text';
+
 
 export default function GoalsScreen() {
   const [showAddSheet, setShowAddSheet] = useState(false);
@@ -15,7 +17,7 @@ export default function GoalsScreen() {
             <Text className="text-white font-bold text-3xl tracking-tight leading-tight mb-1">
               Goals
             </Text>
-            <Text className="text-[#555] text-[13px]">
+            <Text className="text-leben-text-muted text-[13px]">
               Visualize and execute your long-term ambitions.
             </Text>
           </View>

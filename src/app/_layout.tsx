@@ -19,11 +19,11 @@ const LebenTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    primary:    '#7c6af0',
-    background: '#0a0a0a',
-    card:       '#161616',
-    text:       '#f0f0f0',
-    border:     '#222222',
+    primary:    'var(--accent-blue)',
+    background: 'var(--bg-primary)',
+    card:       'var(--bg-card)',
+    text:       'var(--text-primary)',
+    border:     'var(--border-primary)',
   },
 };
 

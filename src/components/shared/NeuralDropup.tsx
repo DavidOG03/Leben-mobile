@@ -3,7 +3,9 @@
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { AIIcon, AnalyticsIcon, SparkleIcon } from "@/constants/Icons";
 import { useRouter } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 interface SubLink {
   label: string;
@@ -67,7 +69,7 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
                 onClose();
                 router.push(link.href as any);
               }}
-              className="flex-row items-center gap-4 px-4 py-5 rounded-2xl active:bg-[#161616]"
+              className="flex-row items-center gap-4 px-4 py-5 rounded-2xl active:bg-leben-bg-card"
               style={{
                 backgroundColor: "#111",
                 borderWidth: 1,
@@ -83,9 +85,9 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
                 <Text className="text-leben-text font-bold text-[16px] mb-1">
                   {link.label}
                 </Text>
-                <Text className="text-[#888] text-[13px]">{link.desc}</Text>
+                <Text className="text-leben-text-muted text-[13px]">{link.desc}</Text>
               </View>
-              <Text className="text-[#444] text-xl">›</Text>
+              <Text className="text-leben-text-dim text-xl">›</Text>
             </Pressable>
           );
         })}

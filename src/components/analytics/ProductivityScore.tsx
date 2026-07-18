@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, } from 'react-native';
 import Svg, { Polyline } from 'react-native-svg';
 import { ProductivityData } from '@/utils/analytics.utils';
+import { Text } from '@/components/ui/Text';
+
 
 export function TrendLine({ data }: { data: number[] }) {
   const max = Math.max(...data, 1);
@@ -45,12 +47,12 @@ export function ProductivityScore({ data, hasData }: Props) {
   return (
     <View
       className="rounded-2xl p-5 mb-5"
-      style={{ backgroundColor: '#111', borderColor: '#1e1e1e', borderWidth: 1 }}
+      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
     >
       <Text className="font-semibold text-white mb-1" style={{ fontSize: 14 }}>
         Productivity Score
       </Text>
-      <Text style={{ fontSize: 11, color: '#555', marginBottom: 16 }}>
+      <Text style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 16 }}>
         7-day efficiency trend
       </Text>
 
@@ -66,7 +68,7 @@ export function ProductivityScore({ data, hasData }: Props) {
           >
             {data.score} %
           </Text>
-          <Text style={{ fontSize: 11, color: '#7c6af0', marginTop: 4 }}>
+          <Text style={{ fontSize: 11, color: 'var(--accent-blue)', marginTop: 4 }}>
             Based on {data.taskCount} tasks & {data.habitCount} habits
           </Text>
         </View>

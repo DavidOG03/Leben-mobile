@@ -2,16 +2,15 @@ import { TrashIcon } from "@/constants/Icons";
 import { useLebenStore } from "@/store/useStore";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
-import {
-  Modal,
+import { Modal,
   Platform,
   Pressable,
   ScrollView,
-  Text,
   TouchableOpacity,
-  View,
-} from "react-native";
+  View, } from 'react-native';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Text } from '@/components/ui/Text';
+
 
 function PushPermissionBanner() {
   const [permission, setPermission] =
@@ -28,7 +27,7 @@ function PushPermissionBanner() {
 
   return (
     <View className="flex-row items-center justify-between mx-4 my-2 px-3 py-3 rounded-xl bg-[rgba(124,106,240,0.08)] border border-[rgba(124,106,240,0.2)]">
-      <Text className="text-[#aaa] text-[12px] flex-1 mr-2 leading-5">
+      <Text className="text-leben-text-2 text-[12px] flex-1 mr-2 leading-5">
         Enable push notifications to receive reminders in real time.
       </Text>
       <TouchableOpacity
@@ -38,7 +37,7 @@ function PushPermissionBanner() {
         }}
         className="bg-[rgba(124,106,240,0.15)] border border-[rgba(124,106,240,0.3)] rounded-md px-3 py-1.5"
       >
-        <Text className="text-[#7c6af0] font-bold text-[11px]">Enable</Text>
+        <Text className="text-leben-accent font-bold text-[11px]">Enable</Text>
       </TouchableOpacity>
     </View>
   );
@@ -69,7 +68,7 @@ export default function NotificationDropdown() {
 
       {/* The actual popup container */}
       <View
-        className="absolute w-[320px] rounded-2xl border border-[#1e1e1e] overflow-hidden bg-leben-bg shadow-md"
+        className="absolute w-[320px] rounded-2xl border border-leben-border overflow-hidden bg-leben-bg shadow-md"
         style={{
           top: insets.top + (Platform.OS === "ios" ? 60 : 70), // Push it slightly below the header
           right: 16, // Right padding
@@ -81,14 +80,14 @@ export default function NotificationDropdown() {
         }}
       >
         {/* Header */}
-        <View className="px-5 py-4 border-b border-[#181818] flex-row items-center justify-between bg-[rgba(255,255,255,0.02)]">
+        <View className="px-5 py-4 border-b border-leben-border-subtle flex-row items-center justify-between bg-[rgba(255,255,255,0.02)]">
           <Text className="text-white font-semibold text-[14px]">
             Notifications
           </Text>
           <View>
             {notifications.some((n: any) => !n.read) && (
               <TouchableOpacity onPress={() => markAllRead()}>
-                <Text className="text-[#7c6af0] font-semibold text-[11px]">
+                <Text className="text-leben-accent font-semibold text-[11px]">
                   Mark all read
                 </Text>
               </TouchableOpacity>
@@ -105,7 +104,7 @@ export default function NotificationDropdown() {
         >
           {notifications.length === 0 ? (
             <View className="px-5 py-10 items-center">
-              <Text className="text-[#444] text-[12px]">
+              <Text className="text-leben-text-dim text-[12px]">
                 No notifications yet
               </Text>
             </View>
@@ -120,15 +119,15 @@ export default function NotificationDropdown() {
               >
                 <View className="flex-row items-start justify-between gap-3">
                   <View className="flex-1">
-                    <Text className="text-[#7c6af0] font-bold text-[10px] uppercase tracking-wider mb-1">
+                    <Text className="text-leben-accent font-bold text-[10px] uppercase tracking-wider mb-1">
                       {n.title}
                     </Text>
                     <Text
-                      className={`${!n.read ? "text-[#e0e0e0]" : "text-[#888]"} text-[13px] leading-[18px]`}
+                      className={`${!n.read ? "text-leben-text" : "text-leben-text-muted"} text-[13px] leading-[18px]`}
                     >
                       {n.body}
                     </Text>
-                    <Text className="text-[#333] text-[10px] mt-1.5">
+                    <Text className="text-leben-text-dim text-[10px] mt-1.5">
                       {new Date(n.date).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -136,7 +135,7 @@ export default function NotificationDropdown() {
                     </Text>
                   </View>
                   {!n.read && (
-                    <View className="w-2 h-2 rounded-full bg-[#7c6af0] mt-1" />
+                    <View className="w-2 h-2 rounded-full bg-leben-accent mt-1" />
                   )}
                   <TouchableOpacity
                     onPress={() => deleteNotification(n.id)}
@@ -152,8 +151,8 @@ export default function NotificationDropdown() {
 
         {/* Footer */}
         {notifications.length > 0 && (
-          <View className="px-5 py-3 bg-[rgba(255,255,255,0.01)] items-center border-t border-[#181818]">
-            <Text className="text-[#333] text-[10px]">
+          <View className="px-5 py-3 bg-[rgba(255,255,255,0.01)] items-center border-t border-leben-border-subtle">
+            <Text className="text-leben-text-dim text-[10px]">
               Showing last {notifications.length} notifications
             </Text>
           </View>

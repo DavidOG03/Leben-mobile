@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { StatCard } from '@/utils/analytics.utils';
 import { Ionicons } from '@expo/vector-icons';
+import { Text } from '@/components/ui/Text';
+
 
 interface StatCardsProps {
   cards: StatCard[];
@@ -15,7 +17,7 @@ export default function StatCards({ cards }: StatCardsProps) {
           <View
             key={i}
             className="rounded-2xl p-5 w-[160px]"
-            style={{ backgroundColor: '#111', borderColor: '#1e1e1e', borderWidth: 1 }}
+            style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
           >
             <View className="w-16 h-3 rounded bg-white/5 mb-3" />
             <View className="w-20 h-8 rounded bg-white/5 mb-3" />
@@ -37,9 +39,9 @@ export default function StatCards({ cards }: StatCardsProps) {
         <View
           key={s.label}
           className="rounded-2xl p-5 w-[160px]"
-          style={{ backgroundColor: '#111', borderColor: '#1e1e1e', borderWidth: 1 }}
+          style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
         >
-          <Text style={{ fontSize: 11, color: '#555', marginBottom: 8 }}>
+          <Text style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8 }}>
             {s.label}
           </Text>
           <Text
@@ -64,7 +66,7 @@ export default function StatCards({ cards }: StatCardsProps) {
                     ? '#4caf7d'
                     : s.up === false
                     ? '#e85555'
-                    : '#555',
+                    : 'var(--text-muted)',
               }}
             >
               {s.sub}

@@ -1,4 +1,6 @@
-import { View, Text } from 'react-native';
+import { View, } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 interface BadgeProps {
   label: string;
@@ -13,7 +15,7 @@ export function Badge({ label, variant = 'default', className = '', icon, number
     default: 'bg-leben-bg-element border border-leben-border text-leben-text-2',
     success: 'bg-[rgba(76,175,125,0.12)] border border-[rgba(76,175,125,0.2)] text-leben-success',
     error: 'bg-[rgba(239,68,68,0.1)] border border-[rgba(239,68,68,0.2)] text-leben-error',
-    warning: 'bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.2)] text-[#f59e0b]',
+    warning: 'bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.2)] text-prio-medium',
     primary: 'bg-leben-accent-dim border border-[rgba(124,106,240,0.2)] text-leben-accent',
     outline: 'bg-transparent border border-leben-border text-leben-text-2',
   };
@@ -22,7 +24,7 @@ export function Badge({ label, variant = 'default', className = '', icon, number
     default: 'text-leben-text-2',
     success: 'text-leben-success',
     error: 'text-leben-error',
-    warning: 'text-[#f59e0b]',
+    warning: 'text-prio-medium',
     primary: 'text-white',
     outline: 'text-leben-text-2',
   };

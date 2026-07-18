@@ -1,5 +1,7 @@
-import { View, Text } from 'react-native';
+import { View, } from 'react-native';
 import { useLebenStore, ScheduleItem } from '@/store/useStore';
+import { Text } from '@/components/ui/Text';
+
 
 export function EnergyDistribution() {
   const schedule = useLebenStore((s) => s.schedule);
@@ -48,8 +50,8 @@ export function EnergyDistribution() {
     <View
       className="rounded-2xl p-6 flex-col gap-6"
       style={{
-        backgroundColor: '#111',
-        borderColor: '#1e1e1e',
+        backgroundColor: 'var(--bg-card)',
+        borderColor: 'var(--border-primary)',
         borderWidth: 1,
       }}
     >
@@ -58,7 +60,7 @@ export function EnergyDistribution() {
           Energy Distribution
         </Text>
         <Text
-          style={{ color: '#7c6af0', fontSize: 10, fontWeight: '600' }}
+          style={{ color: 'var(--accent-blue)', fontSize: 10, fontWeight: '600' }}
         >
           Peak: 10:00 AM
         </Text>
@@ -71,16 +73,16 @@ export function EnergyDistribution() {
               className="w-full rounded-lg"
               style={{
                 height: `${lvl.value}%`,
-                backgroundColor: lvl.peak ? '#7c6af0' : 'rgba(255,255,255,0.05)',
+                backgroundColor: lvl.peak ? 'var(--accent-blue)' : 'rgba(255,255,255,0.05)',
                 borderWidth: lvl.peak ? 0 : 1,
-                borderColor: '#1a1a1a',
+                borderColor: 'var(--bg-secondary)',
               }}
             />
             <Text
               style={{
                 fontSize: 9,
                 fontWeight: '700',
-                color: lvl.peak ? '#7c6af0' : '#555',
+                color: lvl.peak ? 'var(--accent-blue)' : 'var(--text-muted)',
                 letterSpacing: 1,
               }}
             >
@@ -98,10 +100,10 @@ export function EnergyDistribution() {
               <View key={idx} className="flex-row gap-1.5 items-start">
                 <View
                   className="w-1.5 h-1.5 rounded-full mt-1 flex-shrink-0"
-                  style={{ backgroundColor: lvl.peak ? '#7c6af0' : '#444' }}
+                  style={{ backgroundColor: lvl.peak ? 'var(--accent-blue)' : 'var(--text-dim)' }}
                 />
                 <Text
-                  className="text-[#888] leading-tight"
+                  className="text-leben-text-muted leading-tight"
                   style={{ fontSize: 10 }}
                   numberOfLines={2}
                 >
@@ -110,7 +112,7 @@ export function EnergyDistribution() {
               </View>
             ))}
             {lvl.topTasks.length === 0 && (
-              <Text className="text-[#444] italic text-center" style={{ fontSize: 10 }}>
+              <Text className="text-leben-text-dim italic text-center" style={{ fontSize: 10 }}>
                 Free time
               </Text>
             )}

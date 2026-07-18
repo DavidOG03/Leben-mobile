@@ -114,7 +114,7 @@ async function registerForPushNotifications(Notifications: typeof NotificationsT
       name:         'Leben Reminders',
       importance:   Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor:   '#7c6af0',
+      lightColor:   'var(--accent-blue)',
     });
   }
 }

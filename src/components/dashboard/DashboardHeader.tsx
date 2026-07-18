@@ -1,7 +1,9 @@
 import { BellIcon } from "@/constants/Icons";
 import { useLebenStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { , TouchableOpacity, View } from 'react-native';
+import { Text } from '@/components/ui/Text';
+
 
 export function DashboardHeader() {
   const router = useRouter();
@@ -37,13 +39,13 @@ export function DashboardHeader() {
 
   return (
     <>
-      <View className="flex-row items-center justify-between px-5 py-4 border-b border-[#1a1a1a]">
+      <View className="flex-row items-center justify-between px-5 py-4 border-b border-leben-border-subtle">
         {/* Left: Greeting */}
         <View>
           <Text className="text-white font-semibold text-lg leading-snug">
             {getGreeting()}, {firstName}
           </Text>
-          <Text className="text-[#555] text-[10px] tracking-widest font-medium uppercase mt-0.5">
+          <Text className="text-leben-text-muted text-[10px] tracking-widest font-medium uppercase mt-0.5">
             {currentDate}
           </Text>
         </View>
@@ -57,17 +59,17 @@ export function DashboardHeader() {
           >
             <BellIcon color="#888" size={22} />
             {hasUnread && (
-              <View className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-[#7c6af0] border-2 border-leben-bg" />
+              <View className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-leben-accent border-2 border-leben-bg" />
             )}
           </TouchableOpacity>
 
           {/* Avatar */}
           <TouchableOpacity
             onPress={() => router.push("/(tabs)/settings" as any)}
-            className="w-9 h-9 rounded-full items-center justify-center border-[1.5px] border-[#333]"
+            className="w-9 h-9 rounded-full items-center justify-center border-[1.5px] border-leben-border"
             style={{ backgroundColor: "#2a2a3a" }}
           >
-            <Text className="text-[#888] text-sm">👤</Text>
+            <Text className="text-leben-text-muted text-sm">👤</Text>
           </TouchableOpacity>
         </View>
       </View>

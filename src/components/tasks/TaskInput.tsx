@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity, } from 'react-native';
 import { useLebenStore } from '@/store/useStore';
 import { Card } from '@/components/ui/Card';
 import ReminderPicker from '@/components/shared/ReminderPicker';
+import { Text } from '@/components/ui/Text';
+
 
 export function TaskInput() {
   const [task, setTask] = useState('');
@@ -31,7 +33,7 @@ export function TaskInput() {
   };
 
   return (
-    <Card className="p-4 mb-6" style={{ backgroundColor: '#141414', borderColor: '#1e1e1e' }}>
+    <Card className="p-4 mb-6" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
       <View className="flex-row items-center mb-4">
         <TextInput
           value={task}
@@ -43,10 +45,10 @@ export function TaskInput() {
         />
       </View>
 
-      <View className="flex-row flex-wrap items-center justify-between gap-4 border-t border-[#1e1e1e] pt-4 mt-2">
+      <View className="flex-row flex-wrap items-center justify-between gap-4 border-t border-leben-border pt-4 mt-2">
         <View className="flex-row items-center gap-2">
           {/* Tag Selector */}
-          <View className="flex-row items-center gap-1.5 p-1 rounded-lg border border-[#1e1e1e] bg-leben-bg">
+          <View className="flex-row items-center gap-1.5 p-1 rounded-lg border border-leben-border bg-leben-bg">
             {(['WORK', 'PERSONAL'] as const).map((t) => (
               <TouchableOpacity
                 key={t}
@@ -58,7 +60,7 @@ export function TaskInput() {
               >
                 <Text 
                   className="text-[10px] uppercase font-bold tracking-wider"
-                  style={{ color: tag === t ? (t === 'WORK' ? '#4a7abf' : '#8a5abf') : '#444' }}
+                  style={{ color: tag === t ? (t === 'WORK' ? '#4a7abf' : '#8a5abf') : 'var(--text-dim)' }}
                 >
                   {t}
                 </Text>
@@ -66,8 +68,8 @@ export function TaskInput() {
             ))}
           </View>
           
-          <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1 p-1.5 bg-leben-bg rounded-lg border border-[#1e1e1e]">
-            <Text className="text-[#888] text-[10px]">{reminderAt ? new Date(reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "🔔"}</Text>
+          <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1 p-1.5 bg-leben-bg rounded-lg border border-leben-border">
+            <Text className="text-leben-text-muted text-[10px]">{reminderAt ? new Date(reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "🔔"}</Text>
           </TouchableOpacity>
         </View>
 
@@ -76,16 +78,16 @@ export function TaskInput() {
           disabled={!task.trim()}
           className="flex-row items-center justify-center gap-2 px-4 py-2 rounded-xl"
           style={{
-            backgroundColor: task.trim() ? '#25256e' : '#1a1a1a',
-            borderColor: task.trim() ? '#3a3a9e' : '#222',
+            backgroundColor: task.trim() ? '#25256e' : 'var(--bg-secondary)',
+            borderColor: task.trim() ? '#3a3a9e' : 'var(--border-primary)',
             borderWidth: 1,
             opacity: task.trim() ? 1 : 0.8,
           }}
         >
-          <Text className="font-semibold text-[12px]" style={{ color: task.trim() ? '#9d8ff5' : '#444' }}>
+          <Text className="font-semibold text-[12px]" style={{ color: task.trim() ? 'var(--accent-blue-light)' : 'var(--text-dim)' }}>
             Add Task
           </Text>
-          <Text style={{ color: task.trim() ? '#9d8ff5' : '#444' }}>+</Text>
+          <Text style={{ color: task.trim() ? 'var(--accent-blue-light)' : 'var(--text-dim)' }}>+</Text>
         </TouchableOpacity>
       </View>
 

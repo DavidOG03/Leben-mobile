@@ -12,24 +12,24 @@ import { Platform } from 'react-native';
 // ── Leben Brand Colours (matches web globals.css exactly) ─────────────────────
 export const LC = {
   // Backgrounds
-  bgPrimary:       '#0a0a0a',
-  bgCard:          '#161616',
-  bgSecondary:     '#1a1a1a',
-  bgElement:       '#212225',
+  bgPrimary:       'var(--bg-primary)',
+  bgCard:          'var(--bg-card)',
+  bgSecondary:     'var(--bg-secondary)',
+  bgElement:       'var(--bg-element)',
 
   // Borders
-  border:          '#222222',
-  borderSubtle:    '#1a1a1a',
+  border:          'var(--border-primary)',
+  borderSubtle:    'var(--bg-secondary)',
 
   // Accent — purple gradient family
-  accent:          '#7c6af0',
-  accentLight:     '#9d8ff5',
+  accent:          'var(--accent-blue)',
+  accentLight:     'var(--accent-blue-light)',
   accentDim:       'rgba(124,106,240,0.12)',
   accentBorder:    'rgba(124,106,240,0.2)',
 
   // Text
-  textPrimary:     '#f0f0f0',
-  textSecondary:   '#acacac',
+  textPrimary:     'var(--text-primary)',
+  textSecondary:   'var(--text-secondary)',
   textMuted:       '#555555',
   textDim:         '#444444',
 
@@ -56,17 +56,17 @@ export type LebenColor = typeof LC[keyof typeof LC];
 export const Colors = {
   light: {
     text:                '#000000',
-    background:          '#ffffff',
+    background:          'var(--text-primary)',
     backgroundElement:   '#F0F0F3',
     backgroundSelected:  '#E0E1E6',
     textSecondary:       '#60646C',
   },
   dark: {
-    text:                '#f0f0f0',
-    background:          '#0a0a0a',
-    backgroundElement:   '#161616',
-    backgroundSelected:  '#1a1a1a',
-    textSecondary:       '#acacac',
+    text:                'var(--text-primary)',
+    background:          'var(--bg-primary)',
+    backgroundElement:   'var(--bg-card)',
+    backgroundSelected:  'var(--bg-secondary)',
+    textSecondary:       'var(--text-secondary)',
   },
 } as const;
 

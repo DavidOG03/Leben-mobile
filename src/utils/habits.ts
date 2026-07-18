@@ -13,11 +13,11 @@ export const today = () => new Date().toISOString().slice(0, 10);
 
 /** Maps a completion ratio (0–1) to a heatmap colour. */
 export const intensityColor = (ratio: number): string => {
-  if (ratio <= 0)    return '#1a1a1a';
+  if (ratio <= 0)    return 'var(--bg-secondary)';
   if (ratio <= 0.25) return '#1e2a4a';
   if (ratio <= 0.5)  return '#2e4080';
   if (ratio <= 0.75) return '#5a4fd4';
-  return '#9d8ff5';
+  return 'var(--accent-blue-light)';
 };
 
 /**

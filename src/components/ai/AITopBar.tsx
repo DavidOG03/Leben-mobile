@@ -1,7 +1,9 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { useLebenStore } from '@/store/useStore';
 import { BellIcon } from '@/constants/Icons';
 import { useRouter } from 'expo-router';
+import { Text } from '@/components/ui/Text';
+
 
 export default function AITopBar({ toggleLeftPanel }: { toggleLeftPanel?: () => void }) {
   const setNotificationOpen = useLebenStore((s) => s.setNotificationOpen);
@@ -11,7 +13,7 @@ export default function AITopBar({ toggleLeftPanel }: { toggleLeftPanel?: () => 
 
   return (
     <View
-      className="flex-row items-center justify-between px-5 py-4 border-b border-[#181818] bg-leben-bg"
+      className="flex-row items-center justify-between px-5 py-4 border-b border-leben-border-subtle bg-leben-bg"
       style={{
         height: 56,
       }}
@@ -23,7 +25,7 @@ export default function AITopBar({ toggleLeftPanel }: { toggleLeftPanel?: () => 
             className="md:hidden items-center justify-center p-2 rounded-lg"
             onPress={toggleLeftPanel}
           >
-            <Text className="text-[#555] text-lg">☰</Text>
+            <Text className="text-leben-text-muted text-lg">☰</Text>
           </TouchableOpacity>
         )}
 
@@ -39,7 +41,7 @@ export default function AITopBar({ toggleLeftPanel }: { toggleLeftPanel?: () => 
         {/* Notification Bell */}
         <TouchableOpacity
           onPress={() => setNotificationOpen(true)}
-          className="relative items-center justify-center w-8 h-8 rounded-full bg-[#111] border border-[#222]"
+          className="relative items-center justify-center w-8 h-8 rounded-full bg-leben-bg-card border border-leben-border"
         >
           <BellIcon />
           {unreadCount > 0 && (
@@ -55,11 +57,11 @@ export default function AITopBar({ toggleLeftPanel }: { toggleLeftPanel?: () => 
             width: 32,
             height: 32,
             borderWidth: 1.5,
-            borderColor: '#333',
+            borderColor: 'var(--border-primary)',
             backgroundColor: '#2a2a3a'
           }}
         >
-          <Text className="text-[#888] text-sm">👤</Text>
+          <Text className="text-leben-text-muted text-sm">👤</Text>
         </TouchableOpacity>
       </View>
     </View>

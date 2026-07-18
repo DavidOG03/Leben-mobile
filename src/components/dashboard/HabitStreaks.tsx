@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useLebenStore } from '@/store/useStore';
 import { Card } from '@/components/ui/Card';
 import { scheduleReminder, cancelReminder } from '@/hooks/useNotifications';
+import { Text } from '@/components/ui/Text';
+
 
 export function HabitStreaks() {
   const router = useRouter();
@@ -60,7 +62,7 @@ export function HabitStreaks() {
   };
 
   return (
-    <Card className="min-h-[200px] p-6" style={{ backgroundColor: '#121212', borderColor: '#1e1e1e' }}>
+    <Card className="min-h-[200px] p-6" style={{ backgroundColor: '#121212', borderColor: 'var(--border-primary)' }}>
       <View className="flex-row items-center justify-between mb-5">
         <Text className="text-white font-semibold text-[15px]">
           Habit Streaks
@@ -88,15 +90,15 @@ export function HabitStreaks() {
         </View>
       ) : habits.length === 0 ? (
         <View className="flex-1 items-center justify-center py-4 gap-3">
-          <Text className="text-[#333] text-2xl">十</Text>
-          <Text className="text-[#333] text-[11px]">
+          <Text className="text-leben-text-dim text-2xl">十</Text>
+          <Text className="text-leben-text-dim text-[11px]">
             No habits tracked yet
           </Text>
           <TouchableOpacity
             onPress={() => router.push('/(tabs)/habits' as any)}
-            className="px-4 py-1.5 rounded-lg border border-[#222] active:opacity-70"
+            className="px-4 py-1.5 rounded-lg border border-leben-border active:opacity-70"
           >
-            <Text className="text-[#666] text-[11px]">Set up habits</Text>
+            <Text className="text-leben-text-dim text-[11px]">Set up habits</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -106,14 +108,14 @@ export function HabitStreaks() {
               <View className="flex-row items-center justify-between">
                 <View className="flex-row items-center gap-3">
                   <View 
-                    className="w-9 h-9 rounded-lg items-center justify-center border border-[#1e1e1e]"
-                    style={{ backgroundColor: '#181818' }}
+                    className="w-9 h-9 rounded-lg items-center justify-center border border-leben-border"
+                    style={{ backgroundColor: 'var(--bg-secondary)' }}
                   >
                     <Text style={{ color: h.color, fontSize: 18 }}>{h.icon}</Text>
                   </View>
                   <View className="gap-1">
                     <Text className="text-white font-medium text-[13px]">{h.label}</Text>
-                    <Text className="text-[#666] text-[11px]">🔥 {h.streak} day streak</Text>
+                    <Text className="text-leben-text-dim text-[11px]">🔥 {h.streak} day streak</Text>
                   </View>
                 </View>
 
@@ -124,20 +126,20 @@ export function HabitStreaks() {
                     style={{
                       backgroundColor: h.reminderAt ? 'rgba(124, 106, 240, 0.15)' : 'transparent',
                       borderWidth: 1,
-                      borderColor: h.reminderAt ? '#7c6af0' : 'transparent',
+                      borderColor: h.reminderAt ? 'var(--accent-blue)' : 'transparent',
                     }}
                   >
-                    <Text className={h.reminderAt ? 'text-leben-accent' : 'text-[#444]'}>🔔</Text>
+                    <Text className={h.reminderAt ? 'text-leben-accent' : 'text-leben-text-dim'}>🔔</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     onPress={() => toggleHabit(h.id)}
-                    className="w-[42px] h-[26px] rounded-lg items-center justify-center border border-[#1e1e1e]"
+                    className="w-[42px] h-[26px] rounded-lg items-center justify-center border border-leben-border"
                     style={{
-                      backgroundColor: h.checked ? h.color : '#161616',
+                      backgroundColor: h.checked ? h.color : 'var(--bg-card)',
                     }}
                   >
-                    <Text className="text-xs" style={{ color: h.checked ? '#fff' : '#555' }}>
+                    <Text className="text-xs" style={{ color: h.checked ? 'var(--text-primary)' : 'var(--text-muted)' }}>
                       {h.checked ? '✓' : '○'}
                     </Text>
                   </TouchableOpacity>
@@ -152,7 +154,7 @@ export function HabitStreaks() {
                     placeholder="HH:MM"
                     placeholderTextColor="#555"
                     keyboardType="numbers-and-punctuation"
-                    className="px-3 py-1.5 rounded bg-leben-bg border border-[#333] text-[#ccc] text-xs flex-1"
+                    className="px-3 py-1.5 rounded bg-leben-bg border border-leben-border text-leben-text-2 text-xs flex-1"
                     maxLength={5}
                   />
                   <TouchableOpacity
@@ -160,9 +162,9 @@ export function HabitStreaks() {
                     disabled={!reminderTime}
                     className="px-4 py-1.5 rounded"
                     style={{
-                      backgroundColor: reminderTime ? '#7c6af0' : 'transparent',
+                      backgroundColor: reminderTime ? 'var(--accent-blue)' : 'transparent',
                       borderWidth: 1,
-                      borderColor: '#7c6af0',
+                      borderColor: 'var(--accent-blue)',
                       opacity: reminderTime ? 1 : 0.5,
                     }}
                   >
@@ -171,9 +173,9 @@ export function HabitStreaks() {
                   {h.reminderAt && (
                     <TouchableOpacity
                       onPress={() => handleClearReminder(h.id)}
-                      className="px-4 py-1.5 rounded border border-[#555]"
+                      className="px-4 py-1.5 rounded border border-leben-border"
                     >
-                      <Text className="text-[#999] text-xs">Clear</Text>
+                      <Text className="text-leben-text-muted text-xs">Clear</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -182,7 +184,7 @@ export function HabitStreaks() {
           ))}
           {habits.length > 3 && (
             <TouchableOpacity onPress={() => router.push('/(tabs)/habits' as any)} className="mt-auto pt-2 items-center">
-              <Text className="text-[#666] text-[11px]">
+              <Text className="text-leben-text-dim text-[11px]">
                 See all {habits.length} habits
               </Text>
             </TouchableOpacity>

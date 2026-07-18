@@ -2,22 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Leben Design Tokens — mirrors web globals.css */
-  --bg-primary:       #0a0a0a;
-  --bg-secondary:     #1a1a1a;
-  --bg-card:          #161616;
-  --border-subtle:    #222222;
-  --accent-purple:    #7c6af0;
-  --accent-purple-light: #9d8ff5;
-  --text-primary:     #f0f0f0;
-  --text-secondary:   #acacac;
-  --text-muted:       rgba(255, 255, 255, 0.25);
-  --success-green:    #4caf7d;
+@layer base {
+  :root {
+    /* Leben Design Tokens - Light Mode Default */
+    --bg-primary:       #ffffff;
+    --bg-secondary:     #f5f5f5;
+    --bg-card:          #ffffff;
+    --bg-element:       #f9f9f9;
+    --border-primary:   #e5e5e5;
+    --border-subtle:    #f0f0f0;
+    --accent-blue:    #3b82f6;
+    --accent-blue-light: #60a5fa;
+    --text-primary:     #111111;
+    --text-secondary:   #555555;
+    --text-muted:       #888888;
+    --text-dim:         #aaaaaa;
+    --success-green:    #4caf7d;
 
-  /* Typography */
-  --font-display: Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --font-rounded: 'SF Pro Rounded', sans-serif;
-  --font-serif: Georgia, 'Times New Roman', serif;
+    /* Typography */
+    --font-display: Inter, ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-rounded: 'SF Pro Rounded', sans-serif;
+    --font-serif: Georgia, 'Times New Roman', serif;
+  }
+
+  .dark {
+    /* Leben Design Tokens - Dark Mode */
+    --bg-primary:       #0a0a0a;
+    --bg-secondary:     #1a1a1a;
+    --bg-card:          #161616;
+    --bg-element:       #212225;
+    --border-primary:   #222222;
+    --border-subtle:    #1a1a1a;
+    --accent-blue:    #3b82f6;
+    --accent-blue-light: #60a5fa;
+    --text-primary:     #f0f0f0;
+    --text-secondary:   #acacac;
+    --text-muted:       #888888;
+    --text-dim:         #444444;
+    --success-green:    #4caf7d;
+  }
 }

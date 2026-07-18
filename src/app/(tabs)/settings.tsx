@@ -2,7 +2,10 @@ import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { supabase } from "@/lib/supabase/client";
 import { useLebenStore } from "@/store/useStore";
 import { useState } from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Text } from '@/components/ui/Text';
+import { useColorScheme } from 'nativewind';
+
 
 function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
   return (
@@ -53,6 +56,8 @@ export default function SettingsScreen() {
     email: false,
     push: false,
   });
+
+  const { colorScheme, toggleColorScheme } = useColorScheme();
 
   const userId = useLebenStore((s) => s.userId);
   const userFullName = useLebenStore((s: any) => s.userFullName);
@@ -249,10 +254,16 @@ export default function SettingsScreen() {
               />
             </View>
             <View className="flex-row items-center justify-between">
-              <Text style={{ fontSize: 14, color: "#aaa" }}>
+              <Text className="text-leben-text-2 text-[14px]">
                 Desktop / Mobile Push
               </Text>
               <Toggle on={notifs.push} onChange={handlePushToggle} />
+            </View>
+            <View className="flex-row items-center justify-between pt-2 border-t border-leben-border">
+              <Text className="text-leben-text-2 text-[14px]">
+                Dark Mode
+              </Text>
+              <Toggle on={colorScheme === 'dark'} onChange={toggleColorScheme} />
             </View>
           </View>
         </View>
