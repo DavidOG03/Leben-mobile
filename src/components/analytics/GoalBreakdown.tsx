@@ -13,11 +13,8 @@ interface GoalBreakdownProps {
 
 export default function GoalBreakdown({ goals, hasData }: GoalBreakdownProps) {
   return (
-    <View
-      className="rounded-2xl p-5"
-      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
-    >
-      <Text className="font-semibold text-white mb-4" style={{ fontSize: 14 }}>
+    <View className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border">
+      <Text className="font-semibold text-leben-text-2 mb-4 text-[14px]">
         Goal Progress
       </Text>
 
@@ -28,13 +25,10 @@ export default function GoalBreakdown({ goals, hasData }: GoalBreakdownProps) {
             return (
               <View key={g.id}>
                 <View className="flex-row justify-between mb-1.5">
-                  <Text style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{g.title || g.name}</Text>
-                  <Text style={{ fontSize: 11, color: 'var(--text-dim)' }}>{stats.progress}%</Text>
+                  <Text className="text-[12px] text-leben-text-2">{g.title || g.name}</Text>
+                  <Text className="text-[11px] text-leben-text-dim">{stats.progress}%</Text>
                 </View>
-                <View
-                  className="rounded-full overflow-hidden"
-                  style={{ height: 3, backgroundColor: 'var(--bg-secondary)' }}
-                >
+                <View className="rounded-full overflow-hidden h-[3px] bg-leben-bg-secondary">
                   <View
                     className="h-full rounded-full"
                     style={{

@@ -1,9 +1,8 @@
+import { Text } from "@/components/ui/Text";
 import { BellIcon } from "@/constants/Icons";
 import { useLebenStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
-import { , TouchableOpacity, View } from 'react-native';
-import { Text } from '@/components/ui/Text';
-
+import { TouchableOpacity, View } from "react-native";
 
 export function DashboardHeader() {
   const router = useRouter();
@@ -42,7 +41,7 @@ export function DashboardHeader() {
       <View className="flex-row items-center justify-between px-5 py-4 border-b border-leben-border-subtle">
         {/* Left: Greeting */}
         <View>
-          <Text className="text-white font-semibold text-lg leading-snug">
+          <Text className="text-leben-text font-semibold text-lg leading-snug">
             {getGreeting()}, {firstName}
           </Text>
           <Text className="text-leben-text-muted text-[10px] tracking-widest font-medium uppercase mt-0.5">

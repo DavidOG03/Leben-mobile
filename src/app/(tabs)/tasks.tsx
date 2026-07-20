@@ -3,9 +3,8 @@ import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { SmartSuggestion } from "@/components/tasks/SmartSuggestion";
 import { TaskInput } from "@/components/tasks/TaskInput";
 import { TaskList } from "@/components/tasks/TaskList";
-import { , View } from 'react-native';
-import { Text } from '@/components/ui/Text';
-
+import { Text } from "@/components/ui/Text";
+import { View } from "react-native";
 
 export default function TasksScreen() {
   return (
@@ -14,7 +13,7 @@ export default function TasksScreen() {
 
       <View className="flex-1 px-4 py-6">
         <View className="mb-6">
-          <Text className="text-white font-bold text-3xl tracking-tight leading-tight mb-1">
+          <Text className="text-leben-text-2 font-bold text-3xl tracking-tight leading-tight mb-1">
             Daily Tasks
           </Text>
           <Text className="text-leben-text-muted text-[13px]">

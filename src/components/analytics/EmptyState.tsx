@@ -11,19 +11,16 @@ interface EmptyStateProps {
 
 export default function EmptyState({ icon, message, hint }: EmptyStateProps) {
   return (
-    <View className="flex-col items-center justify-center py-6 gap-2" style={{ minHeight: 80 }}>
+    <View className="flex-col items-center justify-center py-6 gap-2 min-h-[80px]">
       {typeof icon === 'string' ? (
-        <Text style={{ fontSize: 22, opacity: 0.4 }}>{icon}</Text>
+        <Text className="text-[22px] opacity-40">{icon}</Text>
       ) : (
-        <View style={{ opacity: 0.4 }}>{icon}</View>
+        <View className="opacity-40">{icon}</View>
       )}
-      <Text className="text-leben-text-dim font-medium" style={{ fontSize: 12 }}>
+      <Text className="text-leben-text-dim font-medium text-[12px]">
         {message}
       </Text>
-      <Text
-        className="text-center text-leben-text-dim"
-        style={{ fontSize: 10, maxWidth: 160, lineHeight: 15 }}
-      >
+      <Text className="text-center text-leben-text-dim text-[10px] max-w-[160px] leading-[15px]">
         {hint}
       </Text>
     </View>

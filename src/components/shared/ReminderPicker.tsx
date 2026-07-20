@@ -1,9 +1,8 @@
+import { Text } from "@/components/ui/Text";
 import { SparkleIcon } from "@/constants/Icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
-import { , TouchableOpacity, View } from 'react-native';
-import { Text } from '@/components/ui/Text';
-
+import { TouchableOpacity, View } from "react-native";
 
 interface ReminderPickerProps {
   initialValue?: string; // ISO string

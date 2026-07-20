@@ -105,7 +105,7 @@ export function HabitItem({ habit }: HabitItemProps) {
               fontSize: 14,
             }}
             placeholder="Habit Label"
-            placeholderTextColor="#555"
+            placeholderTextColor="#555" // Keep or replace if needed
           />
           <TextInput
             value={editSub}
@@ -149,7 +149,7 @@ export function HabitItem({ habit }: HabitItemProps) {
       )}
 
       {/* Best streak */}
-      <Text style={{ fontSize: 10, color: '#777', marginBottom: 14 }}>
+      <Text className="text-[10px] text-leben-text-dim mb-3.5">
         Best: {habit.longestStreak}d
       </Text>
 

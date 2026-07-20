@@ -23,7 +23,7 @@ export function TrendLine({ data }: { data: number[] }) {
     <Svg width={w} height={55} viewBox={`0 0 ${w} 55`} fill="none">
       <Polyline
         points={points}
-        stroke="#7c6af0"
+        stroke="var(--accent-blue)"
         strokeWidth="1.5"
         strokeLinejoin="round"
         strokeLinecap="round"
@@ -45,30 +45,20 @@ interface Props {
 
 export function ProductivityScore({ data, hasData }: Props) {
   return (
-    <View
-      className="rounded-2xl p-5 mb-5"
-      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
-    >
-      <Text className="font-semibold text-white mb-1" style={{ fontSize: 14 }}>
+    <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border">
+      <Text className="font-semibold text-leben-text-2 mb-1 text-[14px]">
         Productivity Score
       </Text>
-      <Text style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 16 }}>
+      <Text className="text-[11px] text-leben-text-muted mb-4">
         7-day efficiency trend
       </Text>
 
       <View className="flex-row items-end justify-between gap-2">
         <View>
-          <Text
-            className="font-black text-white"
-            style={{
-              fontSize: 36,
-              letterSpacing: -1,
-              lineHeight: 40,
-            }}
-          >
+          <Text className="font-black text-leben-text-2 text-[36px] -tracking-[1px] leading-[40px]">
             {data.score} %
           </Text>
-          <Text style={{ fontSize: 11, color: 'var(--accent-blue)', marginTop: 4 }}>
+          <Text className="text-[11px] text-leben-accent mt-1">
             Based on {data.taskCount} tasks & {data.habitCount} habits
           </Text>
         </View>

@@ -62,9 +62,9 @@ export function HabitStreaks() {
   };
 
   return (
-    <Card className="min-h-[200px] p-6" style={{ backgroundColor: '#121212', borderColor: 'var(--border-primary)' }}>
+    <Card className="min-h-[200px] p-6" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
       <View className="flex-row items-center justify-between mb-5">
-        <Text className="text-white font-semibold text-[15px]">
+        <Text className="text-leben-text font-semibold text-[15px]">
           Habit Streaks
         </Text>
         {!loading && habits.length > 0 && (
@@ -114,7 +114,7 @@ export function HabitStreaks() {
                     <Text style={{ color: h.color, fontSize: 18 }}>{h.icon}</Text>
                   </View>
                   <View className="gap-1">
-                    <Text className="text-white font-medium text-[13px]">{h.label}</Text>
+                    <Text className="text-leben-text font-medium text-[13px]">{h.label}</Text>
                     <Text className="text-leben-text-dim text-[11px]">🔥 {h.streak} day streak</Text>
                   </View>
                 </View>
@@ -152,7 +152,7 @@ export function HabitStreaks() {
                     value={reminderTime}
                     onChangeText={setReminderTime}
                     placeholder="HH:MM"
-                    placeholderTextColor="#555"
+                    placeholderTextColor="var(--text-muted)"
                     keyboardType="numbers-and-punctuation"
                     className="px-3 py-1.5 rounded bg-leben-bg border border-leben-border text-leben-text-2 text-xs flex-1"
                     maxLength={5}
@@ -168,7 +168,7 @@ export function HabitStreaks() {
                       opacity: reminderTime ? 1 : 0.5,
                     }}
                   >
-                    <Text className="text-white text-xs">Set</Text>
+                    <Text className="text-leben-bg-card text-xs">Set</Text>
                   </TouchableOpacity>
                   {h.reminderAt && (
                     <TouchableOpacity

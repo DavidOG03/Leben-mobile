@@ -92,6 +92,14 @@ interface ProductivityRecord {
   total:     number;
 }
 
+export interface NotificationPrefs {
+  push:            boolean;
+  morningBriefing: boolean;
+  eveningWrapUp:   boolean;
+  streakSavers:    boolean;
+  goalUpdates:     boolean;
+}
+
 export interface LebenStore extends GoalSlice, BookSlice {
   // ── Auth ────────────────────────────────────────────────────────────────────
   userId:       string | null;
@@ -152,6 +160,10 @@ export interface LebenStore extends GoalSlice, BookSlice {
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
   deleteNotification: (id: string) => void;
+
+  // Notification Preferences
+  notificationPrefs: NotificationPrefs;
+  updateNotificationPrefs: (prefs: Partial<NotificationPrefs>) => void;
 }
 
 // ── Initial State ──────────────────────────────────────────────────────────────
@@ -178,6 +190,13 @@ const initialState = {
   notifications:  [],
   isNotificationOpen: false,
   schedule:       [],
+  notificationPrefs: {
+    push:            false,
+    morningBriefing: false,
+    eveningWrapUp:   false,
+    streakSavers:    false,
+    goalUpdates:     false,
+  },
 };
 
 // ── Store ──────────────────────────────────────────────────────────────────────
@@ -407,6 +426,11 @@ export const useLebenStore = create<LebenStore>()(
           notifications: state.notifications.filter((n) => n.id !== id),
         })),
 
+      updateNotificationPrefs: (prefs) =>
+        set((state) => ({
+          notificationPrefs: { ...state.notificationPrefs, ...prefs },
+        })),
+
       purgeAll: async () => {
         set({
           ...initialState,
@@ -444,6 +468,7 @@ export const useLebenStore = create<LebenStore>()(
         userFullName:        state.userFullName,
         productivityHistory: state.productivityHistory,
         dayPlan:             state.dayPlan,
+        notificationPrefs:   state.notificationPrefs,
       }),
     },
   ),

@@ -14,11 +14,10 @@ export default function StatCards({ cards }: StatCardsProps) {
     return (
       <View className="flex-row gap-4 mb-6 opacity-50">
         {[1, 2, 3, 4].map((i) => (
-          <View
-            key={i}
-            className="rounded-2xl p-5 w-[160px]"
-            style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
-          >
+            <View
+              key={i}
+              className="rounded-2xl p-5 w-[160px] bg-leben-bg-card border border-leben-border"
+            >
             <View className="w-16 h-3 rounded bg-white/5 mb-3" />
             <View className="w-20 h-8 rounded bg-white/5 mb-3" />
             <View className="w-12 h-3 rounded bg-white/5" />
@@ -38,16 +37,12 @@ export default function StatCards({ cards }: StatCardsProps) {
       {cards.map((s) => (
         <View
           key={s.label}
-          className="rounded-2xl p-5 w-[160px]"
-          style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
+          className="rounded-2xl p-5 w-[160px] bg-leben-bg-card border border-leben-border"
         >
-          <Text style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8 }}>
+          <Text className="text-[11px] text-leben-text-muted mb-2">
             {s.label}
           </Text>
-          <Text
-            className="font-black text-white"
-            style={{ fontSize: 28, letterSpacing: -0.5, lineHeight: 28 }}
-          >
+          <Text className="font-black text-leben-text-2 text-[28px] leading-[28px] -tracking-[0.5px]">
             {s.val}
           </Text>
           <View className="flex-row items-center gap-1 mt-2">
@@ -55,19 +50,17 @@ export default function StatCards({ cards }: StatCardsProps) {
               <Ionicons 
                 name={s.up ? "arrow-up" : "arrow-down"} 
                 size={10} 
-                color={s.up ? "#4caf7d" : "#e85555"} 
+                color={s.up ? "var(--state-success-bg)" : "var(--error-bg, #e85555)"} 
               />
             )}
             <Text
-              style={{
-                fontSize: 11,
-                color:
-                  s.up === true
-                    ? '#4caf7d'
-                    : s.up === false
-                    ? '#e85555'
-                    : 'var(--text-muted)',
-              }}
+              className={`text-[11px] ${
+                s.up === true
+                  ? 'text-leben-success'
+                  : s.up === false
+                  ? 'text-leben-error'
+                  : 'text-leben-text-muted'
+              }`}
             >
               {s.sub}
             </Text>

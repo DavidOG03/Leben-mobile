@@ -1,13 +1,9 @@
 import ReminderPicker from "@/components/shared/ReminderPicker";
 import { BottomSheet } from "@/components/ui/BottomSheet";
+import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
 import { useState } from "react";
-import { ScrollView,
-import { Text } from '@/components/ui/Text';
-
-  TextInput,
-  TouchableOpacity,
-  View, } from 'react-native';
+import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
 interface AddHabitSheetProps {
   visible: boolean;
@@ -131,7 +127,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
                     backgroundColor: c,
                     borderWidth: color === c ? 2 : 0,
                     borderColor: "#fff",
-                    boxShadow: color === c ? `0px 2px 4px ${c}80` : 'none',
+                    boxShadow: color === c ? `0px 2px 4px ${c}80` : "none",
                   }}
                 />
               ))}
@@ -205,7 +201,9 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
                     fontSize: 14,
                     fontWeight: "600",
                   }}
-                  className={label.trim() ? "text-leben-bg" : "text-leben-text-muted"}
+                  className={
+                    label.trim() ? "text-leben-bg" : "text-leben-text-muted"
+                  }
                 >
                   Add Habit
                 </Text>

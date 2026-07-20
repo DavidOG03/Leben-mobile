@@ -21,7 +21,7 @@ function renderInlineFormatting(text: string) {
   while ((match = boldRegex.exec(text)) !== null) {
     if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
     parts.push(
-      <Text key={`bold-${match.index}-${keyIndex++}`} className="font-semibold text-white">
+      <Text key={`bold-${match.index}-${keyIndex++}`} className="font-semibold text-leben-text-2">
         {match[1]}
       </Text>,
     );
@@ -101,13 +101,10 @@ export default function AIChatMessages({
           >
             {msg.role === 'assistant' && (
               <View
-                className="items-center justify-center rounded-xl mt-1 flex-shrink-0"
+                className="items-center justify-center rounded-xl mt-1 flex-shrink-0 bg-leben-accent-dim border border-leben-accent/30"
                 style={{
                   width: 32,
                   height: 32,
-                  backgroundColor: '#2d2480',
-                  borderWidth: 1,
-                  borderColor: 'rgba(124,106,240,0.3)',
                 }}
               >
                 <SparkleIcon />
@@ -116,14 +113,7 @@ export default function AIChatMessages({
             
             <View className={`max-w-[85%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
               {msg.role === 'assistant' ? (
-                <View
-                  className="rounded-2xl px-5 py-4"
-                  style={{
-                    backgroundColor: 'var(--bg-card)',
-                    borderWidth: 1,
-                    borderColor: 'var(--border-primary)',
-                  }}
-                >
+                <View className="rounded-2xl px-5 py-4 bg-leben-bg-card border border-leben-border">
                   <View>
                     {renderAssistantMessage(msg.content)}
                   </View>
@@ -132,19 +122,16 @@ export default function AIChatMessages({
                     <TouchableOpacity
                       onPress={() => onImport(msg.id, msg.content)}
                       disabled={isImported}
-                      className="self-start rounded-lg px-3 py-2 mt-4"
-                      style={{
-                        backgroundColor: isImported ? 'var(--border-primary)' : '#2d2480',
-                        borderWidth: 1,
-                        borderColor: isImported ? '#3a3a3a' : '#6258f2',
-                      }}
+                      className={`self-start rounded-lg px-3 py-2 mt-4 border ${
+                        isImported 
+                          ? 'bg-leben-border border-leben-border-subtle' 
+                          : 'bg-leben-accent-dim border-leben-accent/60'
+                      }`}
                     >
                       <Text
-                        style={{
-                          color: isImported ? 'var(--text-muted)' : 'var(--text-primary)',
-                          fontSize: 11,
-                          fontWeight: '600',
-                        }}
+                        className={`text-[11px] font-semibold ${
+                          isImported ? 'text-leben-text-muted' : 'text-leben-text'
+                        }`}
                       >
                         {getImportButtonLabel(counts, isImported)}
                       </Text>
@@ -152,26 +139,11 @@ export default function AIChatMessages({
                   )}
                 </View>
               ) : (
-                <View
-                  className="rounded-2xl px-5 py-4"
-                  style={{
-                    backgroundColor: '#1e1a41',
-                    borderWidth: 1,
-                    borderColor: 'rgba(124,106,240,0.2)',
-                  }}
-                >
+                <View className="rounded-2xl px-5 py-4 bg-leben-accent/10 border border-leben-accent/20">
                   <Text className="text-leben-text text-[14px] leading-relaxed">
                     {msg.content}
                   </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#6358cc',
-                      marginTop: 8,
-                      fontWeight: '600',
-                      textAlign: 'right',
-                    }}
-                  >
+                  <Text className="text-[10px] text-leben-accent mt-2 font-semibold text-right">
                     YOU | {msg.time}
                   </Text>
                 </View>
@@ -184,21 +156,15 @@ export default function AIChatMessages({
       {isThinking && (
         <View className="flex-row gap-3">
           <View
-            className="items-center justify-center rounded-xl mt-1 flex-shrink-0"
+            className="items-center justify-center rounded-xl mt-1 flex-shrink-0 bg-leben-accent-dim border border-leben-accent/30"
             style={{
               width: 32,
               height: 32,
-              backgroundColor: '#2d2480',
-              borderWidth: 1,
-              borderColor: 'rgba(124,106,240,0.3)',
             }}
           >
-            <ActivityIndicator size="small" color="#fff" />
+            <ActivityIndicator size="small" color="var(--accent-blue)" />
           </View>
-          <View
-            className="rounded-2xl px-5 py-4 justify-center"
-            style={{ backgroundColor: 'var(--bg-card)', borderWidth: 1, borderColor: 'var(--border-primary)' }}
-          >
+          <View className="rounded-2xl px-5 py-4 justify-center bg-leben-bg-card border border-leben-border">
             <Text className="text-[12px] text-leben-text-muted font-medium italic">
               Neural engine processing...
             </Text>

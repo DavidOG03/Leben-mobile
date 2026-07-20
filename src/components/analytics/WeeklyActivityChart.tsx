@@ -21,29 +21,21 @@ function BarChart({ data }: { data: DayActivity[] }) {
           <View key={index} className="flex-1 items-center gap-1">
             <View className="w-full flex-col justify-end h-[100px] gap-0.5">
               <View
-                className="w-full rounded-[3px] rounded-b-[2px]"
+                className="w-full rounded-[3px] rounded-b-[2px] bg-leben-accent-dim"
                 style={{
                   height: `${(d.focusHours / 7) * 80}%`,
-                  backgroundColor: '#1e1e3a',
                   minHeight: d.focusHours > 0 ? 3 : 0,
                 }}
               />
               <View
-                className="w-full rounded-[3px] rounded-b-[2px]"
+                className="w-full rounded-[3px] rounded-b-[2px] bg-leben-accent"
                 style={{
                   height: `${(d.tasks / maxTasks) * 60}%`,
-                  backgroundColor: 'var(--accent-blue)', // Gradient is hard with just Views in React Native without expo-linear-gradient, using solid color.
                   minHeight: d.tasks > 0 ? 4 : 0,
                 }}
               />
             </View>
-            <Text
-              style={{
-                fontSize: 9,
-                color: 'var(--text-muted)',
-                letterSpacing: 0.6,
-              }}
-            >
+            <Text className="text-[9px] text-leben-text-muted tracking-wide">
               {d.day}
             </Text>
           </View>
@@ -52,11 +44,11 @@ function BarChart({ data }: { data: DayActivity[] }) {
       <View className="flex-row items-center gap-4 mt-3">
         <View className="flex-row items-center gap-1.5">
           <View className="rounded-sm w-2.5 h-2.5 bg-leben-accent" />
-          <Text style={{ fontSize: 10, color: 'var(--text-muted)' }}>Tasks</Text>
+          <Text className="text-[10px] text-leben-text-muted">Tasks</Text>
         </View>
         <View className="flex-row items-center gap-1.5">
-          <View className="rounded-sm w-2.5 h-2.5 bg-[#1e1e3a]" />
-          <Text style={{ fontSize: 10, color: 'var(--text-muted)' }}>Focus Hours</Text>
+          <View className="rounded-sm w-2.5 h-2.5 bg-leben-accent-dim" />
+          <Text className="text-[10px] text-leben-text-muted">Focus Hours</Text>
         </View>
       </View>
     </View>
@@ -65,30 +57,20 @@ function BarChart({ data }: { data: DayActivity[] }) {
 
 export default function WeeklyActivityChart({ data, hasData }: WeeklyActivityChartProps) {
   return (
-    <View
-      className="rounded-2xl p-5 mb-5"
-      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
-    >
+    <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border">
       <View className="flex-row items-center justify-between mb-5">
         <View>
-          <Text className="font-semibold text-white" style={{ fontSize: 14 }}>
+          <Text className="font-semibold text-leben-text-2 text-[14px]">
             Weekly Activity
           </Text>
-          <Text style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+          <Text className="text-[11px] text-leben-text-muted mt-0.5">
             Tasks completed & focus hours
           </Text>
         </View>
         {hasData && (
-          <View
-            className="flex-row items-center gap-1 px-2.5 py-1 rounded-lg"
-            style={{
-              backgroundColor: 'rgba(74,207,125,0.1)',
-              borderColor: 'rgba(74,207,125,0.2)',
-              borderWidth: 1,
-            }}
-          >
+          <View className="flex-row items-center gap-1 px-2.5 py-1 rounded-lg bg-leben-success/10 border border-leben-success/20">
             <Ionicons name="trending-up" size={10} color="#4caf7d" />
-            <Text style={{ fontSize: 10, color: '#4caf7d', fontWeight: '500' }}>
+            <Text className="text-[10px] text-leben-success font-medium">
               this week
             </Text>
           </View>

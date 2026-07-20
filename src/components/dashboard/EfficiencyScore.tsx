@@ -166,7 +166,7 @@ export function EfficiencyScore() {
   return (
     <Card
       className="min-h-[260px] items-center justify-center p-7"
-      style={{ backgroundColor: "#121212", borderColor: "#1e1e1e" }}
+      style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border-primary)" }}
     >
       <Text className="uppercase tracking-widest text-leben-text-dim text-[10px] font-semibold mb-6">
         Efficiency Score
@@ -199,7 +199,7 @@ export function EfficiencyScore() {
                 cy="70"
                 r="54"
                 fill="none"
-                stroke="#1a1a1a"
+                stroke="var(--border-primary)"
                 strokeWidth="6"
               />
               <Circle
@@ -207,7 +207,7 @@ export function EfficiencyScore() {
                 cy={70}
                 r={54}
                 fill="none"
-                stroke="#252525"
+                stroke="var(--border-subtle)"
                 strokeWidth={6}
                 strokeLinecap="round"
                 strokeDasharray="8 6"
@@ -241,7 +241,7 @@ export function EfficiencyScore() {
                 cy="70"
                 r="54"
                 fill="none"
-                stroke="#1a1a1a"
+                stroke="var(--border-primary)"
                 strokeWidth="8"
               />
               <Circle
@@ -249,7 +249,7 @@ export function EfficiencyScore() {
                 cy={70}
                 r={54}
                 fill="none"
-                stroke="#252525"
+                stroke="var(--border-subtle)"
                 strokeWidth={8}
                 strokeLinecap="round"
                 strokeDasharray="12 8"
@@ -259,10 +259,10 @@ export function EfficiencyScore() {
               />
             </Svg>
             <View className="absolute items-center">
-              <Text className="text-[#2e2e2e] text-3xl font-bold leading-none">
+              <Text className="text-leben-text-dim text-3xl font-bold leading-none">
                 —
               </Text>
-              <Text className="text-[#2e2e2e] text-[9px] uppercase tracking-widest mt-1">
+              <Text className="text-leben-text-dim text-[9px] uppercase tracking-widest mt-1">
                 No data
               </Text>
             </View>
@@ -280,7 +280,7 @@ export function EfficiencyScore() {
                 cy="70"
                 r="54"
                 fill="none"
-                stroke="#1a1a1a"
+                stroke="var(--border-primary)"
                 strokeWidth="8"
               />
               <AnimatedCircle
@@ -288,7 +288,7 @@ export function EfficiencyScore() {
                 cy={70}
                 r={54}
                 fill="none"
-                stroke="#7c6af0"
+                stroke="var(--accent-blue)"
                 strokeWidth={8}
                 strokeLinecap="round"
                 strokeDasharray={`${2 * Math.PI * 54}`}

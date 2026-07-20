@@ -13,30 +13,18 @@ interface ReadingTrackerProps {
 
 const GhostBookCard = ({ opacity }: { opacity: number }) => (
   <View
-    className="rounded-xl flex-1 mr-4"
+    className="rounded-xl flex-1 mr-4 bg-leben-bg-card border border-leben-border"
     style={{
-      backgroundColor: "#111",
-      borderWidth: 1,
-      borderColor: "#1e1e1e",
       opacity,
       height: 140,
       width: 140,
     }}
   >
     <View className="p-4 flex-col justify-between h-full">
-      <View
-        className="rounded-lg w-8 h-8 mb-3"
-        style={{ backgroundColor: "#222" }}
-      />
+      <View className="rounded-lg w-8 h-8 mb-3 bg-leben-border" />
       <View>
-        <View
-          className="h-3 rounded-full w-3/4 mb-2"
-          style={{ backgroundColor: "#222" }}
-        />
-        <View
-          className="h-2 rounded-full w-1/2"
-          style={{ backgroundColor: "#1a1a1a" }}
-        />
+        <View className="h-3 rounded-full w-3/4 mb-2 bg-leben-border" />
+        <View className="h-2 rounded-full w-1/2 bg-leben-bg-element" />
       </View>
     </View>
   </View>
@@ -62,53 +50,28 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
         </View>
         <TouchableOpacity
           onPress={() => onShowAddBook(true)}
-          className="flex-row items-center gap-1.5 px-3 py-2 rounded-lg"
-          style={{
-            backgroundColor: "#1a1a1a",
-            borderWidth: 1,
-            borderColor: "#2a2a2a",
-          }}
+          className="flex-row items-center gap-1.5 px-3 py-2 rounded-lg bg-leben-bg-element border border-leben-border-subtle"
         >
-          <PlusIcon color="#ccc" size={11} />
-          <Text style={{ color: "#ccc", fontSize: 12, fontWeight: "bold" }}>
+          <PlusIcon color="var(--text-secondary)" size={11} />
+          <Text className="text-leben-text-2 text-[12px] font-bold">
             Add Book
           </Text>
         </TouchableOpacity>
       </View>
 
       {books.length === 0 ? (
-        <View
-          className="rounded-2xl overflow-hidden"
-          style={{
-            borderWidth: 1,
-            borderColor: "#1e1e1e",
-            backgroundColor: "#131313",
-          }}
-        >
+        <View className="rounded-2xl overflow-hidden border border-leben-border bg-leben-bg-secondary">
           <View className="p-4 flex-row">
             {[1, 0.65].map((op, i) => (
               <GhostBookCard key={i} opacity={op} />
             ))}
           </View>
-          <View
-            className="flex-col items-center justify-center py-8 gap-3"
-            style={{ borderTopWidth: 1, borderTopColor: "#181818" }}
-          >
-            <Text style={{ fontSize: 28 }}>📚</Text>
-            <Text
-              className="font-medium"
-              style={{ fontSize: 13, color: "#aaa" }}
-            >
+          <View className="flex-col items-center justify-center py-8 gap-3 border-t border-leben-border">
+            <Text className="text-[28px]">📚</Text>
+            <Text className="font-medium text-[13px] text-leben-text-muted">
               No books tracked yet
             </Text>
-            <Text
-              style={{
-                fontSize: 12,
-                color: "#555",
-                textAlign: "center",
-                lineHeight: 18,
-              }}
-            >
+            <Text className="text-[12px] text-leben-text-dim text-center leading-[18px]">
               Click "Add Book" above{"\n"}to start tracking your reading.
             </Text>
           </View>

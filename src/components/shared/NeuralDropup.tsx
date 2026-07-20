@@ -48,14 +48,14 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
     <BottomSheet
       visible={visible}
       onClose={onClose}
-      containerStyle={{ backgroundColor: "#161616" }}
+      containerStyle={{ backgroundColor: "var(--bg-card)" }}
     >
       <View className="mb-6 flex-row items-center justify-between px-4">
         <Text
-          className="font-black flex items-center gap-2 text-white text-[24px]"
+          className="font-black flex items-center gap-2 text-leben-text text-[24px]"
           style={{ letterSpacing: -0.4 }}
         >
-          Neural <SparkleIcon size={18} color="#888888" />
+          Neural <SparkleIcon size={18} color="var(--text-muted)" />
         </Text>
       </View>
 
@@ -71,9 +71,9 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
               }}
               className="flex-row items-center gap-4 px-4 py-5 rounded-2xl active:bg-leben-bg-card"
               style={{
-                backgroundColor: "#111",
+                backgroundColor: "var(--bg-card)",
                 borderWidth: 1,
-                borderColor: "#1a1a1a",
+                borderColor: "var(--border-primary)",
               }}
             >
               {/* Icon bubble */}

@@ -1,38 +1,42 @@
-import { useMemo } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { ScreenLayout } from '@/components/shared/ScreenLayout';
-import { useLebenStore } from '@/store/useStore';
-import { buildAnalyticsData } from '@/utils/analytics.utils';
-import StatCards from '@/components/analytics/StatCards';
-import WeeklyActivityChart from '@/components/analytics/WeeklyActivityChart';
-import { ProductivityScore } from '@/components/analytics/ProductivityScore';
-import HabitBreakdown from '@/components/analytics/HabitBreakdown';
-import GoalBreakdown from '@/components/analytics/GoalBreakdown';
-import AIInsights from '@/components/analytics/AIInsights';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { Text } from '@/components/ui/Text';
-
+import AIInsights from "@/components/analytics/AIInsights";
+import GoalBreakdown from "@/components/analytics/GoalBreakdown";
+import HabitBreakdown from "@/components/analytics/HabitBreakdown";
+import { ProductivityScore } from "@/components/analytics/ProductivityScore";
+import StatCards from "@/components/analytics/StatCards";
+import WeeklyActivityChart from "@/components/analytics/WeeklyActivityChart";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { ScreenLayout } from "@/components/shared/ScreenLayout";
+import { Text } from "@/components/ui/Text";
+import { useLebenStore } from "@/store/useStore";
+import { buildAnalyticsData } from "@/utils/analytics.utils";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { useMemo } from "react";
+import { TouchableOpacity, View } from "react-native";
 
 export default function AnalyticsScreen() {
   const router = useRouter();
-  
+
   // You would typically have a way to check if the user is authenticated in the store.
   // Assuming `userId` or similar exists. For now, checking if `userId` exists.
   const userId = useLebenStore((s: any) => s.userId);
-  
+
   const tasks = useLebenStore((s) => s.tasks);
   const habits = useLebenStore((s) => s.habits);
   const goals = useLebenStore((s) => s.goals);
 
-  const analytics = useMemo(() => buildAnalyticsData(tasks, habits, goals), [tasks, habits, goals]);
+  const analytics = useMemo(
+    () => buildAnalyticsData(tasks, habits, goals),
+    [tasks, habits, goals],
+  );
 
   return (
     <ScreenLayout scrollable>
+      <DashboardHeader />
       <View className="flex-1 px-4 py-6">
         <View className="flex-row items-center justify-between mb-6">
           <View>
-            <Text className="text-white font-bold text-3xl tracking-tight leading-tight mb-1">
+            <Text className="text-leben-text-2 font-bold text-3xl tracking-tight leading-tight mb-1">
               Analytics
             </Text>
             <Text className="text-leben-text-muted text-[13px]">
@@ -49,8 +53,8 @@ export default function AnalyticsScreen() {
               style={{
                 width: 70,
                 height: 70,
-                backgroundColor: 'rgba(124,106,240,0.05)',
-                borderColor: 'rgba(124,106,240,0.1)',
+                backgroundColor: "rgba(124,106,240,0.05)",
+                borderColor: "rgba(124,106,240,0.1)",
                 borderWidth: 1,
               }}
             >
@@ -59,49 +63,97 @@ export default function AnalyticsScreen() {
 
             <View className="items-center space-y-3 mb-8">
               <Text
-                className="text-white font-bold text-center"
+                className="text-leben-text-2 font-bold text-center"
                 style={{ fontSize: 28, letterSpacing: -0.5 }}
               >
-                Deep Performance <Text style={{ color: 'var(--accent-blue)' }}>Metrics.</Text>
+                Deep Performance{" "}
+                <Text style={{ color: "var(--accent-blue)" }}>Metrics.</Text>
               </Text>
               <Text
                 className="text-center mt-2"
                 style={{
                   fontSize: 15,
-                  color: 'var(--text-muted)',
+                  color: "var(--text-muted)",
                   lineHeight: 22,
                 }}
               >
-                Sign in to unlock long-term trends, efficiency correlations,
-                and predictive analytics based on your historical behavior.
+                Sign in to unlock long-term trends, efficiency correlations, and
+                predictive analytics based on your historical behavior.
               </Text>
             </View>
 
             <TouchableOpacity
-              onPress={() => router.push('/(auth)')} // Navigate to your auth screen
+              onPress={() => router.push("/(auth)/sign-in" as any)} // Navigate to your auth screen
               className="flex-row items-center gap-3 px-7 py-3.5 rounded-xl mb-8"
-              style={{ backgroundColor: 'var(--accent-blue)' }}
+              style={{ backgroundColor: "var(--accent-blue)" }}
             >
-              <Text className="text-white font-bold" style={{ fontSize: 14 }}>
+              <Text
+                className="text-leben-text-2 font-bold"
+                style={{ fontSize: 14 }}
+              >
                 Sign In to View Analytics
               </Text>
-              <Ionicons name="arrow-forward" size={16} color="#fff" />
+              <Ionicons name="arrow-forward" size={16} color="leben-text-2" />
             </TouchableOpacity>
 
             <View className="flex-row w-full gap-4">
-              <View className="flex-1 p-4 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.05)', borderWidth: 1 }}>
-                <Text style={{ fontSize: 10, color: 'var(--text-dim)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1, mb: 4 }}>
+              <View
+                className="flex-1 p-4 rounded-xl"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.02)",
+                  borderColor: "rgba(255,255,255,0.05)",
+                  borderWidth: 1,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 10,
+                    color: "var(--text-dim)",
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                    letterSpacing: 1,
+                    marginBottom: 4,
+                  }}
+                >
                   Trends
                 </Text>
-                <Text style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4 }}>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    color: "var(--text-dim)",
+                    marginTop: 4,
+                  }}
+                >
                   Visualize your growth over weeks and months.
                 </Text>
               </View>
-              <View className="flex-1 p-4 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.05)', borderWidth: 1 }}>
-                <Text style={{ fontSize: 10, color: 'var(--text-dim)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1, mb: 4 }}>
+              <View
+                className="flex-1 p-4 rounded-xl"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.02)",
+                  borderColor: "rgba(255,255,255,0.05)",
+                  borderWidth: 1,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 10,
+                    color: "var(--text-dim)",
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                    letterSpacing: 1,
+                    marginBottom: 4,
+                  }}
+                >
                   Correlations
                 </Text>
-                <Text style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4 }}>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    color: "var(--text-dim)",
+                    marginTop: 4,
+                  }}
+                >
                   Find links between habits and task density.
                 </Text>
               </View>
@@ -110,33 +162,37 @@ export default function AnalyticsScreen() {
         ) : (
           <View>
             <StatCards cards={analytics.statCards} />
-            
-            <WeeklyActivityChart 
-              data={analytics.weekActivity} 
-              hasData={analytics.hasTaskData} 
+
+            <WeeklyActivityChart
+              data={analytics.weekActivity}
+              hasData={analytics.hasTaskData}
             />
-            
-            <ProductivityScore 
-              data={analytics.productivity} 
-              hasData={analytics.hasTaskData || analytics.hasHabitData} 
+
+            <ProductivityScore
+              data={analytics.productivity}
+              hasData={analytics.hasTaskData || analytics.hasHabitData}
             />
-            
-            <HabitBreakdown 
-              habits={analytics.topHabits} 
-              hasData={analytics.hasHabitData} 
+
+            <HabitBreakdown
+              habits={analytics.topHabits}
+              hasData={analytics.hasHabitData}
             />
-            
+
             <View className="mt-5">
-              <GoalBreakdown 
-                goals={analytics.goalProgress} 
-                hasData={analytics.hasGoalData} 
+              <GoalBreakdown
+                goals={analytics.goalProgress}
+                hasData={analytics.hasGoalData}
               />
             </View>
-            
+
             <View className="mt-5">
-              <AIInsights 
-                insights={analytics.aiInsights} 
-                hasData={analytics.hasTaskData || analytics.hasHabitData || analytics.hasGoalData} 
+              <AIInsights
+                insights={analytics.aiInsights}
+                hasData={
+                  analytics.hasTaskData ||
+                  analytics.hasHabitData ||
+                  analytics.hasGoalData
+                }
               />
             </View>
           </View>

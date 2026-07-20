@@ -3,8 +3,8 @@ module.exports = {
   // NativeWind v4: use the content array to scan ALL app source files
   content: ['./src/**/*.{js,jsx,ts,tsx}', './app/**/*.{js,jsx,ts,tsx}'],
   presets: [require('nativewind/preset')],
+  darkMode: 'class',
   theme: {
-    darkMode: 'class',
     extend: {
       colors: {
         // ── Leben Brand Palette ──────────
@@ -36,9 +36,16 @@ module.exports = {
         'prio-medium': '#f59e0b',
         'prio-low': '#6b7fff',
 
-        // Tag chips
-        'tag-work': 'rgba(107,127,255,0.15)',
-        'tag-personal': 'rgba(76,175,125,0.15)',
+        // Semantic UI States
+        'state-success-bg': 'var(--state-success-bg)',
+        'state-success-border': 'var(--state-success-border)',
+        'tag-work-bg': 'var(--tag-work-bg)',
+        'tag-work-border': 'var(--tag-work-border)',
+        'tag-work-text': 'var(--tag-work-text)',
+        'tag-personal-bg': 'var(--tag-personal-bg)',
+        'tag-personal-border': 'var(--tag-personal-border)',
+        'tag-personal-text': 'var(--tag-personal-text)',
+        'brand-deep': 'var(--brand-deep)',
       },
       fontFamily: {
         sans: ['Geist', 'system-ui', 'sans-serif'],

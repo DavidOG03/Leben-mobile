@@ -32,17 +32,19 @@ export default function AIChatPanel() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1"
-      style={{ borderRightWidth: 1, borderRightColor: "#161616" }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={{ flex: 1 }}
+      className="border-r border-leben-border-subtle"
     >
-      <AIChatMessages
-        messages={messages}
-        isThinking={isThinking}
-        importedMessageIds={importedMessageIds}
-        onImport={importAssistantMessage}
-        scrollViewRef={scrollViewRef}
-      />
+      <View style={{ flex: 1 }}>
+        <AIChatMessages
+          messages={messages}
+          isThinking={isThinking}
+          importedMessageIds={importedMessageIds}
+          onImport={importAssistantMessage}
+          scrollViewRef={scrollViewRef}
+        />
+      </View>
 
       <View className="px-4 pb-2 pt-2">
         <ScrollView
@@ -54,10 +56,9 @@ export default function AIChatPanel() {
             <TouchableOpacity
               key={suggestion.label}
               onPress={() => sendMessage(suggestion.label)}
-              className="px-4 py-2 rounded-xl border border-leben-border-subtle"
-              style={{ backgroundColor: "#0e0e0e" }}
+              className="px-4 py-2 rounded-xl border border-leben-border-subtle bg-leben-bg-secondary"
             >
-              <Text style={{ color: "#888", fontSize: 12 }}>
+              <Text className="text-leben-text-muted text-[12px]">
                 {suggestion.label}
               </Text>
             </TouchableOpacity>
@@ -65,35 +66,30 @@ export default function AIChatPanel() {
         </ScrollView>
       </View>
 
-      <View className="px-4 pb-6 pt-2 border-t border-white/5">
-        <View
-          className="flex-row items-center gap-3 rounded-2xl px-4 py-2 min-h-[50px]"
-          style={{
-            backgroundColor: "#0c0c0c",
-            borderWidth: 1,
-            borderColor: "#1e1e1e",
-          }}
-        >
+      <View className="px-4 pb-6 pt-2 border-t border-leben-border-subtle">
+        <View className="flex-row items-center gap-3 rounded-2xl px-4 py-2 min-h-[50px] bg-leben-bg-card border border-leben-border">
           <TextInput
             value={input}
             onChangeText={setInput}
             placeholder="Ask neural engine..."
             placeholderTextColor="#555"
             multiline
-            className="flex-1 text-white text-[14px] max-h-32 py-2"
+            className="flex-1 text-leben-text-2 text-[14px] max-h-32 py-2"
           />
           <TouchableOpacity
             onPress={() => sendMessage(input)}
             disabled={!input.trim() || isThinking}
-            className="w-9 h-9 rounded-xl items-center justify-center border"
+            className={`w-9 h-9 rounded-xl items-center justify-center border ${
+              input.trim() 
+                ? "bg-leben-accent-dim border-leben-accent/40" 
+                : "bg-leben-bg-element border-leben-border-subtle"
+            }`}
             style={{
-              backgroundColor: input.trim() ? "#2d2480" : "#1a1a1a",
-              borderColor: input.trim() ? "#3a3060" : "#222",
               opacity: input.trim() && !isThinking ? 1 : 0.5,
             }}
           >
-            <Text className="text-white text-lg leading-none mt-[-2px]">
-              <SendIcon />
+            <Text className="text-leben-text-2 text-lg leading-none mt-[-2px]">
+              <SendIcon color="currentColor" size={16} />
             </Text>
           </TouchableOpacity>
         </View>

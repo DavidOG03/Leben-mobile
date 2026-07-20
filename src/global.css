@@ -9,8 +9,8 @@
     --bg-secondary:     #f5f5f5;
     --bg-card:          #ffffff;
     --bg-element:       #f9f9f9;
-    --border-primary:   #e5e5e5;
-    --border-subtle:    #f0f0f0;
+    --border-primary:   #a3a3a3;
+    --border-subtle:    #d4d4d4;
     --accent-blue:    #3b82f6;
     --accent-blue-light: #60a5fa;
     --text-primary:     #111111;
@@ -18,6 +18,17 @@
     --text-muted:       #888888;
     --text-dim:         #aaaaaa;
     --success-green:    #4caf7d;
+
+    /* Semantic UI States */
+    --state-success-bg:     #e6f4ea;
+    --state-success-border: #ceead6;
+    --tag-work-bg:          #e8f0fe;
+    --tag-work-border:      #d2e3fc;
+    --tag-work-text:        #1967d2;
+    --tag-personal-bg:      #f3e8fd;
+    --tag-personal-border:  #e9d2fc;
+    --tag-personal-text:    #8430ce;
+    --brand-deep:           #ede7f6;
 
     /* Typography */
     --font-display: Inter, ui-sans-serif, system-ui, sans-serif;
@@ -41,5 +52,16 @@
     --text-muted:       #888888;
     --text-dim:         #444444;
     --success-green:    #4caf7d;
+
+    /* Semantic UI States */
+    --state-success-bg:     #1e3d26;
+    --state-success-border: #3a7a4a;
+    --tag-work-bg:          #1a1f2e;
+    --tag-work-border:      #1e2a42;
+    --tag-work-text:        #4a7abf;
+    --tag-personal-bg:      #1e1a2a;
+    --tag-personal-border:  #2a1e42;
+    --tag-personal-text:    #8a5abf;
+    --brand-deep:           #2d2480;
   }
 }

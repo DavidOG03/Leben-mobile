@@ -13,24 +13,15 @@ interface AIInsightsProps {
 
 export default function AIInsights({ insights, hasData }: AIInsightsProps) {
   return (
-    <View
-      className="rounded-2xl p-5 mb-5"
-      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
-    >
+    <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border">
       <View className="flex-row items-center gap-2 mb-4">
         <View
-          className="items-center justify-center rounded-lg"
-          style={{
-            width: 26,
-            height: 26,
-            backgroundColor: 'rgba(124,106,240,0.15)',
-            borderColor: 'rgba(124,106,240,0.2)',
-            borderWidth: 1,
-          }}
+          className="items-center justify-center rounded-lg bg-leben-accent-dim border border-leben-accent/20"
+          style={{ width: 26, height: 26 }}
         >
-          <Ionicons name="sparkles" size={12} color="#7c6af0" />
+          <Ionicons name="sparkles" size={12} color="var(--accent-blue)" />
         </View>
-        <Text className="font-semibold text-white" style={{ fontSize: 14 }}>
+        <Text className="font-semibold text-leben-text-2 text-[14px]">
           AI Insights
         </Text>
       </View>
@@ -40,15 +31,10 @@ export default function AIInsights({ insights, hasData }: AIInsightsProps) {
           {insights.map((insight, i) => (
             <View
               key={i}
-              className="flex-row gap-2.5 rounded-xl p-3"
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                borderColor: 'var(--border-primary)',
-                borderWidth: 1,
-              }}
+              className="flex-row gap-2.5 rounded-xl p-3 bg-leben-bg-card border border-leben-border"
             >
-              <Text style={{ fontSize: 14, marginTop: 1 }}>{insight.icon}</Text>
-              <Text style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 16.5, flexShrink: 1 }}>
+              <Text className="text-[14px] mt-0.5">{insight.icon}</Text>
+              <Text className="text-[11px] text-leben-text-muted leading-[16.5px] shrink">
                 {insight.text}
               </Text>
             </View>

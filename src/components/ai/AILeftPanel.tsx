@@ -1,22 +1,30 @@
-import { useState } from 'react';
-import { View, TouchableOpacity, ScrollView, Modal, Pressable } from 'react-native';
-import { BoltIcon } from '@/constants/Icons';
-import { useAIChatPanel } from '@/hooks/useAIChatPanel';
-import { Text } from '@/components/ui/Text';
+import { Text } from "@/components/ui/Text";
+import { BoltIcon } from "@/constants/Icons";
+import { useAIChatPanel } from "@/hooks/useAIChatPanel";
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-
-const navItems = [
-  { label: 'Quick Prompt', icon: <BoltIcon />, active: true },
-];
+const navItems = [{ label: "Quick Prompt", icon: <BoltIcon />, active: true }];
 
 const prompts = [
-  { title: 'Plan my day', sub: 'Daily focus mapping' },
-  { title: 'Weekly review', sub: 'Metric aggregation' },
-  { title: 'Summarize goals', sub: 'Quarterly alignment' },
-  { title: 'Identify focus blocks', sub: 'Calendar optimization' },
+  { title: "Plan my day", sub: "Daily focus mapping" },
+  { title: "Weekly review", sub: "Metric aggregation" },
+  { title: "Summarize goals", sub: "Quarterly alignment" },
+  { title: "Identify focus blocks", sub: "Calendar optimization" },
 ];
 
-export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
+export default function AILeftPanel({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}) {
   const { sendMessage } = useAIChatPanel();
 
   const handlePrompt = (title: string) => {
@@ -28,26 +36,16 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
     <View className="flex-1">
       {/* AI identity */}
       <View className="flex-row items-center gap-3 px-5 mb-6">
-        <View
-          className="items-center justify-center rounded-xl"
-          style={{
-            width: 40,
-            height: 40,
-            backgroundColor: '#2d2480',
-            borderWidth: 1,
-            borderColor: 'rgba(124,106,240,0.4)',
-          }}
-        >
-          <Text className="text-white text-lg">✦</Text>
-        </View>
         <View>
           <Text
-            className="font-bold text-white"
+            className="font-bold text-leben-text"
             style={{ fontSize: 14, letterSpacing: -0.1 }}
           >
             Leben AI
           </Text>
-          <Text style={{ fontSize: 11, color: 'var(--text-muted)' }}>Productivity Engine</Text>
+          <Text style={{ fontSize: 11, color: "var(--text-muted)" }}>
+            Productivity Engine
+          </Text>
         </View>
       </View>
 
@@ -58,17 +56,19 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
             key={item.label}
             className="flex-row items-center gap-2.5 px-3 py-2 rounded-lg"
             style={{
-              backgroundColor: item.active ? 'var(--border-primary)' : 'transparent',
+              backgroundColor: item.active
+                ? "var(--border-primary)"
+                : "transparent",
             }}
           >
-            <View style={{ opacity: item.active ? 1 : 0.6 }}>
-              {item.icon}
-            </View>
+            <View style={{ opacity: item.active ? 1 : 0.6 }}>{item.icon}</View>
             <Text
               style={{
-                color: item.active ? 'var(--text-primary)' : 'var(--text-muted)',
+                color: item.active
+                  ? "var(--text-primary)"
+                  : "var(--text-muted)",
                 fontSize: 13,
-                fontWeight: item.active ? '500' : '400',
+                fontWeight: item.active ? "500" : "400",
               }}
             >
               {item.label}
@@ -85,7 +85,7 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
             className="uppercase"
             style={{
               fontSize: 9,
-              color: '#3a3a3a',
+              color: "var(--text-muted)",
               letterSpacing: 1.4,
             }}
           >
@@ -100,12 +100,18 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
               className="rounded-xl px-4 py-3 border border-leben-border bg-leben-bg-card"
             >
               <Text
-                className="font-medium text-white"
+                className="font-medium text-leben-text"
                 style={{ fontSize: 13 }}
               >
                 {p.title}
               </Text>
-              <Text style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+              <Text
+                style={{
+                  fontSize: 11,
+                  color: "var(--text-muted)",
+                  marginTop: 2,
+                }}
+              >
                 {p.sub}
               </Text>
             </TouchableOpacity>
@@ -120,17 +126,17 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
       {/* Mobile Drawer */}
       <Modal visible={isOpen} transparent animationType="fade">
         <View className="flex-1 flex-row">
-          <Pressable 
-            className="absolute inset-0 bg-black/50" 
-            onPress={() => setIsOpen(false)} 
+          <Pressable
+            className="absolute inset-0 bg-black/50"
+            onPress={() => setIsOpen(false)}
           />
           <View
             className="h-full py-6"
             style={{
               width: 260,
-              backgroundColor: '#0c0c0c',
+              backgroundColor: "var(--bg-primary)",
               borderRightWidth: 1,
-              borderRightColor: 'var(--bg-card)',
+              borderRightColor: "var(--bg-card)",
             }}
           >
             <ScrollView>{panelContent}</ScrollView>
@@ -143,9 +149,9 @@ export default function AILeftPanel({ isOpen, setIsOpen }: { isOpen: boolean; se
         className="hidden md:flex h-full py-6"
         style={{
           width: 250,
-          backgroundColor: '#0c0c0c',
+          backgroundColor: "var(--bg-primary)",
           borderRightWidth: 1,
-          borderRightColor: 'var(--bg-card)',
+          borderRightColor: "var(--bg-card)",
         }}
       >
         <ScrollView>{panelContent}</ScrollView>

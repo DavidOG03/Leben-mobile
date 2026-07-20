@@ -1,23 +1,14 @@
+import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
-import { , View } from 'react-native';
+import { View } from "react-native";
 import { HabitItem } from "./HabitItem";
-import { Text } from '@/components/ui/Text';
-
 
 export function HabitList() {
   const habits = useLebenStore((s) => s.habits);
 
   if (habits.length === 0) {
     return (
-      <View
-        style={{
-          borderRadius: 16,
-          borderWidth: 1,
-          borderColor: "#1e1e1e",
-          backgroundColor: "#131313",
-          overflow: "hidden",
-        }}
-      >
+      <View className="rounded-2xl border border-leben-border bg-leben-bg-secondary overflow-hidden">
         {/* Ghost preview rows */}
         <View style={{ flexDirection: "row", gap: 12, padding: 16 }}>
           {[1, 1].map((op, i) => (
@@ -36,28 +27,12 @@ export function HabitList() {
         </View>
 
         {/* Empty state */}
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            paddingVertical: 32,
-            gap: 8,
-            borderTopWidth: 1,
-            borderTopColor: "#181818",
-          }}
-        >
-          <Text style={{ fontSize: 28 }}>🌱</Text>
-          <Text style={{ fontSize: 13, color: "#888", fontWeight: "500" }}>
+        <View className="items-center justify-center py-8 gap-2 border-t border-leben-border">
+          <Text className="text-[28px]">🌱</Text>
+          <Text className="text-[13px] text-leben-text-muted font-medium">
             No habits yet
           </Text>
-          <Text
-            style={{
-              fontSize: 12,
-              color: "#666",
-              textAlign: "center",
-              lineHeight: 20,
-            }}
-          >
+          <Text className="text-[12px] text-leben-text-dim text-center leading-[20px]">
             Tap the + button above{"\n"}to build your first ritual.
           </Text>
         </View>

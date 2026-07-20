@@ -20,9 +20,9 @@ export function GoalProgress() {
   }, []);
 
   return (
-    <Card className="min-h-[260px] p-6" style={{ backgroundColor: '#121212', borderColor: 'var(--border-primary)' }}>
+    <Card className="min-h-[260px] p-6" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
       <View className="flex-row items-center justify-between mb-5">
-        <Text className="text-white font-semibold text-[15px]">
+        <Text className="text-leben-text font-semibold text-[15px]">
           Goal Progress
         </Text>
         {!loading && goals.length > 0 && (
@@ -76,7 +76,7 @@ export function GoalProgress() {
                 <View className="flex-row items-center justify-between mb-2">
                   <View className="flex-row items-center gap-2 max-w-[70%]">
                     <Text className="text-[14px]">{g.icon}</Text>
-                    <Text className="text-white font-medium text-[13px]" numberOfLines={1}>
+                    <Text className="text-leben-text font-medium text-[13px]" numberOfLines={1}>
                       {g.title}
                     </Text>
                   </View>
@@ -85,7 +85,7 @@ export function GoalProgress() {
                   </Text>
                 </View>
                 
-                <View className="h-[3px] rounded-full bg-[#1e1e1e] overflow-hidden mb-3">
+                <View className="h-[3px] rounded-full bg-leben-border overflow-hidden mb-3">
                   <View 
                     className="h-full rounded-full"
                     style={{ 

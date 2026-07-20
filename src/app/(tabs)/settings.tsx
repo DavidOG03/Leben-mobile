@@ -1,34 +1,20 @@
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
+import { Text } from "@/components/ui/Text";
 import { supabase } from "@/lib/supabase/client";
 import { useLebenStore } from "@/store/useStore";
-import { useState } from "react";
-import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
-import { Text } from '@/components/ui/Text';
-import { useColorScheme } from 'nativewind';
-
+import { useColorScheme } from "nativewind";
+import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
 
 function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
   return (
     <TouchableOpacity
       onPress={onChange}
       activeOpacity={0.8}
-      style={{
-        width: 42,
-        height: 24,
-        backgroundColor: on ? "#7c6af0" : "#2a2a2a",
-        borderRadius: 12,
-        padding: 2,
-        justifyContent: "center",
-      }}
+      className={`w-[42px] h-[24px] rounded-[12px] p-[2px] justify-center transition-colors ${on ? "bg-leben-accent" : "bg-leben-text-dim"}`}
     >
       <View
-        style={{
-          width: 20,
-          height: 20,
-          borderRadius: 10,
-          backgroundColor: "#fff",
-          transform: [{ translateX: on ? 18 : 0 }],
-        }}
+        className="w-5 h-5 rounded-full bg-white shadow-sm"
+        style={{ transform: [{ translateX: on ? 18 : 0 }] }}
       />
     </TouchableOpacity>
   );
@@ -37,14 +23,8 @@ function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
 function SectionLabel({ text }: { text: string }) {
   return (
     <Text
-      style={{
-        fontSize: 10,
-        color: "#3a3a3a",
-        letterSpacing: 1.6,
-        textTransform: "uppercase",
-        marginBottom: 16,
-        marginTop: 32,
-      }}
+      className="text-[10px] text-leben-text-dim uppercase mb-4 mt-8"
+      style={{ letterSpacing: 1.6 }}
     >
       {text}
     </Text>
@@ -52,10 +32,10 @@ function SectionLabel({ text }: { text: string }) {
 }
 
 export default function SettingsScreen() {
-  const [notifs, setNotifs] = useState({
-    email: false,
-    push: false,
-  });
+  const notificationPrefs = useLebenStore((s) => s.notificationPrefs);
+  const updateNotificationPrefs = useLebenStore(
+    (s) => s.updateNotificationPrefs,
+  );
 
   const { colorScheme, toggleColorScheme } = useColorScheme();
 
@@ -66,8 +46,8 @@ export default function SettingsScreen() {
 
   const handlePushToggle = () => {
     // In a full mobile implementation, this would request expo-notifications permissions
-    if (notifs.push) {
-      setNotifs((p) => ({ ...p, push: false }));
+    if (notificationPrefs.push) {
+      updateNotificationPrefs({ push: false });
     } else {
       Alert.alert(
         "Push Notifications",
@@ -76,7 +56,7 @@ export default function SettingsScreen() {
           { text: "Cancel", style: "cancel" },
           {
             text: "Enable",
-            onPress: () => setNotifs((p) => ({ ...p, push: true })),
+            onPress: () => updateNotificationPrefs({ push: true }),
           },
         ],
       );
@@ -127,22 +107,10 @@ export default function SettingsScreen() {
         <View className="flex-row items-start gap-6 mb-8">
           {/* Avatar */}
           <View className="relative">
-            <View
-              className="rounded-2xl overflow-hidden items-center justify-center"
-              style={{
-                width: 88,
-                height: 88,
-                backgroundColor: "#1a1a1a",
-                borderColor: "#2a2a2a",
-                borderWidth: 1,
-              }}
-            >
+            <View className="rounded-2xl overflow-hidden items-center justify-center w-[88px] h-[88px] bg-leben-bg-element border border-leben-border-subtle">
               {/* Web uses a gradient + SVG. We'll simulate it with a View and Emoji */}
-              <View
-                className="w-full h-full items-center justify-center"
-                style={{ backgroundColor: "#1f1f2e" }}
-              >
-                <Text style={{ fontSize: 40 }}>👤</Text>
+              <View className="w-full h-full items-center justify-center bg-leben-bg-secondary">
+                <Text className="text-[40px]">👤</Text>
               </View>
             </View>
             {/* <TouchableOpacity
@@ -162,12 +130,14 @@ export default function SettingsScreen() {
           {/* Name / badge */}
           <View className="justify-center mt-2">
             <Text
-              className="font-black text-white capitalize"
+              className="font-black text-leben-text capitalize"
               style={{ fontSize: 26, letterSpacing: -0.5, marginBottom: 4 }}
             >
               {userId ? displayName : "Guest"}
             </Text>
-            <Text style={{ fontSize: 13, color: "#555" }}>{displayEmail}</Text>
+            <Text className="text-[13px] text-leben-text-muted">
+              {displayEmail}
+            </Text>
           </View>
         </View>
 
@@ -182,26 +152,16 @@ export default function SettingsScreen() {
           ].map(({ label, val }) => (
             <View
               key={label}
-              className="rounded-xl p-4 flex-1 min-w-[150px]"
-              style={{
-                backgroundColor: "#111",
-                borderColor: "#1e1e1e",
-                borderWidth: 1,
-              }}
+              className="rounded-xl p-4 flex-1 min-w-[150px] bg-leben-bg-card border border-leben-border"
             >
               <Text
-                style={{
-                  fontSize: 9,
-                  color: "#555",
-                  letterSpacing: 1.4,
-                  textTransform: "uppercase",
-                  marginBottom: 6,
-                }}
+                className="text-[9px] text-leben-text-muted uppercase mb-1.5"
+                style={{ letterSpacing: 1.4 }}
               >
                 {label}
               </Text>
               <Text
-                className="font-medium text-white capitalize"
+                className="font-medium text-leben-text-2 capitalize"
                 style={{ fontSize: 15 }}
               >
                 {val}
@@ -212,32 +172,16 @@ export default function SettingsScreen() {
 
         {/* Notification Channels */}
         <SectionLabel text="System Preferences" />
-        <View
-          className="rounded-xl p-5 mb-8"
-          style={{
-            backgroundColor: "#111",
-            borderColor: "#1e1e1e",
-            borderWidth: 1,
-          }}
-        >
+        <View className="rounded-xl p-5 mb-8 bg-leben-bg-card border border-leben-border">
           <View className="flex-row items-center gap-3 mb-4">
-            <View
-              className="items-center justify-center rounded-lg"
-              style={{
-                width: 34,
-                height: 34,
-                backgroundColor: "#1a1a1a",
-                borderColor: "#222",
-                borderWidth: 1,
-              }}
-            >
-              <Text style={{ fontSize: 16 }}>🔔</Text>
+            <View className="items-center justify-center rounded-lg w-[34px] h-[34px] bg-leben-bg-element border border-leben-border-subtle">
+              <Text className="text-[16px]">🔔</Text>
             </View>
             <View>
-              <Text className="font-medium text-white" style={{ fontSize: 14 }}>
+              <Text className="font-medium text-leben-text-2 text-[14px]">
                 Notification Channels
               </Text>
-              <Text style={{ fontSize: 11, color: "#555", marginTop: 2 }}>
+              <Text className="text-[11px] text-leben-text-muted mt-0.5">
                 Manage how Leben communicates vital updates
               </Text>
             </View>
@@ -245,61 +189,119 @@ export default function SettingsScreen() {
 
           <View className="flex-col gap-6 mt-4">
             <View className="flex-row items-center justify-between">
-              <Text style={{ fontSize: 14, color: "#aaa" }}>
-                Email Reminders
-              </Text>
+              <View className="flex-1 pr-4">
+                <Text className="text-leben-text-2 text-[14px]">
+                  Desktop / Mobile Push
+                </Text>
+                <Text className="text-[11px] text-leben-text-muted mt-0.5">
+                  Master switch for system notifications
+                </Text>
+              </View>
+              <Toggle on={notificationPrefs.push} onChange={handlePushToggle} />
+            </View>
+
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 pr-4">
+                <Text className="text-leben-text-2 text-[14px]">
+                  Morning Briefing (8 AM)
+                </Text>
+                <Text className="text-[11px] text-leben-text-muted mt-0.5">
+                  Get a summary of your day ahead
+                </Text>
+              </View>
               <Toggle
-                on={notifs.email}
-                onChange={() => setNotifs((p) => ({ ...p, email: !p.email }))}
+                on={notificationPrefs.morningBriefing}
+                onChange={() =>
+                  updateNotificationPrefs({
+                    morningBriefing: !notificationPrefs.morningBriefing,
+                  })
+                }
               />
             </View>
+
             <View className="flex-row items-center justify-between">
-              <Text className="text-leben-text-2 text-[14px]">
-                Desktop / Mobile Push
-              </Text>
-              <Toggle on={notifs.push} onChange={handlePushToggle} />
+              <View className="flex-1 pr-4">
+                <Text className="text-leben-text-2 text-[14px]">
+                  Streak Savers (6 PM)
+                </Text>
+                <Text className="text-[11px] text-leben-text-muted mt-0.5">
+                  Reminders if you haven't completed daily habits
+                </Text>
+              </View>
+              <Toggle
+                on={notificationPrefs.streakSavers}
+                onChange={() =>
+                  updateNotificationPrefs({
+                    streakSavers: !notificationPrefs.streakSavers,
+                  })
+                }
+              />
             </View>
+
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 pr-4">
+                <Text className="text-leben-text-2 text-[14px]">
+                  Evening Wrap-up (8 PM)
+                </Text>
+                <Text className="text-[11px] text-leben-text-muted mt-0.5">
+                  Log your progress and plan tomorrow
+                </Text>
+              </View>
+              <Toggle
+                on={notificationPrefs.eveningWrapUp}
+                onChange={() =>
+                  updateNotificationPrefs({
+                    eveningWrapUp: !notificationPrefs.eveningWrapUp,
+                  })
+                }
+              />
+            </View>
+
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 pr-4">
+                <Text className="text-leben-text-2 text-[14px]">
+                  Goal Updates
+                </Text>
+                <Text className="text-[11px] text-leben-text-muted mt-0.5">
+                  Mid-point and deadline proximity alerts
+                </Text>
+              </View>
+              <Toggle
+                on={notificationPrefs.goalUpdates}
+                onChange={() =>
+                  updateNotificationPrefs({
+                    goalUpdates: !notificationPrefs.goalUpdates,
+                  })
+                }
+              />
+            </View>
+
             <View className="flex-row items-center justify-between pt-2 border-t border-leben-border">
-              <Text className="text-leben-text-2 text-[14px]">
-                Dark Mode
-              </Text>
-              <Toggle on={colorScheme === 'dark'} onChange={toggleColorScheme} />
+              <Text className="text-leben-text-2 text-[14px]">Dark Mode</Text>
+              <Toggle
+                on={colorScheme === "dark"}
+                onChange={toggleColorScheme}
+              />
             </View>
           </View>
         </View>
 
         {/* Danger zone */}
-        <View
-          className="rounded-xl p-5 mt-4"
-          style={{
-            backgroundColor: "#110a0a",
-            borderColor: "#2a1515",
-            borderWidth: 1,
-          }}
-        >
+        <View className="rounded-xl p-5 mt-4 bg-leben-error-bg border border-leben-error/20">
           <View className="mb-4">
-            <Text
-              className="font-bold mb-1"
-              style={{ fontSize: 15, color: "#e85555" }}
-            >
+            <Text className="font-bold mb-1 text-[15px] text-leben-error">
               Workspace Termination
             </Text>
-            <Text style={{ fontSize: 12, color: "#666", lineHeight: 18 }}>
+            <Text className="text-[12px] text-leben-text-muted leading-[18px]">
               Permanently delete all tasks, habits, goals, and books spanning
               your workspace. This action is irreversible.
             </Text>
           </View>
           <TouchableOpacity
             onPress={handlePurge}
-            className="items-center justify-center rounded-xl active:opacity-80"
-            style={{
-              backgroundColor: "#e85555",
-              paddingVertical: 12,
-              paddingHorizontal: 20,
-              alignSelf: "flex-start",
-            }}
+            className="items-center justify-center rounded-xl active:opacity-80 bg-leben-error py-3 px-5 self-start"
           >
-            <Text style={{ color: "white", fontSize: 13, fontWeight: "600" }}>
+            <Text className="text-white text-[13px] font-semibold">
               Purge Core
             </Text>
           </TouchableOpacity>
@@ -308,24 +310,19 @@ export default function SettingsScreen() {
         {/* Sign Out */}
         <TouchableOpacity
           onPress={handleSignOut}
-          className="rounded-xl p-4 mt-4 items-center justify-center flex-row gap-2 active:opacity-80"
-          style={{
-            backgroundColor: "#111",
-            borderColor: "#222",
-            borderWidth: 1,
-          }}
+          className="rounded-xl p-4 mt-4 items-center justify-center flex-row gap-2 active:opacity-80 bg-leben-bg-card border border-leben-border"
         >
-          <Text style={{ color: "#fff", fontSize: 14, fontWeight: "600" }}>
+          <Text className="text-leben-text-2 text-[14px] font-semibold">
             Sign Out
           </Text>
         </TouchableOpacity>
 
         {/* Footer */}
-        <View
-          className="flex-row items-center justify-between mt-8 pt-4 mb-10"
-          style={{ borderTopColor: "#161616", borderTopWidth: 1 }}
-        >
-          <Text style={{ fontSize: 10, color: "#2a2a2a", letterSpacing: 1 }}>
+        <View className="flex-row items-center justify-between mt-8 pt-4 mb-10 border-t border-leben-border">
+          <Text
+            className="text-[10px] text-leben-text-dim"
+            style={{ letterSpacing: 1 }}
+          >
             Leben V1.0
           </Text>
         </View>

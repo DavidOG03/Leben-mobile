@@ -12,11 +12,8 @@ interface HabitBreakdownProps {
 
 export default function HabitBreakdown({ habits, hasData }: HabitBreakdownProps) {
   return (
-    <View
-      className="rounded-2xl p-5"
-      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)', borderWidth: 1 }}
-    >
-      <Text className="font-semibold text-white mb-4" style={{ fontSize: 14 }}>
+    <View className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border">
+      <Text className="font-semibold text-leben-text-2 mb-4 text-[14px]">
         Habit Consistency
       </Text>
 
@@ -28,15 +25,12 @@ export default function HabitBreakdown({ habits, hasData }: HabitBreakdownProps)
               <View key={i}>
                 <View className="flex-row justify-between mb-1.5">
                   <View className="flex-row items-center gap-1.5">
-                    <Text style={{ fontSize: 12 }}>{h.icon}</Text>
-                    <Text style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{h.label}</Text>
+                    <Text className="text-[12px]">{h.icon}</Text>
+                    <Text className="text-[12px] text-leben-text-2">{h.label}</Text>
                   </View>
-                  <Text style={{ fontSize: 11, color: 'var(--text-dim)' }}>{pct}%</Text>
+                  <Text className="text-[11px] text-leben-text-dim">{pct}%</Text>
                 </View>
-                <View
-                  className="rounded-full overflow-hidden"
-                  style={{ height: 3, backgroundColor: 'var(--bg-secondary)' }}
-                >
+                <View className="rounded-full overflow-hidden h-[3px] bg-leben-bg-secondary">
                   <View
                     className="h-full rounded-full"
                     style={{

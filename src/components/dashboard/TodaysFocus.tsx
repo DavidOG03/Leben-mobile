@@ -64,10 +64,10 @@ export function TodaysFocus() {
   };
 
   return (
-    <Card className="min-h-[200px] p-0 overflow-hidden" style={{ backgroundColor: '#121212', borderColor: 'var(--border-primary)' }}>
+    <Card className="min-h-[200px] p-0 overflow-hidden" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
       {/* Header */}
       <View className="flex-row items-center justify-between p-6 pb-4">
-        <Text className="text-white font-semibold text-[15px]">
+        <Text className="text-leben-text font-semibold text-[15px]">
           Today's Focus
         </Text>
         {tasks.length > 0 && (
@@ -110,8 +110,8 @@ export function TodaysFocus() {
                     className="w-[18px] h-[18px] rounded-[5px] items-center justify-center"
                     style={{
                       borderWidth: 1,
-                      borderColor: task.completed ? '#3a7a4a' : 'var(--border-primary)',
-                      backgroundColor: task.completed ? '#1e3d26' : 'var(--bg-secondary)',
+                      borderColor: task.completed ? 'var(--state-success-border)' : 'var(--border-primary)',
+                      backgroundColor: task.completed ? 'var(--state-success-bg)' : 'var(--bg-secondary)',
                     }}
                     activeOpacity={0.7}
                   >
@@ -136,13 +136,13 @@ export function TodaysFocus() {
                       <View 
                         className="rounded px-2 py-0.5"
                         style={{
-                          backgroundColor: isWork ? '#1a1f2e' : '#1e1a2a',
-                          borderColor: isWork ? '#1e2a42' : '#2a1e42',
+                          backgroundColor: isWork ? 'var(--tag-work-bg)' : 'var(--tag-personal-bg)',
+                          borderColor: isWork ? 'var(--tag-work-border)' : 'var(--tag-personal-border)',
                           borderWidth: 1,
                         }}
                       >
                         <Text 
-                          style={{ color: isWork ? '#4a7abf' : '#8a5abf' }} 
+                          style={{ color: isWork ? 'var(--tag-work-text)' : 'var(--tag-personal-text)' }} 
                           className="text-[9px] font-medium tracking-widest"
                         >
                           {task.tag}
@@ -187,7 +187,7 @@ export function TodaysFocus() {
                       value={reminderTime}
                       onChangeText={setReminderTime}
                       placeholder="HH:MM"
-                      placeholderTextColor="#555"
+                      placeholderTextColor="var(--text-muted)"
                       keyboardType="numbers-and-punctuation"
                       className="px-3 py-1.5 rounded bg-leben-bg border border-leben-border text-leben-text-2 text-xs w-20"
                       maxLength={5}
@@ -203,7 +203,7 @@ export function TodaysFocus() {
                         opacity: reminderTime ? 1 : 0.5,
                       }}
                     >
-                      <Text className="text-white text-xs">Set</Text>
+                      <Text className="text-leben-bg-card text-xs">Set</Text>
                     </TouchableOpacity>
                     {task.reminderAt && (
                       <TouchableOpacity

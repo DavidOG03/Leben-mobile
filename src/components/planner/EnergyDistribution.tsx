@@ -1,23 +1,22 @@
-import { View, } from 'react-native';
-import { useLebenStore, ScheduleItem } from '@/store/useStore';
-import { Text } from '@/components/ui/Text';
-
+import { Text } from "@/components/ui/Text";
+import { ScheduleItem, useLebenStore } from "@/store/useStore";
+import { View } from "react-native";
 
 export function EnergyDistribution() {
   const schedule = useLebenStore((s) => s.schedule);
 
   const morningTasks = schedule.filter((item) => {
-    const hour = parseInt(item.start.split(':')[0]);
+    const hour = parseInt(item.start.split(":")[0]);
     return hour >= 6 && hour < 12;
   });
 
   const peakTasks = schedule.filter((item) => {
-    const hour = parseInt(item.start.split(':')[0]);
+    const hour = parseInt(item.start.split(":")[0]);
     return hour >= 12 && hour < 18;
   });
 
   const eveningTasks = schedule.filter((item) => {
-    const hour = parseInt(item.start.split(':')[0]);
+    const hour = parseInt(item.start.split(":")[0]);
     return hour >= 18 || hour < 6;
   });
 
@@ -25,8 +24,8 @@ export function EnergyDistribution() {
     if (tasks.length === 0) return 20;
     const score = tasks.reduce(
       (acc, t) =>
-        acc + (t.priority === 'high' ? 30 : t.priority === 'medium' ? 20 : 10),
-      0
+        acc + (t.priority === "high" ? 30 : t.priority === "medium" ? 20 : 10),
+      0,
     );
     return Math.min(100, 20 + score);
   };
@@ -41,50 +40,52 @@ export function EnergyDistribution() {
   };
 
   const levels = [
-    { label: 'MOR', value: calculateH(morningTasks), peak: false, topTasks: getTopTasks(morningTasks) },
-    { label: 'PEAK', value: calculateH(peakTasks), peak: true, topTasks: getTopTasks(peakTasks) },
-    { label: 'EVE', value: calculateH(eveningTasks), peak: false, topTasks: getTopTasks(eveningTasks) },
+    {
+      label: "MOR",
+      value: calculateH(morningTasks),
+      peak: false,
+      topTasks: getTopTasks(morningTasks),
+    },
+    {
+      label: "PEAK",
+      value: calculateH(peakTasks),
+      peak: true,
+      topTasks: getTopTasks(peakTasks),
+    },
+    {
+      label: "EVE",
+      value: calculateH(eveningTasks),
+      peak: false,
+      topTasks: getTopTasks(eveningTasks),
+    },
   ];
 
   return (
-    <View
-      className="rounded-2xl p-6 flex-col gap-6"
-      style={{
-        backgroundColor: 'var(--bg-card)',
-        borderColor: 'var(--border-primary)',
-        borderWidth: 1,
-      }}
-    >
+    <View className="rounded-2xl p-6 flex-col gap-6 bg-leben-bg-card border border-leben-border">
       <View className="flex-row items-center justify-between">
-        <Text className="text-white font-semibold" style={{ fontSize: 14 }}>
+        <Text
+          className="text-leben-text-2 font-semibold pb-4"
+          style={{ fontSize: 14 }}
+        >
           Energy Distribution
         </Text>
-        <Text
-          style={{ color: 'var(--accent-blue)', fontSize: 10, fontWeight: '600' }}
-        >
+        <Text className="text-leben-accent text-[10px] font-semibold">
           Peak: 10:00 AM
         </Text>
       </View>
 
       <View className="flex-row items-end justify-between px-4 h-32 gap-6">
         {levels.map((lvl) => (
-          <View key={lvl.label} className="flex-col items-center gap-3 flex-1 h-full justify-end">
+          <View
+            key={lvl.label}
+            className="flex-col items-center gap-3 flex-1 h-full justify-end"
+          >
             <View
-              className="w-full rounded-lg"
-              style={{
-                height: `${lvl.value}%`,
-                backgroundColor: lvl.peak ? 'var(--accent-blue)' : 'rgba(255,255,255,0.05)',
-                borderWidth: lvl.peak ? 0 : 1,
-                borderColor: 'var(--bg-secondary)',
-              }}
+              className={`w-full rounded-lg ${lvl.peak ? "bg-leben-accent" : "bg-leben-border-subtle border border-leben-border-subtle"}`}
+              style={{ height: `${lvl.value}%` }}
             />
             <Text
-              style={{
-                fontSize: 9,
-                fontWeight: '700',
-                color: lvl.peak ? 'var(--accent-blue)' : 'var(--text-muted)',
-                letterSpacing: 1,
-              }}
+              className={`text-[9px] font-bold tracking-[1px] ${lvl.peak ? "text-leben-accent" : "text-leben-text-muted"}`}
             >
               {lvl.label}
             </Text>
@@ -99,8 +100,7 @@ export function EnergyDistribution() {
             {lvl.topTasks.map((t, idx) => (
               <View key={idx} className="flex-row gap-1.5 items-start">
                 <View
-                  className="w-1.5 h-1.5 rounded-full mt-1 flex-shrink-0"
-                  style={{ backgroundColor: lvl.peak ? 'var(--accent-blue)' : 'var(--text-dim)' }}
+                  className={`w-1.5 h-1.5 rounded-full mt-1 flex-shrink-0 ${lvl.peak ? "bg-leben-accent" : "bg-leben-text-dim"}`}
                 />
                 <Text
                   className="text-leben-text-muted leading-tight"
@@ -112,7 +112,10 @@ export function EnergyDistribution() {
               </View>
             ))}
             {lvl.topTasks.length === 0 && (
-              <Text className="text-leben-text-dim italic text-center" style={{ fontSize: 10 }}>
+              <Text
+                className="text-leben-text-dim italic text-center"
+                style={{ fontSize: 10 }}
+              >
                 Free time
               </Text>
             )}
