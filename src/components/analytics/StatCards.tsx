@@ -1,9 +1,7 @@
-import React from 'react';
-import { View, ScrollView } from 'react-native';
-import { StatCard } from '@/utils/analytics.utils';
-import { Ionicons } from '@expo/vector-icons';
-import { Text } from '@/components/ui/Text';
-
+import { Text } from "@/components/ui/Text";
+import { StatCard } from "@/utils/analytics.utils";
+import { Ionicons } from "@expo/vector-icons";
+import { ScrollView, View } from "react-native";
 
 interface StatCardsProps {
   cards: StatCard[];
@@ -14,10 +12,10 @@ export default function StatCards({ cards }: StatCardsProps) {
     return (
       <View className="flex-row gap-4 mb-6 opacity-50">
         {[1, 2, 3, 4].map((i) => (
-            <View
-              key={i}
-              className="rounded-2xl p-5 w-[160px] bg-leben-bg-card border border-leben-border"
-            >
+          <View
+            key={i}
+            className="rounded-2xl p-5 w-[160px] bg-leben-bg-card border border-leben-border"
+          >
             <View className="w-16 h-3 rounded bg-white/5 mb-3" />
             <View className="w-20 h-8 rounded bg-white/5 mb-3" />
             <View className="w-12 h-3 rounded bg-white/5" />
@@ -28,8 +26,8 @@ export default function StatCards({ cards }: StatCardsProps) {
   }
 
   return (
-    <ScrollView 
-      horizontal 
+    <ScrollView
+      horizontal
       showsHorizontalScrollIndicator={false}
       className="mb-6"
       contentContainerStyle={{ gap: 16, paddingRight: 16 }}
@@ -47,19 +45,19 @@ export default function StatCards({ cards }: StatCardsProps) {
           </Text>
           <View className="flex-row items-center gap-1 mt-2">
             {s.up !== null && (
-              <Ionicons 
-                name={s.up ? "arrow-up" : "arrow-down"} 
-                size={10} 
-                color={s.up ? "var(--state-success-bg)" : "var(--error-bg, #e85555)"} 
+              <Ionicons
+                name={s.up ? "arrow-up" : "arrow-down"}
+                size={10}
+                color={s.up ? "#4caf7d" : "#e85555"}
               />
             )}
             <Text
               className={`text-[11px] ${
                 s.up === true
-                  ? 'text-leben-success'
+                  ? "text-leben-success"
                   : s.up === false
-                  ? 'text-leben-error'
-                  : 'text-leben-text-muted'
+                    ? "text-leben-error"
+                    : "text-leben-text-muted"
               }`}
             >
               {s.sub}

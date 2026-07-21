@@ -18,7 +18,7 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
             transform: [{ rotate: "12deg" }],
           }}
         >
-          <AIIcon color="var(--accent-blue)" size={32} />
+          <AIIcon color="#3b82f6" size={32} />
         </View>
       </View>
 
@@ -34,7 +34,7 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
       >
         The AI Planner requires more contextual input to generate an optimized
         daily plan. Add{" "}
-        <Text style={{ color: "var(--accent-blue)", fontWeight: "bold" }}>
+        <Text className="text-leben-accent font-bold">
           {remaining} more {remaining === 1 ? "task" : "tasks"}
         </Text>{" "}
         to activate high-performance scheduling.
@@ -43,32 +43,16 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
       <View className="flex-col gap-4 w-full" style={{ maxWidth: 240 }}>
         <TouchableOpacity
           onPress={() => router.push("/(tabs)/tasks" as any)}
-          className="flex-row items-center justify-center gap-2 px-6 py-3 rounded-xl"
-          style={{
-            backgroundColor: "var(--accent-blue)",
-          }}
+          className="flex-row items-center justify-center gap-2 px-6 py-3 rounded-xl bg-leben-accent"
         >
           <PlusIcon color="#fff" size={16} />
-          <Text
-            style={{
-              color: "var(--text-primary)",
-              fontSize: 14,
-              fontWeight: "bold",
-            }}
-          >
+          <Text className="text-white text-[14px] font-bold">
             Add Tasks
           </Text>
         </TouchableOpacity>
 
         <Text
-          className="text-center"
-          style={{
-            color: "var(--text-dim)",
-            fontSize: 11,
-            fontWeight: "600",
-            letterSpacing: 1,
-            textTransform: "uppercase",
-          }}
+          className="text-center text-leben-text-dim text-[11px] font-semibold tracking-[1px] uppercase"
         >
           Current tasks: {taskCount} / 3
         </Text>

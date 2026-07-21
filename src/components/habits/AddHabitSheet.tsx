@@ -90,21 +90,15 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
         <View className="gap-5 pb-8">
           {/* Icon */}
           <View>
-            <Text style={sectionLabel}>Icon</Text>
+            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">Icon</Text>
             <View className="flex-row flex-wrap gap-2">
               {HABIT_ICONS.map((ic) => (
                 <TouchableOpacity
                   key={ic}
                   onPress={() => setIcon(ic)}
-                  className="rounded-xl items-center justify-center"
-                  style={{
-                    width: 38,
-                    height: 38,
-                    backgroundColor:
-                      icon === ic ? "rgba(124,106,240,0.15)" : "#161616",
-                    borderWidth: 1,
-                    borderColor: icon === ic ? "#7c6af0" : "#2a2a2a",
-                  }}
+                  className={`rounded-xl items-center justify-center border w-[38px] h-[38px] ${
+                    icon === ic ? "bg-leben-accent/15 border-leben-accent" : "bg-leben-bg-card border-leben-border-subtle"
+                  }`}
                 >
                   <Text style={{ fontSize: 18 }}>{ic}</Text>
                 </TouchableOpacity>
@@ -114,7 +108,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
 
           {/* Color */}
           <View>
-            <Text style={sectionLabel}>Color</Text>
+            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">Color</Text>
             <View className="flex-row gap-2">
               {HABIT_COLORS.map((c) => (
                 <TouchableOpacity
@@ -136,25 +130,25 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
 
           {/* Name */}
           <View>
-            <Text style={sectionLabel}>Habit Name</Text>
+            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">Habit Name</Text>
             <TextInput
               value={label}
               onChangeText={setLabel}
               placeholder="e.g. Cold Shower"
-              placeholderTextColor="#555"
-              style={inputStyle}
+              placeholderTextColor="gray"
+              className="bg-leben-bg-card border border-leben-border-subtle rounded-xl px-4 py-3 text-leben-text text-[13px] mb-3"
             />
           </View>
 
           {/* Target / Sub */}
           <View>
-            <Text style={sectionLabel}>Target</Text>
+            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">Target</Text>
             <TextInput
               value={sub}
               onChangeText={setSub}
               placeholder="e.g. 5 mins every morning"
-              placeholderTextColor="#555"
-              style={inputStyle}
+              placeholderTextColor="gray"
+              className="bg-leben-bg-card border border-leben-border-subtle rounded-xl px-4 py-3 text-leben-text text-[13px] mb-3"
             />
           </View>
 
@@ -177,15 +171,10 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
             <View className="flex-row gap-3 flex-1 ml-3">
               <TouchableOpacity
                 onPress={onClose}
-                className="flex-1 py-3 rounded-xl items-center justify-center"
-                style={{
-                  backgroundColor: "#161616",
-                  borderWidth: 1,
-                  borderColor: "#2a2a2a",
-                }}
+                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-card border border-leben-border-subtle"
               >
                 <Text
-                  style={{ color: "#888", fontSize: 13, fontWeight: "600" }}
+                  className="text-leben-text-muted text-[13px] font-semibold"
                 >
                   Cancel
                 </Text>
@@ -194,16 +183,14 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
               <TouchableOpacity
                 onPress={handleAdd}
                 disabled={!label.trim()}
-                className={`flex-1 py-3 rounded-xl items-center justify-center ${label.trim() ? "bg-white" : "bg-[#2a2a2a]"}`}
+                className={`flex-1 py-3 rounded-xl items-center justify-center bg-leben-text ${
+                  !label.trim() ? "opacity-50" : ""
+                }`}
               >
                 <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                  }}
-                  className={
+                  className={`text-[14px] font-semibold ${
                     label.trim() ? "text-leben-bg" : "text-leben-text-muted"
-                  }
+                  }`}
                 >
                   Add Habit
                 </Text>
@@ -229,22 +216,4 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
   );
 }
 
-const sectionLabel = {
-  fontSize: 11,
-  color: "#555",
-  marginBottom: 8,
-  textTransform: "uppercase" as const,
-  letterSpacing: 1.2,
-};
 
-const inputStyle = {
-  backgroundColor: "#1a1a1a",
-  borderWidth: 1,
-  borderColor: "#2a2a2a",
-  borderRadius: 12,
-  paddingHorizontal: 16,
-  paddingVertical: 12,
-  color: "#fff",
-  fontSize: 13,
-  marginBottom: 12,
-};

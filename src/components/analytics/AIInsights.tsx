@@ -19,7 +19,7 @@ export default function AIInsights({ insights, hasData }: AIInsightsProps) {
           className="items-center justify-center rounded-lg bg-leben-accent-dim border border-leben-accent/20"
           style={{ width: 26, height: 26 }}
         >
-          <Ionicons name="sparkles" size={12} color="var(--accent-blue)" />
+          <Ionicons name="sparkles" size={12} color="#3b82f6" />
         </View>
         <Text className="font-semibold text-leben-text-2 text-[14px]">
           AI Insights

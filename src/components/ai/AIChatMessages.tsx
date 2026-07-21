@@ -162,7 +162,7 @@ export default function AIChatMessages({
               height: 32,
             }}
           >
-            <ActivityIndicator size="small" color="var(--accent-blue)" />
+            <ActivityIndicator size="small" color="#3b82f6" />
           </View>
           <View className="rounded-2xl px-5 py-4 justify-center bg-leben-bg-card border border-leben-border">
             <Text className="text-[12px] text-leben-text-muted font-medium italic">

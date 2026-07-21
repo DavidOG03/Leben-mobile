@@ -1,8 +1,8 @@
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import AddBookModal from "@/components/habits/AddBookModal";
 import { AddHabitSheet } from "@/components/habits/AddHabitSheet";
 import { HabitList } from "@/components/habits/HabitList";
 import ReadingTracker from "@/components/habits/ReadingTracker";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
@@ -23,7 +23,7 @@ export default function HabitsScreen() {
         <View className="flex-row flex-wrap items-center justify-between mb-4">
           <View>
             <Text
-              className="text-leben-text-2 font-bold text-[18px]"
+              className="text-leben-text font-bold text-3xl"
               style={{ letterSpacing: -0.2 }}
             >
               Daily Rituals

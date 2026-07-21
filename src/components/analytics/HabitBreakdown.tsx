@@ -35,7 +35,7 @@ export default function HabitBreakdown({ habits, hasData }: HabitBreakdownProps)
                     className="h-full rounded-full"
                     style={{
                       width: `${pct}%`,
-                      backgroundColor: h.color || 'var(--accent-blue)',
+                      backgroundColor: h.color || '#3b82f6',
                     }}
                   />
                 </View>

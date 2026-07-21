@@ -5,6 +5,7 @@ import { AIIcon, AnalyticsIcon, SparkleIcon } from "@/constants/Icons";
 import { useRouter } from "expo-router";
 import { Pressable, View } from 'react-native';
 import { Text } from '@/components/ui/Text';
+import { useColorScheme } from "nativewind";
 
 
 interface SubLink {
@@ -43,19 +44,21 @@ interface NeuralDropupProps {
 
 export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
   const router = useRouter();
+  const { colorScheme } = useColorScheme();
+  const bgColor = colorScheme === 'dark' ? '#141419' : '#ffffff';
 
   return (
     <BottomSheet
       visible={visible}
       onClose={onClose}
-      containerStyle={{ backgroundColor: "var(--bg-card)" }}
+      containerStyle={{ backgroundColor: bgColor }}
     >
       <View className="mb-6 flex-row items-center justify-between px-4">
         <Text
           className="font-black flex items-center gap-2 text-leben-text text-[24px]"
           style={{ letterSpacing: -0.4 }}
         >
-          Neural <SparkleIcon size={18} color="var(--text-muted)" />
+          Neural <SparkleIcon size={18} color="#888888" />
         </Text>
       </View>
 
@@ -69,12 +72,7 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
                 onClose();
                 router.push(link.href as any);
               }}
-              className="flex-row items-center gap-4 px-4 py-5 rounded-2xl active:bg-leben-bg-card"
-              style={{
-                backgroundColor: "var(--bg-card)",
-                borderWidth: 1,
-                borderColor: "var(--border-primary)",
-              }}
+              className="flex-row items-center gap-4 px-4 py-5 rounded-2xl active:bg-leben-bg-card bg-leben-bg-card border border-leben-border-subtle"
             >
               {/* Icon bubble */}
               <View className="w-12 h-12 rounded-xl bg-leben-accent-dim border border-[rgba(124,106,240,0.2)] items-center justify-center">

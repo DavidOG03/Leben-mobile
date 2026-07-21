@@ -62,7 +62,7 @@ export function HabitStreaks() {
   };
 
   return (
-    <Card className="min-h-[200px] p-6" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
+    <Card className="min-h-[200px] p-6 bg-leben-bg-card border border-leben-border-subtle">
       <View className="flex-row items-center justify-between mb-5">
         <Text className="text-leben-text font-semibold text-[15px]">
           Habit Streaks
@@ -108,8 +108,7 @@ export function HabitStreaks() {
               <View className="flex-row items-center justify-between">
                 <View className="flex-row items-center gap-3">
                   <View 
-                    className="w-9 h-9 rounded-lg items-center justify-center border border-leben-border"
-                    style={{ backgroundColor: 'var(--bg-secondary)' }}
+                    className="w-9 h-9 rounded-lg items-center justify-center border border-leben-border-subtle bg-leben-bg-secondary"
                   >
                     <Text style={{ color: h.color, fontSize: 18 }}>{h.icon}</Text>
                   </View>
@@ -122,24 +121,21 @@ export function HabitStreaks() {
                 <View className="flex-row items-center gap-2">
                   <TouchableOpacity
                     onPress={() => setReminderHabit(reminderHabit === h.id ? null : h.id)}
-                    className="w-[26px] h-[26px] rounded-md items-center justify-center"
-                    style={{
-                      backgroundColor: h.reminderAt ? 'rgba(124, 106, 240, 0.15)' : 'transparent',
-                      borderWidth: 1,
-                      borderColor: h.reminderAt ? 'var(--accent-blue)' : 'transparent',
-                    }}
+                    className={`w-[26px] h-[26px] rounded-md items-center justify-center border ${
+                      h.reminderAt ? 'bg-leben-accent/15 border-leben-accent' : 'bg-transparent border-transparent'
+                    }`}
                   >
                     <Text className={h.reminderAt ? 'text-leben-accent' : 'text-leben-text-dim'}>🔔</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     onPress={() => toggleHabit(h.id)}
-                    className="w-[42px] h-[26px] rounded-lg items-center justify-center border border-leben-border"
+                    className="w-[42px] h-[26px] rounded-lg items-center justify-center border border-leben-border-subtle"
                     style={{
-                      backgroundColor: h.checked ? h.color : 'var(--bg-card)',
+                      backgroundColor: h.checked ? h.color : 'transparent',
                     }}
                   >
-                    <Text className="text-xs" style={{ color: h.checked ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+                    <Text className={`text-xs ${h.checked ? 'text-white' : 'text-leben-text-muted'}`}>
                       {h.checked ? '✓' : '○'}
                     </Text>
                   </TouchableOpacity>
@@ -151,22 +147,16 @@ export function HabitStreaks() {
                   <TextInput
                     value={reminderTime}
                     onChangeText={setReminderTime}
-                    placeholder="HH:MM"
-                    placeholderTextColor="var(--text-muted)"
-                    keyboardType="numbers-and-punctuation"
+                    placeholderTextColor="gray"
                     className="px-3 py-1.5 rounded bg-leben-bg border border-leben-border text-leben-text-2 text-xs flex-1"
                     maxLength={5}
                   />
                   <TouchableOpacity
                     onPress={() => handleSetReminder(h.id, h.label)}
                     disabled={!reminderTime}
-                    className="px-4 py-1.5 rounded"
-                    style={{
-                      backgroundColor: reminderTime ? 'var(--accent-blue)' : 'transparent',
-                      borderWidth: 1,
-                      borderColor: 'var(--accent-blue)',
-                      opacity: reminderTime ? 1 : 0.5,
-                    }}
+                    className={`px-4 py-1.5 rounded border ${
+                      reminderTime ? 'bg-leben-accent border-leben-accent opacity-100' : 'bg-transparent border-leben-accent opacity-50'
+                    }`}
                   >
                     <Text className="text-leben-bg-card text-xs">Set</Text>
                   </TouchableOpacity>

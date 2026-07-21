@@ -52,7 +52,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           onPress={() => onShowAddBook(true)}
           className="flex-row items-center gap-1.5 px-3 py-2 rounded-lg bg-leben-bg-element border border-leben-border-subtle"
         >
-          <PlusIcon color="var(--text-secondary)" size={11} />
+          <PlusIcon color="#555555" size={11} />
           <Text className="text-leben-text-2 text-[12px] font-bold">
             Add Book
           </Text>

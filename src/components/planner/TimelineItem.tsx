@@ -30,7 +30,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
           {item.start}
         </Text>
         <View
-          className={`mt-3 relative z-10 items-center justify-center w-2 h-2 rounded-full border ${isCurrent ? "bg-leben-accent border-black shadow-[0_0_5px_var(--accent-blue)]" : "bg-leben-border border-leben-border"}`}
+          className={`mt-3 relative z-10 items-center justify-center w-2 h-2 rounded-full border ${isCurrent ? "bg-leben-accent border-black shadow-sm" : "bg-leben-border border-leben-border"}`}
         >
           {item.reminderAt && (
             <View className="absolute top-4">

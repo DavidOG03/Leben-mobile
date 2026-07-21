@@ -66,7 +66,7 @@ export function AIMorningBrief() {
   }, [hasData, userId, tasks.length, handleGenerate]);
 
   return (
-    <Card className="min-h-[260px] justify-between p-5" style={{ backgroundColor: 'var(--bg-card)' }}>
+    <Card className="min-h-[260px] justify-between p-5 bg-leben-bg-card border border-leben-border-subtle">
       <View>
         {/* Header */}
         <View className="flex-row items-center gap-2 mb-4">

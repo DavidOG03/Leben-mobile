@@ -33,15 +33,15 @@ export function TaskInput() {
   };
 
   return (
-    <Card className="p-4 mb-6" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
+    <Card className="p-4 mb-6 bg-leben-bg-card border border-leben-border-subtle">
       <View className="flex-row items-center mb-4">
         <TextInput
           value={task}
           onChangeText={setTask}
           onSubmitEditing={handleAddTask}
           placeholder="What needs to be done?"
-          placeholderTextColor="#666"
-          className="flex-1 px-4 py-3 rounded-xl text-white text-[15px]"
+          placeholderTextColor="var(--text-muted)"
+          className="flex-1 px-4 py-3 rounded-xl text-leben-text text-[15px]"
         />
       </View>
 
@@ -53,14 +53,16 @@ export function TaskInput() {
               <TouchableOpacity
                 key={t}
                 onPress={() => setTag(t)}
-                className="px-2 py-1 rounded-md"
-                style={{
-                  backgroundColor: tag === t ? (t === 'WORK' ? '#1a1f2e' : '#1e1a2a') : 'transparent',
-                }}
+                className={`px-2 py-1 rounded-md border ${
+                  tag === t 
+                    ? (t === 'WORK' ? 'bg-leben-accent/10 border-leben-accent/20' : 'bg-green-500/10 border-green-500/20')
+                    : 'bg-transparent border-transparent'
+                }`}
               >
                 <Text 
-                  className="text-[10px] uppercase font-bold tracking-wider"
-                  style={{ color: tag === t ? (t === 'WORK' ? '#4a7abf' : '#8a5abf') : 'var(--text-dim)' }}
+                  className={`text-[10px] uppercase font-bold tracking-wider ${
+                    tag === t ? (t === 'WORK' ? 'text-leben-accent' : 'text-green-500') : 'text-leben-text-dim'
+                  }`}
                 >
                   {t}
                 </Text>
@@ -76,18 +78,14 @@ export function TaskInput() {
         <TouchableOpacity
           onPress={handleAddTask}
           disabled={!task.trim()}
-          className="flex-row items-center justify-center gap-2 px-4 py-2 rounded-xl"
-          style={{
-            backgroundColor: task.trim() ? '#25256e' : 'var(--bg-secondary)',
-            borderColor: task.trim() ? '#3a3a9e' : 'var(--border-primary)',
-            borderWidth: 1,
-            opacity: task.trim() ? 1 : 0.8,
-          }}
+          className={`flex-row items-center justify-center gap-2 px-4 py-2 rounded-xl border ${
+            task.trim() ? 'bg-leben-accent border-leben-accent opacity-100' : 'bg-transparent border-leben-border opacity-50'
+          }`}
         >
-          <Text className="font-semibold text-[12px]" style={{ color: task.trim() ? 'var(--accent-blue-light)' : 'var(--text-dim)' }}>
+          <Text className={`font-semibold text-[12px] ${task.trim() ? 'text-white' : 'text-leben-text-dim'}`}>
             Add Task
           </Text>
-          <Text style={{ color: task.trim() ? 'var(--accent-blue-light)' : 'var(--text-dim)' }}>+</Text>
+          <Text className={task.trim() ? 'text-white' : 'text-leben-text-dim'}>+</Text>
         </TouchableOpacity>
       </View>
 

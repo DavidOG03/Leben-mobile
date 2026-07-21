@@ -23,7 +23,7 @@ export function TrendLine({ data }: { data: number[] }) {
     <Svg width={w} height={55} viewBox={`0 0 ${w} 55`} fill="none">
       <Polyline
         points={points}
-        stroke="var(--accent-blue)"
+        stroke="#7c6af0"
         strokeWidth="1.5"
         strokeLinejoin="round"
         strokeLinecap="round"

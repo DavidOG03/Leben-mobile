@@ -14,7 +14,7 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
       <View className="rounded-2xl p-6 flex flex-col gap-4 bg-leben-bg-card border border-leben-border">
         <View className="flex-row items-center gap-2">
           <View className="p-1.5 rounded-lg bg-leben-bg-element border border-leben-border-subtle">
-            <SparkleIcon color="var(--accent-blue)" size={16} />
+            <SparkleIcon color="#3b82f6" size={16} />
           </View>
           <Text className="text-leben-text-2 font-semibold text-[14px]">
             AI Insights

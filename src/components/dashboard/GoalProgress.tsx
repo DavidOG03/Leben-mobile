@@ -20,7 +20,7 @@ export function GoalProgress() {
   }, []);
 
   return (
-    <Card className="min-h-[260px] p-6" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
+    <Card className="min-h-[260px] p-6 bg-leben-bg-card border border-leben-border-subtle">
       <View className="flex-row items-center justify-between mb-5">
         <Text className="text-leben-text font-semibold text-[15px]">
           Goal Progress
@@ -87,11 +87,8 @@ export function GoalProgress() {
                 
                 <View className="h-[3px] rounded-full bg-leben-border overflow-hidden mb-3">
                   <View 
-                    className="h-full rounded-full"
-                    style={{ 
-                      width: `${progress}%`,
-                      backgroundColor: 'var(--accent-blue)', // approximate linear-gradient fallback
-                    }}
+                    className="h-full rounded-full bg-leben-accent"
+                    style={{ width: `${progress}%` }}
                   />
                 </View>
 
@@ -103,18 +100,14 @@ export function GoalProgress() {
                       className="flex-row items-center gap-2"
                     >
                       <View 
-                        className="w-[14px] h-[14px] rounded-full items-center justify-center"
-                        style={{
-                          backgroundColor: m.done ? 'rgba(124,106,240,0.2)' : 'transparent',
-                          borderColor: m.done ? 'var(--accent-blue)' : 'var(--border-primary)',
-                          borderWidth: 1,
-                        }}
+                        className={`w-[14px] h-[14px] rounded-full items-center justify-center border ${
+                          m.done ? 'bg-leben-accent/20 border-leben-accent' : 'bg-transparent border-leben-border-subtle'
+                        }`}
                       >
                         {m.done && <Text className="text-leben-accent text-[8px]">✓</Text>}
                       </View>
                       <Text 
-                        className="flex-1 text-[11px]"
-                        style={{ color: m.done ? 'var(--text-muted)' : 'var(--text-dim)' }}
+                        className={`flex-1 text-[11px] ${m.done ? 'text-leben-text-muted' : 'text-leben-text-dim'}`}
                         numberOfLines={1}
                       >
                         {m.label}

@@ -42,7 +42,7 @@ export function GoalItem({ goal }: GoalItemProps) {
   };
 
   return (
-    <Card className="p-5 mb-4" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
+    <Card className="p-5 mb-4 bg-leben-bg-card border border-leben-border-subtle">
       {/* Header Row */}
       <View className="flex-row items-start justify-between mb-4">
         <View
@@ -111,8 +111,8 @@ export function GoalItem({ goal }: GoalItemProps) {
         </View>
         <View className="h-[3px] rounded-full bg-[#1e1e1e] overflow-hidden">
           <View
-            className="h-full rounded-full"
-            style={{ width: `${progress}%`, backgroundColor: 'var(--accent-blue)' }}
+            className="h-full rounded-full bg-leben-accent"
+            style={{ width: `${progress}%` }}
           />
         </View>
       </View>
@@ -132,12 +132,9 @@ export function GoalItem({ goal }: GoalItemProps) {
               >
                 {/* Done indicator (non-interactive in edit mode) */}
                 <View
-                  className="w-4 h-4 rounded-full"
-                  style={{
-                    backgroundColor: m.done ? 'rgba(124,106,240,0.2)' : 'transparent',
-                    borderColor:     m.done ? 'var(--accent-blue)' : 'var(--border-primary)',
-                    borderWidth: 1,
-                  }}
+                  className={`w-4 h-4 rounded-full border ${
+                    m.done ? 'bg-leben-accent/20 border-leben-accent' : 'bg-transparent border-leben-border-subtle'
+                  }`}
                 />
                 <TextInput
                   value={m.label}
@@ -193,12 +190,9 @@ export function GoalItem({ goal }: GoalItemProps) {
                 {/* Checkbox */}
                 <TouchableOpacity
                   onPress={() => toggleMilestone(goal.id, m.id)}
-                  className="w-4 h-4 rounded-full items-center justify-center shrink-0"
-                  style={{
-                    backgroundColor: m.done ? 'rgba(124,106,240,0.2)' : 'transparent',
-                    borderColor:     m.done ? 'var(--accent-blue)' : 'var(--border-primary)',
-                    borderWidth: 1,
-                  }}
+                  className={`w-4 h-4 rounded-full items-center justify-center shrink-0 border ${
+                    m.done ? 'bg-leben-accent/20 border-leben-accent' : 'bg-transparent border-leben-border-subtle'
+                  }`}
                 >
                   {m.done && <Text className="text-leben-accent text-[8px]">✓</Text>}
                 </TouchableOpacity>
@@ -209,11 +203,9 @@ export function GoalItem({ goal }: GoalItemProps) {
                   className="flex-1"
                 >
                   <Text
-                    className="text-[12px] leading-snug"
-                    style={{
-                      color:               m.done ? 'var(--text-muted)' : 'var(--text-secondary)',
-                      textDecorationLine:  m.done ? 'line-through' : 'none',
-                    }}
+                    className={`text-[12px] leading-snug ${
+                      m.done ? 'text-leben-text-muted line-through' : 'text-leben-text-secondary'
+                    }`}
                   >
                     {m.label}
                   </Text>

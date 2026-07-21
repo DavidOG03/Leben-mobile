@@ -9,7 +9,7 @@ export function TaskList() {
   const tasks = useLebenStore((s) => s.tasks);
 
   return (
-    <Card className="p-0 overflow-hidden" style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}>
+    <Card className="p-0 overflow-hidden bg-leben-bg-card border-leben-border-subtle">
       {tasks.length === 0 ? (
         <View className="items-center justify-center py-10 gap-3 border-t border-leben-border-subtle">
           <Text className="text-leben-text-dim text-4xl">◎</Text>

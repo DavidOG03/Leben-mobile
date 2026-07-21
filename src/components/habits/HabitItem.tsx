@@ -43,12 +43,9 @@ export function HabitItem({ habit }: HabitItemProps) {
 
   return (
     <View
+      className="rounded-2xl p-5 border bg-leben-bg-card border-leben-border-subtle"
       style={{
-        backgroundColor: 'var(--bg-card)',
-        borderRadius: 16,
-        padding: 20,
-        borderWidth: 1,
-        borderColor: isCheckedToday ? `${habit.color}55` : 'var(--border-primary)',
+        borderColor: isCheckedToday ? `${habit.color}55` : undefined,
       }}
     >
       {/* Top row: icon + actions */}
@@ -94,32 +91,14 @@ export function HabitItem({ habit }: HabitItemProps) {
             autoFocus
             value={editLabel}
             onChangeText={setEditLabel}
-            style={{
-              backgroundColor: 'var(--bg-secondary)',
-              borderWidth: 1,
-              borderColor: 'var(--border-primary)',
-              borderRadius: 8,
-              paddingHorizontal: 10,
-              paddingVertical: 6,
-              color: 'var(--text-primary)',
-              fontSize: 14,
-            }}
+            className="bg-leben-bg-secondary border border-leben-border-subtle rounded-lg px-2.5 py-1.5 text-leben-text text-[14px]"
             placeholder="Habit Label"
             placeholderTextColor="#555" // Keep or replace if needed
           />
           <TextInput
             value={editSub}
             onChangeText={setEditSub}
-            style={{
-              backgroundColor: 'var(--bg-secondary)',
-              borderWidth: 1,
-              borderColor: 'var(--border-primary)',
-              borderRadius: 8,
-              paddingHorizontal: 10,
-              paddingVertical: 6,
-              color: 'var(--text-primary)',
-              fontSize: 11,
-            }}
+            className="bg-leben-bg-secondary border border-leben-border-subtle rounded-lg px-2.5 py-1.5 text-leben-text text-[11px]"
             placeholder="Subtext"
             placeholderTextColor="#555"
           />
@@ -134,15 +113,15 @@ export function HabitItem({ habit }: HabitItemProps) {
               marginTop: 4,
             }}
           >
-            <Text style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: 12 }}>Save</Text>
+            <Text className="text-white font-semibold text-[12px]">Save</Text>
           </TouchableOpacity>
         </View>
       ) : (
         <>
-          <Text style={{ fontSize: 15, fontWeight: '700', color: 'var(--text-primary)', marginBottom: 2 }}>
+          <Text className="text-[15px] font-bold text-leben-text mb-0.5">
             {habit.label}
           </Text>
-          <Text style={{ fontSize: 11, color: 'var(--text-secondary)', marginBottom: 4 }}>
+          <Text className="text-[11px] text-leben-text-secondary mb-1">
             {habit.sub}
           </Text>
         </>
@@ -155,21 +134,19 @@ export function HabitItem({ habit }: HabitItemProps) {
 
       {/* Bottom row: done status + toggle */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Text style={{ fontSize: 10, color: isCheckedToday ? habit.color : 'var(--text-secondary)' }}>
+        <Text 
+          className="text-[10px] text-leben-text-secondary"
+          style={{ color: isCheckedToday ? habit.color : undefined }}
+        >
           {isCheckedToday ? `Done today ✓  🔥${currentStreak}` : `Not yet  🔥${currentStreak}`}
         </Text>
 
         <TouchableOpacity
           onPress={() => toggleHabit(habit.id)}
+          className="w-[30px] h-[30px] rounded-full items-center justify-center border-2 border-leben-border-subtle"
           style={{
-            width: 30,
-            height: 30,
-            borderRadius: 15,
-            alignItems: 'center',
-            justifyContent: 'center',
             backgroundColor: isCheckedToday ? `${habit.color}22` : 'transparent',
-            borderWidth: 1.5,
-            borderColor: isCheckedToday ? habit.color : 'var(--border-primary)',
+            borderColor: isCheckedToday ? habit.color : undefined,
           }}
           activeOpacity={0.7}
         >

@@ -40,8 +40,7 @@ export default function BookCard({ book }: BookCardProps) {
 
   return (
     <View
-      className="rounded-2xl p-5"
-      style={{ backgroundColor: 'var(--bg-card)', borderWidth: 1, borderColor: 'var(--border-primary)' }}
+      className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border-subtle"
     >
       <View className="flex-row items-start justify-between mb-4">
         <View
@@ -58,10 +57,10 @@ export default function BookCard({ book }: BookCardProps) {
         </View>
         <View className="flex-row items-center gap-4">
           <TouchableOpacity onPress={() => setEditingDetails(!editingDetails)}>
-            <Text style={{ color: 'var(--text-muted)', fontSize: 14 }}>✏️</Text>
+            <Text className="text-leben-text-muted text-[14px]">✏️</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => removeBook(book.id)}>
-            <Text style={{ color: 'var(--text-dim)', fontSize: 20, lineHeight: 20 }}>×</Text>
+            <Text className="text-leben-text-dim text-[20px] leading-[20px]">×</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -71,8 +70,8 @@ export default function BookCard({ book }: BookCardProps) {
           <TextInput
             value={editTitle}
             onChangeText={setEditTitle}
-            className="rounded-lg px-3 py-1.5 text-white"
-            style={{ backgroundColor: 'var(--bg-secondary)', borderWidth: 1, borderColor: `${book.coverColor}55`, fontSize: 14 }}
+            className="rounded-lg px-3 py-1.5 text-leben-text text-[14px] bg-leben-bg-secondary border"
+            style={{ borderColor: `${book.coverColor}55` }}
             placeholder="Book Title"
             placeholderTextColor="#666"
             autoFocus
@@ -80,8 +79,8 @@ export default function BookCard({ book }: BookCardProps) {
           <TextInput
             value={editAuthor}
             onChangeText={setEditAuthor}
-            className="rounded-lg px-3 py-1.5 text-white"
-            style={{ backgroundColor: 'var(--bg-secondary)', borderWidth: 1, borderColor: `${book.coverColor}55`, fontSize: 11 }}
+            className="rounded-lg px-3 py-1.5 text-leben-text text-[11px] bg-leben-bg-secondary border"
+            style={{ borderColor: `${book.coverColor}55` }}
             placeholder="Author"
             placeholderTextColor="#666"
           />
@@ -90,7 +89,7 @@ export default function BookCard({ book }: BookCardProps) {
             className="rounded-lg px-3 py-2 items-center mt-1"
             style={{ backgroundColor: book.coverColor }}
           >
-            <Text style={{ color: 'var(--text-primary)', fontSize: 12, fontWeight: 'bold' }}>Save Details</Text>
+            <Text className="text-white text-[12px] font-bold">Save Details</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -101,15 +100,14 @@ export default function BookCard({ book }: BookCardProps) {
           >
             {book.title}
           </Text>
-          <Text style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+          <Text className="text-[11px] text-leben-text-muted">
             by {book.author}
           </Text>
         </View>
       )}
 
       <View
-        className="rounded-full overflow-hidden mb-2"
-        style={{ height: 4, backgroundColor: 'var(--border-primary)' }}
+        className="rounded-full overflow-hidden mb-2 h-1 bg-leben-border-subtle"
       >
         <View
           className="h-full rounded-full"
@@ -121,7 +119,7 @@ export default function BookCard({ book }: BookCardProps) {
       </View>
 
       <View className="flex-row items-center justify-between mb-4">
-        <Text style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+        <Text className="text-[11px] text-leben-text-muted">
           {pagesLeft > 0 ? `${pagesLeft} pages left` : 'Finished! 🎉'}
         </Text>
         <Text
@@ -139,13 +137,8 @@ export default function BookCard({ book }: BookCardProps) {
             onChangeText={setPageInput}
             keyboardType="numeric"
             autoFocus
-            className="flex-1 rounded-lg px-3 py-2 text-white"
-            style={{
-              backgroundColor: 'var(--bg-secondary)',
-              borderWidth: 1,
-              borderColor: `${book.coverColor}55`,
-              fontSize: 12,
-            }}
+            className="flex-1 rounded-lg px-3 py-2 text-leben-text text-[12px] bg-leben-bg-secondary border"
+            style={{ borderColor: `${book.coverColor}55` }}
             placeholder={`0 – ${book.totalPages}`}
             placeholderTextColor="#666"
           />
@@ -154,7 +147,7 @@ export default function BookCard({ book }: BookCardProps) {
             className="rounded-lg px-3 py-2 items-center justify-center"
             style={{ backgroundColor: book.coverColor }}
           >
-            <Text style={{ color: 'var(--text-primary)', fontSize: 12, fontWeight: 'bold' }}>Save</Text>
+            <Text className="text-white text-[12px] font-bold">Save</Text>
           </TouchableOpacity>
         </View>
       ) : (

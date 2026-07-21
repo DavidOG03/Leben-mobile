@@ -56,7 +56,7 @@ export default function AddBookModal({
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="flex-row items-center justify-between mb-6">
           <Text
-            className="font-black text-white text-[20px]"
+            className="font-black text-leben-text text-[20px]"
             style={{ letterSpacing: -0.4 }}
           >
             Track a Book
@@ -82,13 +82,7 @@ export default function AddBookModal({
 
         <View>
           <Text
-            style={{
-              fontSize: 10,
-              color: "#555",
-              letterSpacing: 1,
-              textTransform: "uppercase",
-              marginBottom: 8,
-            }}
+            className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase"
           >
             Book Title
           </Text>
@@ -96,26 +90,14 @@ export default function AddBookModal({
             value={title}
             onChangeText={setTitle}
             placeholder="e.g. Atomic Habits"
-            placeholderTextColor="#555"
-            className="w-full rounded-xl px-4 py-3 text-white mb-5"
-            style={{
-              backgroundColor: "#161616",
-              borderWidth: 1,
-              borderColor: "#2a2a2a",
-              fontSize: 14,
-            }}
+            placeholderTextColor="gray"
+            className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-card border border-leben-border-subtle text-[14px]"
           />
         </View>
 
         <View>
           <Text
-            style={{
-              fontSize: 10,
-              color: "#555",
-              letterSpacing: 1,
-              textTransform: "uppercase",
-              marginBottom: 8,
-            }}
+            className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase"
           >
             Author
           </Text>
@@ -123,26 +105,14 @@ export default function AddBookModal({
             value={author}
             onChangeText={setAuthor}
             placeholder="e.g. James Clear"
-            placeholderTextColor="#555"
-            className="w-full rounded-xl px-4 py-3 text-white mb-5"
-            style={{
-              backgroundColor: "#161616",
-              borderWidth: 1,
-              borderColor: "#2a2a2a",
-              fontSize: 14,
-            }}
+            placeholderTextColor="gray"
+            className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-card border border-leben-border-subtle text-[14px]"
           />
         </View>
 
         <View>
           <Text
-            style={{
-              fontSize: 10,
-              color: "#555",
-              letterSpacing: 1,
-              textTransform: "uppercase",
-              marginBottom: 8,
-            }}
+            className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase"
           >
             Total Pages
           </Text>
@@ -150,15 +120,9 @@ export default function AddBookModal({
             value={totalPages}
             onChangeText={setTotalPages}
             placeholder="e.g. 320"
-            placeholderTextColor="#555"
+            placeholderTextColor="gray"
             keyboardType="numeric"
-            className="w-full rounded-xl px-4 py-3 text-white mb-5"
-            style={{
-              backgroundColor: "#161616",
-              borderWidth: 1,
-              borderColor: "#2a2a2a",
-              fontSize: 14,
-            }}
+            className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-card border border-leben-border-subtle text-[14px]"
           />
           {/* Buttons */}
           <View className="flex-row items-center justify-between mt-4">
@@ -169,30 +133,22 @@ export default function AddBookModal({
             <View className="flex-row gap-3 flex-1 ml-3">
               <TouchableOpacity
                 onPress={handleCancel}
-                className="flex-1 py-3 rounded-xl items-center justify-center"
-                style={{
-                  backgroundColor: "#161616",
-                  borderWidth: 1,
-                  borderColor: "#2a2a2a",
-                }}
+                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-card border border-leben-border-subtle"
               >
-                <Text style={{ color: "#888", fontSize: 13, fontWeight: "600" }}>Cancel</Text>
+                <Text className="text-leben-text-muted text-[13px] font-semibold">Cancel</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={handleAdd}
                 disabled={!title.trim() || !totalPages}
-                className="flex-1 py-3 rounded-xl items-center justify-center"
-                style={{
-                  backgroundColor: title.trim() && totalPages ? "#f0f0f0" : "#2a2a2a",
-                }}
+                className={`flex-1 py-3 rounded-xl items-center justify-center bg-leben-text ${
+                  !(title.trim() && totalPages) ? "opacity-50" : ""
+                }`}
               >
                 <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                  }}
-                  className={title.trim() && totalPages ? "text-leben-bg" : "text-leben-text-muted"}
+                  className={`text-[14px] font-semibold ${
+                    title.trim() && totalPages ? "text-leben-bg" : "text-leben-text-muted"
+                  }`}
                 >
                   Add Book
                 </Text>

@@ -1,17 +1,17 @@
-import { useState, useEffect, useMemo } from "react";
-import { View, TouchableOpacity } from 'react-native';
-import { useRouter } from "expo-router";
-import Svg, { Circle } from "react-native-svg";
-import Animated, {
-  useAnimatedProps,
-  withTiming,
-  Easing,
-  useSharedValue,
-} from "react-native-reanimated";
-import { useLebenStore } from "@/store/useStore";
 import { Card } from "@/components/ui/Card";
-import { Text } from '@/components/ui/Text';
-
+import { Text } from "@/components/ui/Text";
+import { useLebenStore } from "@/store/useStore";
+import { useRouter } from "expo-router";
+import { useEffect, useMemo, useState } from "react";
+import { TouchableOpacity, View } from "react-native";
+import { useColorScheme } from "nativewind";
+import Animated, {
+  Easing,
+  useAnimatedProps,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import Svg, { Circle } from "react-native-svg";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -46,11 +46,10 @@ export function EfficiencyScore() {
         .filter(Boolean)
         .map((value) => value!.split("T")[0]),
       ...habits.flatMap((h) => h.completedDates ?? []),
-      ...goals.flatMap(
-        (g) =>
-          g.milestones
-            .filter((m) => m.done && m.id) // web uses m.done
-            .map((m) => todayIso),
+      ...goals.flatMap((g) =>
+        g.milestones
+          .filter((m) => m.done && m.id) // web uses m.done
+          .map((m) => todayIso),
       ),
     ];
 
@@ -163,11 +162,13 @@ export function EfficiencyScore() {
     };
   });
 
+  const { colorScheme } = useColorScheme();
+  const strokeBorder = colorScheme === 'dark' ? '#2a2a3a' : '#e5e5ea';
+  const strokeSubtle = colorScheme === 'dark' ? '#1e1e2e' : '#f4f4f5';
+  const strokeAccent = '#7c6af0';
+
   return (
-    <Card
-      className="min-h-[260px] items-center justify-center p-7"
-      style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border-primary)" }}
-    >
+    <Card className="min-h-[260px] items-center justify-center p-7 bg-leben-bg-card border border-leben-border-subtle">
       <Text className="uppercase tracking-widest text-leben-text-dim text-[10px] font-semibold mb-6">
         Efficiency Score
       </Text>
@@ -181,7 +182,7 @@ export function EfficiencyScore() {
                 cy="70"
                 r="54"
                 fill="none"
-                stroke="rgba(255,255,255,0.03)"
+                stroke={strokeBorder}
                 strokeWidth="6"
               />
             </Svg>
@@ -199,7 +200,7 @@ export function EfficiencyScore() {
                 cy="70"
                 r="54"
                 fill="none"
-                stroke="var(--border-primary)"
+                stroke={strokeBorder}
                 strokeWidth="6"
               />
               <Circle
@@ -207,7 +208,7 @@ export function EfficiencyScore() {
                 cy={70}
                 r={54}
                 fill="none"
-                stroke="var(--border-subtle)"
+                stroke={strokeSubtle}
                 strokeWidth={6}
                 strokeLinecap="round"
                 strokeDasharray="8 6"
@@ -241,7 +242,7 @@ export function EfficiencyScore() {
                 cy="70"
                 r="54"
                 fill="none"
-                stroke="var(--border-primary)"
+                stroke={strokeBorder}
                 strokeWidth="8"
               />
               <Circle
@@ -249,7 +250,7 @@ export function EfficiencyScore() {
                 cy={70}
                 r={54}
                 fill="none"
-                stroke="var(--border-subtle)"
+                stroke={strokeSubtle}
                 strokeWidth={8}
                 strokeLinecap="round"
                 strokeDasharray="12 8"
@@ -280,7 +281,7 @@ export function EfficiencyScore() {
                 cy="70"
                 r="54"
                 fill="none"
-                stroke="var(--border-primary)"
+                stroke={strokeBorder}
                 strokeWidth="8"
               />
               <AnimatedCircle
@@ -288,7 +289,7 @@ export function EfficiencyScore() {
                 cy={70}
                 r={54}
                 fill="none"
-                stroke="var(--accent-blue)"
+                stroke={strokeAccent}
                 strokeWidth={8}
                 strokeLinecap="round"
                 strokeDasharray={`${2 * Math.PI * 54}`}

@@ -96,7 +96,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
           
           {/* Icon picker */}
           <View>
-            <Text style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+            <Text className="text-[10px] text-leben-text-muted tracking-[1px] uppercase mb-2">
               Icon
             </Text>
             <View className="flex-row flex-wrap gap-2">
@@ -104,14 +104,9 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                 <TouchableOpacity
                   key={icon}
                   onPress={() => setForm({ ...form, icon })}
-                  className="rounded-xl items-center justify-center"
-                  style={{
-                    width: 36,
-                    height: 36,
-                    borderWidth: 1,
-                    borderColor: form.icon === icon ? 'var(--accent-blue)' : 'var(--border-primary)',
-                    backgroundColor: form.icon === icon ? 'rgba(124,106,240,0.15)' : 'var(--bg-card)',
-                  }}
+                  className={`rounded-xl items-center justify-center border w-[36px] h-[36px] ${
+                    form.icon === icon ? 'bg-leben-accent/15 border-leben-accent' : 'bg-leben-bg-card border-leben-border-subtle'
+                  }`}
                 >
                   <Text style={{ fontSize: 18 }}>{icon}</Text>
                 </TouchableOpacity>
@@ -121,7 +116,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
 
           {/* Title */}
           <View>
-            <Text style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+            <Text className="text-[10px] text-leben-text-muted tracking-[1px] uppercase mb-2">
               Goal Title
             </Text>
             <TextInput
@@ -129,13 +124,9 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               onChangeText={(text) => setForm({ ...form, title: text })}
               placeholder="e.g. Master Spanish"
               placeholderTextColor="#555"
-              className="w-full rounded-xl px-4 py-3 text-white"
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                borderWidth: 1,
-                borderColor: errors.title ? '#e05c5c' : 'var(--border-primary)',
-                fontSize: 14,
-              }}
+              className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-card border ${
+                errors.title ? 'border-leben-error' : 'border-leben-border-subtle'
+              }`}
             />
             {errors.title ? (
               <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.title}</Text>
@@ -144,7 +135,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
 
           {/* Deadline */}
           <View>
-            <Text style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+            <Text className="text-[10px] text-leben-text-muted tracking-[1px] uppercase mb-2">
               Deadline
             </Text>
             <TextInput
@@ -152,13 +143,9 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               onChangeText={(text) => setForm({ ...form, deadline: text })}
               placeholder="YYYY-MM (or YYYY-MM-DD)"
               placeholderTextColor="#555"
-              className="w-full rounded-xl px-4 py-3 text-white"
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                borderWidth: 1,
-                borderColor: errors.deadline ? '#e05c5c' : 'var(--border-primary)',
-                fontSize: 14,
-              }}
+              className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-card border ${
+                errors.deadline ? 'border-leben-error' : 'border-leben-border-subtle'
+              }`}
             />
             {errors.deadline ? (
               <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.deadline}</Text>
@@ -167,7 +154,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
 
           {/* Milestones */}
           <View>
-            <Text style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>
+            <Text className="text-[10px] text-leben-text-muted tracking-[1px] uppercase mb-2">
               Milestones
             </Text>
             <View className="gap-2">
@@ -178,13 +165,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                   onChangeText={(text) => updateMilestone(i, text)}
                   placeholder={`Milestone ${i + 1}`}
                   placeholderTextColor="#555"
-                  className="w-full rounded-xl px-4 py-3 text-white"
-                  style={{
-                    backgroundColor: 'var(--bg-card)',
-                    borderWidth: 1,
-                    borderColor: 'var(--border-primary)',
-                    fontSize: 13,
-                  }}
+                  className="w-full rounded-xl px-4 py-3 text-leben-text text-[13px] bg-leben-bg-card border border-leben-border-subtle"
                 />
               ))}
             </View>
@@ -192,7 +173,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.milestones}</Text>
             ) : null}
             <TouchableOpacity onPress={addMilestoneField} className="mt-3">
-              <Text style={{ fontSize: 12, color: 'var(--accent-blue)' }}>+ Add milestone</Text>
+              <Text className="text-[12px] text-leben-accent">+ Add milestone</Text>
             </TouchableOpacity>
           </View>
 
@@ -205,22 +186,14 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
             <View className="flex-row gap-3 flex-1 ml-3">
               <TouchableOpacity
                 onPress={handleCancel}
-                className="flex-1 py-3 rounded-xl items-center justify-center"
-                style={{
-                  backgroundColor: 'var(--bg-card)',
-                  borderWidth: 1,
-                  borderColor: 'var(--border-primary)',
-                }}
+                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-card border border-leben-border-subtle"
               >
-                <Text style={{ color: 'var(--text-muted)', fontSize: 13, fontWeight: '600' }}>Cancel</Text>
+                <Text className="text-leben-text-muted text-[13px] font-semibold">Cancel</Text>
               </TouchableOpacity>
               
               <TouchableOpacity
                 onPress={handleSubmit}
-                className="flex-1 py-3 rounded-xl items-center justify-center"
-                style={{
-                  backgroundColor: 'var(--text-primary)',
-                }}
+                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-text"
               >
                 <Text className="text-leben-bg font-semibold text-[13px]">Create Goal</Text>
               </TouchableOpacity>

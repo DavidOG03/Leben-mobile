@@ -13,7 +13,7 @@ export default function TasksScreen() {
 
       <View className="flex-1 px-4 py-6">
         <View className="mb-6">
-          <Text className="text-leben-text-2 font-bold text-3xl tracking-tight leading-tight mb-1">
+          <Text className="text-leben-text font-bold text-3xl tracking-tight leading-tight mb-1">
             Daily Tasks
           </Text>
           <Text className="text-leben-text-muted text-[13px]">

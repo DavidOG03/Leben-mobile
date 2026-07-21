@@ -43,7 +43,7 @@ export default function AILeftPanel({
           >
             Leben AI
           </Text>
-          <Text style={{ fontSize: 11, color: "var(--text-muted)" }}>
+          <Text className="text-[11px] text-leben-text-muted">
             Productivity Engine
           </Text>
         </View>
@@ -54,22 +54,15 @@ export default function AILeftPanel({
         {navItems.map((item) => (
           <TouchableOpacity
             key={item.label}
-            className="flex-row items-center gap-2.5 px-3 py-2 rounded-lg"
-            style={{
-              backgroundColor: item.active
-                ? "var(--border-primary)"
-                : "transparent",
-            }}
+            className={`flex-row items-center gap-2.5 px-3 py-2 rounded-lg ${
+              item.active ? "bg-leben-border-subtle" : "bg-transparent"
+            }`}
           >
             <View style={{ opacity: item.active ? 1 : 0.6 }}>{item.icon}</View>
             <Text
-              style={{
-                color: item.active
-                  ? "var(--text-primary)"
-                  : "var(--text-muted)",
-                fontSize: 13,
-                fontWeight: item.active ? "500" : "400",
-              }}
+              className={`text-[13px] ${
+                item.active ? "text-leben-text font-medium" : "text-leben-text-muted font-normal"
+              }`}
             >
               {item.label}
             </Text>
@@ -82,12 +75,7 @@ export default function AILeftPanel({
         <View className="flex-row items-center gap-2 mb-3">
           <View className="w-1.5 h-1.5 rounded-full bg-leben-accent" />
           <Text
-            className="uppercase"
-            style={{
-              fontSize: 9,
-              color: "var(--text-muted)",
-              letterSpacing: 1.4,
-            }}
+            className="uppercase text-[9px] text-leben-text-muted tracking-[1.4px]"
           >
             Quick Prompts
           </Text>
@@ -105,13 +93,7 @@ export default function AILeftPanel({
               >
                 {p.title}
               </Text>
-              <Text
-                style={{
-                  fontSize: 11,
-                  color: "var(--text-muted)",
-                  marginTop: 2,
-                }}
-              >
+              <Text className="text-[11px] text-leben-text-muted mt-[2px]">
                 {p.sub}
               </Text>
             </TouchableOpacity>
@@ -131,13 +113,7 @@ export default function AILeftPanel({
             onPress={() => setIsOpen(false)}
           />
           <View
-            className="h-full py-6"
-            style={{
-              width: 260,
-              backgroundColor: "var(--bg-primary)",
-              borderRightWidth: 1,
-              borderRightColor: "var(--bg-card)",
-            }}
+            className="h-full py-6 w-[260px] bg-leben-bg border-r border-leben-bg-card"
           >
             <ScrollView>{panelContent}</ScrollView>
           </View>
@@ -146,13 +122,7 @@ export default function AILeftPanel({
 
       {/* Desktop sidebar (hidden on mobile, relies on NativeWind md:flex) */}
       <View
-        className="hidden md:flex h-full py-6"
-        style={{
-          width: 250,
-          backgroundColor: "var(--bg-primary)",
-          borderRightWidth: 1,
-          borderRightColor: "var(--bg-card)",
-        }}
+        className="hidden md:flex h-full py-6 w-[250px] bg-leben-bg border-r border-leben-bg-card"
       >
         <ScrollView>{panelContent}</ScrollView>
       </View>

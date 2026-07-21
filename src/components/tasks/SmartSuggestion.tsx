@@ -1,10 +1,9 @@
+import { Text } from "@/components/ui/Text";
 import { getTaskPriority, TaskPrioritySuggestion } from "@/lib/ai/client";
 import { useLebenStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
-import { Text } from '@/components/ui/Text';
-
+import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
 export function SmartSuggestion() {
   const router = useRouter();
@@ -78,9 +77,9 @@ export function SmartSuggestion() {
         marginTop: 16,
         minHeight: 200,
         justifyContent: "space-between",
-        backgroundColor: "#1a1745",
+        backgroundColor: "#172554",
         borderWidth: 1,
-        borderColor: "rgba(124,106,240,0.3)",
+        borderColor: "rgba(59,130,246,0.3)",
         overflow: "hidden",
         position: "relative",
       }}
@@ -94,7 +93,7 @@ export function SmartSuggestion() {
           width: 120,
           height: 120,
           borderRadius: 60,
-          backgroundColor: "rgba(124,106,240,0.12)",
+          backgroundColor: "rgba(59,130,246,0.12)",
         }}
         pointerEvents="none"
       />
@@ -106,20 +105,20 @@ export function SmartSuggestion() {
             width: 30,
             height: 30,
             borderRadius: 8,
-            backgroundColor: "rgba(124,106,240,0.2)",
+            backgroundColor: "rgba(59,130,246,0.2)",
             alignItems: "center",
             justifyContent: "center",
             marginBottom: 12,
           }}
         >
-          <Text style={{ fontSize: 14, color: "#f0fa00ff" }}>✦</Text>
+          <Text style={{ fontSize: 14, color: "#fff" }}>✦</Text>
         </View>
 
         {/* Label */}
         <Text
           style={{
             fontSize: 10,
-            color: "rgba(200,190,255,0.8)",
+            color: "rgba(191,219,254,0.8)",
             letterSpacing: 1,
             textTransform: "uppercase",
             fontWeight: "600",
@@ -166,10 +165,10 @@ export function SmartSuggestion() {
                 borderRadius: 8,
                 backgroundColor: "rgba(0,0,0,0.2)",
                 borderLeftWidth: 2,
-                borderLeftColor: "#7c6af0",
+                borderLeftColor: "#3b82f6",
               }}
             >
-              <Text style={{ fontSize: 11, color: "#c4b8ff", lineHeight: 16 }}>
+              <Text style={{ fontSize: 11, color: "#93c5fd", lineHeight: 16 }}>
                 <Text style={{ opacity: 0.5, fontStyle: "italic" }}>
                   Reason:{" "}
                 </Text>
@@ -184,7 +183,7 @@ export function SmartSuggestion() {
           <Text
             style={{
               fontSize: 12,
-              color: "rgba(200,190,255,0.4)",
+              color: "rgba(191,219,254,0.4)",
               lineHeight: 18,
             }}
           >
@@ -207,10 +206,10 @@ export function SmartSuggestion() {
             }}
             activeOpacity={0.7}
           >
-            <Text style={{ fontSize: 11, color: "#a89cf0", fontWeight: "700" }}>
+            <Text style={{ fontSize: 11, color: "#60a5fa", fontWeight: "700" }}>
               {suggestion.action}
             </Text>
-            <Text style={{ fontSize: 9, color: "rgba(168,156,240,0.4)" }}>
+            <Text style={{ fontSize: 9, color: "rgba(96,165,250,0.4)" }}>
               Re-analyze
             </Text>
           </TouchableOpacity>
@@ -227,9 +226,9 @@ export function SmartSuggestion() {
               borderRadius: 10,
               paddingVertical: 11,
               backgroundColor: canAnalyze
-                ? "#7c6af0"
+                ? "#3b82f6"
                 : "rgba(255,255,255,0.04)",
-              shadowColor: canAnalyze ? "#7c6af0" : "transparent",
+              shadowColor: canAnalyze ? "#3b82f6" : "transparent",
               shadowOpacity: canAnalyze ? 0.35 : 0,
               shadowRadius: 10,
               elevation: canAnalyze ? 4 : 0,
@@ -243,7 +242,7 @@ export function SmartSuggestion() {
                   fontSize: 11,
                   fontWeight: "700",
                   letterSpacing: 0.3,
-                  color: canAnalyze ? "#fff" : "rgba(200,190,255,0.25)",
+                  color: canAnalyze ? "#fff" : "rgba(191,219,254,0.25)",
                 }}
               >
                 Identify Priority

@@ -5,63 +5,64 @@
 @layer base {
   :root {
     /* Leben Design Tokens - Light Mode Default */
-    --bg-primary:       #ffffff;
-    --bg-secondary:     #f5f5f5;
-    --bg-card:          #ffffff;
-    --bg-element:       #f9f9f9;
-    --border-primary:   #a3a3a3;
-    --border-subtle:    #d4d4d4;
-    --accent-blue:    #3b82f6;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --bg-card: #efefef;
+    --bg-element: #f9f9f9;
+    --border-primary: #a3a3a3;
+    --border-subtle: #d4d4d4;
+    --accent-blue: #3b82f6;
     --accent-blue-light: #60a5fa;
-    --text-primary:     #111111;
-    --text-secondary:   #555555;
-    --text-muted:       #888888;
-    --text-dim:         #aaaaaa;
-    --success-green:    #4caf7d;
+    --text-primary: #111111;
+    --text-secondary: #555555;
+    --text-muted: #888888;
+    --text-dim: #aaaaaa;
+    --success-green: #4caf7d;
 
     /* Semantic UI States */
-    --state-success-bg:     #e6f4ea;
+    --state-success-bg: #e6f4ea;
     --state-success-border: #ceead6;
-    --tag-work-bg:          #e8f0fe;
-    --tag-work-border:      #d2e3fc;
-    --tag-work-text:        #1967d2;
-    --tag-personal-bg:      #f3e8fd;
-    --tag-personal-border:  #e9d2fc;
-    --tag-personal-text:    #8430ce;
-    --brand-deep:           #ede7f6;
+    --tag-work-bg: #e8f0fe;
+    --tag-work-border: #d2e3fc;
+    --tag-work-text: #1967d2;
+    --tag-personal-bg: #f3e8fd;
+    --tag-personal-border: #e9d2fc;
+    --tag-personal-text: #8430ce;
+    --brand-deep: #ede7f6;
 
     /* Typography */
     --font-display: Inter, ui-sans-serif, system-ui, sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    --font-rounded: 'SF Pro Rounded', sans-serif;
-    --font-serif: Georgia, 'Times New Roman', serif;
+    --font-mono:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-rounded: "SF Pro Rounded", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
   }
 
   .dark {
     /* Leben Design Tokens - Dark Mode */
-    --bg-primary:       #0a0a0a;
-    --bg-secondary:     #1a1a1a;
-    --bg-card:          #161616;
-    --bg-element:       #212225;
-    --border-primary:   #222222;
-    --border-subtle:    #1a1a1a;
-    --accent-blue:    #3b82f6;
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-card: #161616;
+    --bg-element: #212225;
+    --border-primary: #222222;
+    --border-subtle: #1a1a1a;
+    --accent-blue: #3b82f6;
     --accent-blue-light: #60a5fa;
-    --text-primary:     #f0f0f0;
-    --text-secondary:   #acacac;
-    --text-muted:       #888888;
-    --text-dim:         #444444;
-    --success-green:    #4caf7d;
+    --text-primary: #f0f0f0;
+    --text-secondary: #acacac;
+    --text-muted: #888888;
+    --text-dim: #444444;
+    --success-green: #4caf7d;
 
     /* Semantic UI States */
-    --state-success-bg:     #1e3d26;
+    --state-success-bg: #1e3d26;
     --state-success-border: #3a7a4a;
-    --tag-work-bg:          #1a1f2e;
-    --tag-work-border:      #1e2a42;
-    --tag-work-text:        #4a7abf;
-    --tag-personal-bg:      #1e1a2a;
-    --tag-personal-border:  #2a1e42;
-    --tag-personal-text:    #8a5abf;
-    --brand-deep:           #2d2480;
+    --tag-work-bg: #1a1f2e;
+    --tag-work-border: #1e2a42;
+    --tag-work-text: #4a7abf;
+    --tag-personal-bg: #1e1a2a;
+    --tag-personal-border: #2a1e42;
+    --tag-personal-text: #8a5abf;
+    --brand-deep: #2d2480;
   }
 }

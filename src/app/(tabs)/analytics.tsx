@@ -67,16 +67,9 @@ export default function AnalyticsScreen() {
                 style={{ fontSize: 28, letterSpacing: -0.5 }}
               >
                 Deep Performance{" "}
-                <Text style={{ color: "var(--accent-blue)" }}>Metrics.</Text>
+                <Text className="text-leben-accent">Metrics.</Text>
               </Text>
-              <Text
-                className="text-center mt-2"
-                style={{
-                  fontSize: 15,
-                  color: "var(--text-muted)",
-                  lineHeight: 22,
-                }}
-              >
+              <Text className="text-center mt-2 text-leben-text-muted text-[15px] leading-[22px]">
                 Sign in to unlock long-term trends, efficiency correlations, and
                 predictive analytics based on your historical behavior.
               </Text>
@@ -84,8 +77,7 @@ export default function AnalyticsScreen() {
 
             <TouchableOpacity
               onPress={() => router.push("/(auth)/sign-in" as any)} // Navigate to your auth screen
-              className="flex-row items-center gap-3 px-7 py-3.5 rounded-xl mb-8"
-              style={{ backgroundColor: "var(--accent-blue)" }}
+              className="flex-row items-center gap-3 px-7 py-3.5 rounded-xl mb-8 bg-leben-accent"
             >
               <Text
                 className="text-leben-text-2 font-bold"
@@ -105,25 +97,10 @@ export default function AnalyticsScreen() {
                   borderWidth: 1,
                 }}
               >
-                <Text
-                  style={{
-                    fontSize: 10,
-                    color: "var(--text-dim)",
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                    letterSpacing: 1,
-                    marginBottom: 4,
-                  }}
-                >
+                <Text className="text-[10px] text-leben-text-dim font-bold uppercase tracking-[1px] mb-1">
                   Trends
                 </Text>
-                <Text
-                  style={{
-                    fontSize: 11,
-                    color: "var(--text-dim)",
-                    marginTop: 4,
-                  }}
-                >
+                <Text className="text-[11px] text-leben-text-dim mt-1">
                   Visualize your growth over weeks and months.
                 </Text>
               </View>
@@ -135,25 +112,10 @@ export default function AnalyticsScreen() {
                   borderWidth: 1,
                 }}
               >
-                <Text
-                  style={{
-                    fontSize: 10,
-                    color: "var(--text-dim)",
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                    letterSpacing: 1,
-                    marginBottom: 4,
-                  }}
-                >
+                <Text className="text-[10px] text-leben-text-dim font-bold uppercase tracking-[1px] mb-1">
                   Correlations
                 </Text>
-                <Text
-                  style={{
-                    fontSize: 11,
-                    color: "var(--text-dim)",
-                    marginTop: 4,
-                  }}
-                >
+                <Text className="text-[11px] text-leben-text-dim mt-1">
                   Find links between habits and task density.
                 </Text>
               </View>

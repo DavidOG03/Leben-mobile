@@ -51,7 +51,7 @@ export function Button({
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'secondary' || variant === 'ghost' ? 'var(--accent-blue)' : 'var(--text-primary)'} size="small" />
+        <ActivityIndicator color={variant === 'secondary' || variant === 'ghost' ? '#3b82f6' : '#ffffff'} size="small" />
       ) : (
         <Text className={`${textClasses[variant]} ${size === 'sm' ? 'text-sm' : 'text-[15px]'}`}>
           {label}
