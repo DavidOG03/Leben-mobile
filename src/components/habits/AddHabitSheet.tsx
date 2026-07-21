@@ -79,7 +79,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
       {/* Header */}
       <View className="mb-6 flex-row items-center justify-between">
         <Text
-          className="font-black text-white text-[20px]"
+          className="font-black text-leben-text text-[20px]"
           style={{ letterSpacing: -0.4 }}
         >
           New Habit
@@ -97,7 +97,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
                   key={ic}
                   onPress={() => setIcon(ic)}
                   className={`rounded-xl items-center justify-center border w-[38px] h-[38px] ${
-                    icon === ic ? "bg-leben-accent/15 border-leben-accent" : "bg-leben-bg-card border-leben-border-subtle"
+                    icon === ic ? "bg-leben-accent/15 border-leben-accent" : "bg-leben-bg-secondary border-leben-border-subtle"
                   }`}
                 >
                   <Text style={{ fontSize: 18 }}>{ic}</Text>
@@ -136,7 +136,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
               onChangeText={setLabel}
               placeholder="e.g. Cold Shower"
               placeholderTextColor="gray"
-              className="bg-leben-bg-card border border-leben-border-subtle rounded-xl px-4 py-3 text-leben-text text-[13px] mb-3"
+              className="bg-leben-bg-secondary border border-leben-border-subtle rounded-xl px-4 py-3 text-leben-text text-[13px] mb-3"
             />
           </View>
 
@@ -148,7 +148,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
               onChangeText={setSub}
               placeholder="e.g. 5 mins every morning"
               placeholderTextColor="gray"
-              className="bg-leben-bg-card border border-leben-border-subtle rounded-xl px-4 py-3 text-leben-text text-[13px] mb-3"
+              className="bg-leben-bg-secondary border border-leben-border-subtle rounded-xl px-4 py-3 text-leben-text text-[13px] mb-3"
             />
           </View>
 
@@ -171,7 +171,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
             <View className="flex-row gap-3 flex-1 ml-3">
               <TouchableOpacity
                 onPress={onClose}
-                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-card border border-leben-border-subtle"
+                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-secondary border border-leben-border-subtle"
               >
                 <Text
                   className="text-leben-text-muted text-[13px] font-semibold"

@@ -1,32 +1,38 @@
-import { useState } from 'react';
-import { View, TouchableOpacity, TextInput } from 'react-native';
-import { Goal, deriveGoalStats, Milestone, generateMilestoneId } from '@/utils/goals.types';
-import { useLebenStore } from '@/store/useStore';
-import { Card } from '@/components/ui/Card';
-import { Text } from '@/components/ui/Text';
-
+import { Card } from "@/components/ui/Card";
+import { Text } from "@/components/ui/Text";
+import { useLebenStore } from "@/store/useStore";
+import {
+  Goal,
+  Milestone,
+  deriveGoalStats,
+  generateMilestoneId,
+} from "@/utils/goals.types";
+import { useState } from "react";
+import { TextInput, TouchableOpacity, View } from "react-native";
 
 interface GoalItemProps {
   goal: Goal;
 }
 
 export function GoalItem({ goal }: GoalItemProps) {
-  const removeGoal      = useLebenStore((s) => s.removeGoal);
-  const editGoal        = useLebenStore((s) => s.editGoal);
+  const removeGoal = useLebenStore((s) => s.removeGoal);
+  const editGoal = useLebenStore((s) => s.editGoal);
   const toggleMilestone = useLebenStore((s) => s.toggleMilestone);
 
   const safeGoal = { ...goal, milestones: goal.milestones ?? [] };
   const { progress, status, statusColor } = deriveGoalStats(safeGoal);
 
-  const [isEditing,      setIsEditing]      = useState(false);
-  const [editTitle,      setEditTitle]      = useState(goal.title);
-  const [editDeadline,   setEditDeadline]   = useState(goal.deadline ?? '');
-  const [editMilestones, setEditMilestones] = useState<Milestone[]>(safeGoal.milestones);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(goal.title);
+  const [editDeadline, setEditDeadline] = useState(goal.deadline ?? "");
+  const [editMilestones, setEditMilestones] = useState<Milestone[]>(
+    safeGoal.milestones,
+  );
 
   const handleSave = () => {
     editGoal(goal.id, {
-      title:     editTitle,
-      deadline:  editDeadline,
+      title: editTitle,
+      deadline: editDeadline,
       milestones: editMilestones,
     });
     setIsEditing(false);
@@ -35,7 +41,7 @@ export function GoalItem({ goal }: GoalItemProps) {
   const handleEditToggle = () => {
     if (!isEditing) {
       setEditTitle(goal.title);
-      setEditDeadline(goal.deadline ?? '');
+      setEditDeadline(goal.deadline ?? "");
       setEditMilestones([...safeGoal.milestones]);
     }
     setIsEditing(!isEditing);
@@ -47,7 +53,7 @@ export function GoalItem({ goal }: GoalItemProps) {
       <View className="flex-row items-start justify-between mb-4">
         <View
           className="w-12 h-12 rounded-xl items-center justify-center border border-[#252535]"
-          style={{ backgroundColor: '#141428' }}
+          style={{ backgroundColor: "#141428" }}
         >
           <Text className="text-[22px]">{goal.icon}</Text>
         </View>
@@ -79,7 +85,7 @@ export function GoalItem({ goal }: GoalItemProps) {
           <TextInput
             value={editTitle}
             onChangeText={setEditTitle}
-            className="bg-leben-bg-secondary border border-leben-border text-white px-3 py-2 rounded-lg text-[14px]"
+            className="bg-leben-bg-secondary border border-leben-border text-leben-text px-3 py-2 rounded-lg text-[14px]"
             placeholder="Goal Title"
             placeholderTextColor="#666"
             autoFocus
@@ -87,14 +93,14 @@ export function GoalItem({ goal }: GoalItemProps) {
           <TextInput
             value={editDeadline}
             onChangeText={setEditDeadline}
-            className="bg-leben-bg-secondary border border-leben-border text-white px-3 py-2 rounded-lg text-[11px]"
+            className="bg-leben-bg-secondary border border-leben-border text-leben-text px-3 py-2 rounded-lg text-[11px]"
             placeholder="Deadline (e.g. Dec 2025)"
             placeholderTextColor="#666"
           />
         </View>
       ) : (
         <View className="mb-4">
-          <Text className="text-white font-bold text-[20px] tracking-tight leading-tight mb-1">
+          <Text className="text-leben-text font-bold text-[20px] tracking-tight leading-tight mb-1">
             {goal.title}
           </Text>
           <Text className="text-leben-text-muted text-[11px]">
@@ -106,10 +112,14 @@ export function GoalItem({ goal }: GoalItemProps) {
       {/* Progress Bar */}
       <View className="mb-5">
         <View className="flex-row justify-between mb-2">
-          <Text className="text-leben-text-muted text-[11px] font-medium">Progress</Text>
-          <Text className="text-leben-text-muted text-[11px] font-medium">{progress}%</Text>
+          <Text className="text-leben-text-muted text-[11px] font-medium">
+            Progress
+          </Text>
+          <Text className="text-leben-text-muted text-[11px] font-medium">
+            {progress}%
+          </Text>
         </View>
-        <View className="h-[3px] rounded-full bg-[#1e1e1e] overflow-hidden">
+        <View className="h-[3px] rounded-full bg-leben-border overflow-hidden">
           <View
             className="h-full rounded-full bg-leben-accent"
             style={{ width: `${progress}%` }}
@@ -133,7 +143,9 @@ export function GoalItem({ goal }: GoalItemProps) {
                 {/* Done indicator (non-interactive in edit mode) */}
                 <View
                   className={`w-4 h-4 rounded-full border ${
-                    m.done ? 'bg-leben-accent/20 border-leben-accent' : 'bg-transparent border-leben-border-subtle'
+                    m.done
+                      ? "bg-leben-accent/20 border-leben-accent"
+                      : "bg-transparent border-leben-border-subtle"
                   }`}
                 />
                 <TextInput
@@ -165,12 +177,14 @@ export function GoalItem({ goal }: GoalItemProps) {
               onPress={() =>
                 setEditMilestones([
                   ...editMilestones,
-                  { id: generateMilestoneId(), label: '', done: false },
+                  { id: generateMilestoneId(), label: "", done: false },
                 ])
               }
               className="mt-1 py-2"
             >
-              <Text className="text-leben-accent text-[11px] font-semibold">+ Add Milestone</Text>
+              <Text className="text-leben-accent text-[11px] font-semibold">
+                + Add Milestone
+              </Text>
             </TouchableOpacity>
 
             {/* Save */}
@@ -178,41 +192,49 @@ export function GoalItem({ goal }: GoalItemProps) {
               onPress={handleSave}
               className="mt-3 bg-leben-accent rounded-lg py-3 items-center"
             >
-              <Text className="text-white font-semibold text-[13px]">Save Changes</Text>
+              <Text className="text-leben-text font-semibold text-[13px]">
+                Save Changes
+              </Text>
             </TouchableOpacity>
           </>
+        ) : safeGoal.milestones.length === 0 ? (
+          <Text className="text-leben-text-dim text-[12px]">
+            No milestones yet.
+          </Text>
         ) : (
-          safeGoal.milestones.length === 0 ? (
-            <Text className="text-leben-text-dim text-[12px]">No milestones yet.</Text>
-          ) : (
-            safeGoal.milestones.map((m) => (
-              <View key={m.id} className="flex-row items-center gap-3 w-full">
-                {/* Checkbox */}
-                <TouchableOpacity
-                  onPress={() => toggleMilestone(goal.id, m.id)}
-                  className={`w-4 h-4 rounded-full items-center justify-center shrink-0 border ${
-                    m.done ? 'bg-leben-accent/20 border-leben-accent' : 'bg-transparent border-leben-border-subtle'
+          safeGoal.milestones.map((m) => (
+            <View key={m.id} className="flex-row items-center gap-3 w-full">
+              {/* Checkbox */}
+              <TouchableOpacity
+                onPress={() => toggleMilestone(goal.id, m.id)}
+                className={`w-4 h-4 rounded-full items-center justify-center shrink-0 border ${
+                  m.done
+                    ? "bg-leben-accent/20 border-leben-accent"
+                    : "bg-transparent border-leben-border-subtle"
+                }`}
+              >
+                {m.done && (
+                  <Text className="text-leben-accent text-[8px]">✓</Text>
+                )}
+              </TouchableOpacity>
+
+              {/* Label — tappable */}
+              <TouchableOpacity
+                onPress={() => toggleMilestone(goal.id, m.id)}
+                className="flex-1"
+              >
+                <Text
+                  className={`text-[12px] leading-snug ${
+                    m.done
+                      ? "text-leben-text-muted line-through"
+                      : "text-leben-text-secondary"
                   }`}
                 >
-                  {m.done && <Text className="text-leben-accent text-[8px]">✓</Text>}
-                </TouchableOpacity>
-
-                {/* Label — tappable */}
-                <TouchableOpacity
-                  onPress={() => toggleMilestone(goal.id, m.id)}
-                  className="flex-1"
-                >
-                  <Text
-                    className={`text-[12px] leading-snug ${
-                      m.done ? 'text-leben-text-muted line-through' : 'text-leben-text-secondary'
-                    }`}
-                  >
-                    {m.label}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ))
-          )
+                  {m.label}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ))
         )}
       </View>
     </Card>

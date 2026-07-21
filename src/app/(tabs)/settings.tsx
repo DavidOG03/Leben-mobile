@@ -10,11 +10,24 @@ function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
     <TouchableOpacity
       onPress={onChange}
       activeOpacity={0.8}
-      className={`w-[42px] h-[24px] rounded-[12px] p-[2px] justify-center transition-colors ${on ? "bg-leben-accent" : "bg-leben-text-dim"}`}
+      style={{
+        width: 44,
+        height: 24,
+        borderRadius: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 2,
+        backgroundColor: on ? '#3b82f6' : '#71717a'
+      }}
     >
       <View
-        className="w-5 h-5 rounded-full bg-white shadow-sm"
-        style={{ transform: [{ translateX: on ? 18 : 0 }] }}
+        style={{
+          width: 20,
+          height: 20,
+          borderRadius: 10,
+          backgroundColor: '#ffffff',
+          transform: [{ translateX: on ? 20 : 0 }]
+        }}
       />
     </TouchableOpacity>
   );
@@ -37,7 +50,7 @@ export default function SettingsScreen() {
     (s) => s.updateNotificationPrefs,
   );
 
-  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const { colorScheme, setColorScheme } = useColorScheme();
 
   const userId = useLebenStore((s) => s.userId);
   const userFullName = useLebenStore((s: any) => s.userFullName);
@@ -280,7 +293,7 @@ export default function SettingsScreen() {
               <Text className="text-leben-text-2 text-[14px]">Dark Mode</Text>
               <Toggle
                 on={colorScheme === "dark"}
-                onChange={toggleColorScheme}
+                onChange={() => setColorScheme(colorScheme === "dark" ? "light" : "dark")}
               />
             </View>
           </View>

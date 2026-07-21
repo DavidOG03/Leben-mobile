@@ -169,7 +169,7 @@ export function SmartSuggestion() {
               }}
             >
               <Text style={{ fontSize: 11, color: "#93c5fd", lineHeight: 16 }}>
-                <Text style={{ opacity: 0.5, fontStyle: "italic" }}>
+                <Text style={{ color: "#a5b4fc", fontStyle: "italic" }}>
                   Reason:{" "}
                 </Text>
                 {suggestion.reason}

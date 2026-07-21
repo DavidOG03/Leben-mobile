@@ -91,7 +91,7 @@ export default function AddBookModal({
             onChangeText={setTitle}
             placeholder="e.g. Atomic Habits"
             placeholderTextColor="gray"
-            className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-card border border-leben-border-subtle text-[14px]"
+            className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-secondary border border-leben-border-subtle text-[14px]"
           />
         </View>
 
@@ -106,7 +106,7 @@ export default function AddBookModal({
             onChangeText={setAuthor}
             placeholder="e.g. James Clear"
             placeholderTextColor="gray"
-            className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-card border border-leben-border-subtle text-[14px]"
+            className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-secondary border border-leben-border-subtle text-[14px]"
           />
         </View>
 
@@ -122,7 +122,7 @@ export default function AddBookModal({
             placeholder="e.g. 320"
             placeholderTextColor="gray"
             keyboardType="numeric"
-            className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-card border border-leben-border-subtle text-[14px]"
+            className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-secondary border border-leben-border-subtle text-[14px]"
           />
           {/* Buttons */}
           <View className="flex-row items-center justify-between mt-4">
@@ -133,7 +133,7 @@ export default function AddBookModal({
             <View className="flex-row gap-3 flex-1 ml-3">
               <TouchableOpacity
                 onPress={handleCancel}
-                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-card border border-leben-border-subtle"
+                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-secondary border border-leben-border-subtle"
               >
                 <Text className="text-leben-text-muted text-[13px] font-semibold">Cancel</Text>
               </TouchableOpacity>

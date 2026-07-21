@@ -48,10 +48,10 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
           <View className="flex-col gap-1 flex-1 pr-2">
             <View className="flex-row items-center gap-2">
               <View
-                className={`px-2 py-0.5 rounded border ${isDeepWork ? "bg-leben-accent/10 border-leben-accent/20" : isRecharge ? "bg-leben-success/10 border-leben-success/20" : "bg-leben-bg-secondary border-leben-border"}`}
+                className={`px-2 py-0.5 rounded border ${isDeepWork ? "bg-leben-accent border-leben-accent" : isRecharge ? "bg-leben-success border-leben-success" : "bg-tag-personal-text border-leben-border"}`}
               >
                 <Text
-                  className={`font-bold uppercase tracking-widest text-[9px] ${isDeepWork ? "text-leben-accent" : isRecharge ? "text-[#4caf70]" : "text-leben-text-muted"}`}
+                  className={`font-bold uppercase tracking-widest text-[9px] ${isDeepWork || isRecharge ? "text-white" : "text-white"}`}
                 >
                   {item.tag}
                 </Text>
@@ -66,7 +66,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
               )}
             </View>
             <Text
-              className="text-leben-text-2
+              className="text-leben-text
                font-bold mt-1"
               style={{ fontSize: 18 }}
             >
@@ -86,14 +86,17 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
           </View>
         </View>
 
-        <Text className="text-[#777] leading-relaxed" style={{ fontSize: 13 }}>
+        <Text
+          className="text-leben-text-2 leading-relaxed"
+          style={{ fontSize: 13 }}
+        >
           {item.description}
         </Text>
 
         <View className="flex-row gap-2 mt-5">
           <View className="px-3 py-1 rounded-full bg-leben-bg-secondary border border-leben-border">
             <Text
-              className="text-leben-text-dim font-medium"
+              className="text-leben-text-2 font-medium"
               style={{ fontSize: 10 }}
             >
               {item.tag}
@@ -101,7 +104,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
           </View>
           <View className="px-3 py-1 rounded-full bg-leben-bg-secondary border border-leben-border">
             <Text
-              className="text-leben-text-dim font-medium"
+              className="text-leben-text-2 font-medium"
               style={{ fontSize: 10 }}
             >
               {item.priority.toUpperCase()}

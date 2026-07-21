@@ -1,10 +1,8 @@
-import { PlusIcon } from "@/constants/Icons";
+import { Text } from "@/components/ui/Text";
 import type { Book } from "@/store/bookSlice";
 import React from "react";
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import BookCard from "./BookCard";
-import { Text } from '@/components/ui/Text';
-
 
 interface ReadingTrackerProps {
   onShowAddBook: (show: boolean) => void;
@@ -38,10 +36,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
     <View className="mb-6 px-4 md:px-0">
       <View className="flex-row items-center justify-between mb-4 flex-wrap">
         <View>
-          <Text
-            className="font-bold text-white"
-            style={{ fontSize: 18, letterSpacing: -0.5 }}
-          >
+          <Text className="font-bold text-leben-text text-3xl ">
             Reading Tracker
           </Text>
           <Text className="text-xs text-leben-text-muted my-2">
@@ -52,9 +47,8 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           onPress={() => onShowAddBook(true)}
           className="flex-row items-center gap-1.5 px-3 py-2 rounded-lg bg-leben-bg-element border border-leben-border-subtle"
         >
-          <PlusIcon color="#555555" size={11} />
           <Text className="text-leben-text-2 text-[12px] font-bold">
-            Add Book
+            + Add Book
           </Text>
         </TouchableOpacity>
       </View>

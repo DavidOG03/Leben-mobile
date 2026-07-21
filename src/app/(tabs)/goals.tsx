@@ -1,6 +1,6 @@
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { AddGoalSheet } from "@/components/goals/AddGoalSheet";
 import { GoalList } from "@/components/goals/GoalList";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { Text } from "@/components/ui/Text";
 import { useState } from "react";
@@ -15,7 +15,7 @@ export default function GoalsScreen() {
       <View className="flex-1 px-4 py-6">
         <View className="flex-row items-center justify-between mb-4">
           <View>
-            <Text className="text-leben-text-2 font-bold text-3xl tracking-tight leading-tight mb-1">
+            <Text className="text-leben-text font-bold text-3xl tracking-tight leading-tight mb-1">
               Goals
             </Text>
             <Text className="text-leben-text-muted text-[13px]">
@@ -24,10 +24,10 @@ export default function GoalsScreen() {
           </View>
           <TouchableOpacity
             onPress={() => setShowAddSheet(true)}
-            className="w-10 h-10 rounded-full items-center justify-center bg-leben-accent active:opacity-80"
+            className="flex flex-row items-center justify-center gap-2 rounded-full bg-leben-accent active:opacity-80 px-4 py-2"
           >
-            <Text className="text-leben-text-2 text-xl leading-none font-light">
-              +
+            <Text className="text-white text-sm leading-none font-light">
+              + Add Goal
             </Text>
           </TouchableOpacity>
         </View>

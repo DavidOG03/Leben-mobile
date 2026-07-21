@@ -1,7 +1,6 @@
-import { View, } from 'react-native';
-import { SparkleIcon } from '@/constants/Icons';
-import { Text } from '@/components/ui/Text';
-
+import { Text } from "@/components/ui/Text";
+import { SparkleIcon } from "@/constants/Icons";
+import { View } from "react-native";
 
 interface AIInsightsCardProps {
   insights: string[];
@@ -16,11 +15,11 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
           <View className="p-1.5 rounded-lg bg-leben-bg-element border border-leben-border-subtle">
             <SparkleIcon color="#3b82f6" size={16} />
           </View>
-          <Text className="text-leben-text-2 font-semibold text-[14px]">
+          <Text className="text-leben-text font-semibold text-[14px]">
             AI Insights
           </Text>
         </View>
-        <Text className="text-leben-text-muted text-[12px] leading-[19px]">
+        <Text className="text-leben-text-2 text-[12px] leading-[19px]">
           Generating your personalized day plan...
         </Text>
       </View>
@@ -33,12 +32,12 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
         <View className="p-1.5 rounded-lg bg-leben-bg-element border border-leben-border-subtle">
           <Text className="text-leben-accent text-[16px]">✨</Text>
         </View>
-        <Text className="text-leben-text-2 font-semibold text-[14px]">
+        <Text className="text-leben-text font-semibold text-[14px]">
           AI Insights
         </Text>
       </View>
 
-      <Text className="text-leben-text-muted text-[12px] leading-[19px]">
+      <Text className="text-leben-text-2 text-[12px] leading-[19px]">
         {insights[0] || "No insights generated yet."}
       </Text>
 
@@ -48,7 +47,7 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
             <View className="mt-1 flex-shrink-0 items-center justify-center w-[14px] h-[14px] rounded-full border border-leben-accent">
               <View className="w-[6px] h-[6px] rounded-full bg-leben-accent" />
             </View>
-            <Text className="text-leben-text-primary text-[11px] leading-[16px] flex-1">
+            <Text className="text-leben-text-muted text-[11px] leading-[16px] flex-1">
               {insight}
             </Text>
           </View>

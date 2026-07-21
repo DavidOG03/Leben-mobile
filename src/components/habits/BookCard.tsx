@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, TextInput } from 'react-native';
-import { useLebenStore } from '@/store/useStore';
-import type { Book } from '@/store/bookSlice';
-import { Text } from '@/components/ui/Text';
-
+import { Text } from "@/components/ui/Text";
+import type { Book } from "@/store/bookSlice";
+import { useLebenStore } from "@/store/useStore";
+import { useState } from "react";
+import { TextInput, TouchableOpacity, View } from "react-native";
 
 interface BookCardProps {
   book: Book;
@@ -22,12 +21,18 @@ export default function BookCard({ book }: BookCardProps) {
 
   const pct = Math.min(
     100,
-    book.totalPages > 0 ? Math.round((book.currentPage / book.totalPages) * 100) : 0,
+    book.totalPages > 0
+      ? Math.round((book.currentPage / book.totalPages) * 100)
+      : 0,
   );
-  const pagesLeft = book.totalPages > 0 ? book.totalPages - book.currentPage : 0;
+  const pagesLeft =
+    book.totalPages > 0 ? book.totalPages - book.currentPage : 0;
 
   const handleSaveProgress = () => {
-    const p = Math.min(book.totalPages > 0 ? book.totalPages : 9999, Math.max(0, parseInt(pageInput) || 0));
+    const p = Math.min(
+      book.totalPages > 0 ? book.totalPages : 9999,
+      Math.max(0, parseInt(pageInput) || 0),
+    );
     updateBook(book.id, { currentPage: p });
     setPageInput(String(p));
     setEditingProgress(false);
@@ -39,9 +44,7 @@ export default function BookCard({ book }: BookCardProps) {
   };
 
   return (
-    <View
-      className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border-subtle"
-    >
+    <View className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border-subtle">
       <View className="flex-row items-start justify-between mb-4">
         <View
           className="items-center justify-center rounded-xl"
@@ -60,7 +63,9 @@ export default function BookCard({ book }: BookCardProps) {
             <Text className="text-leben-text-muted text-[14px]">✏️</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => removeBook(book.id)}>
-            <Text className="text-leben-text-dim text-[20px] leading-[20px]">×</Text>
+            <Text className="text-leben-text-dim text-[20px] leading-[20px]">
+              ×
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -89,13 +94,15 @@ export default function BookCard({ book }: BookCardProps) {
             className="rounded-lg px-3 py-2 items-center mt-1"
             style={{ backgroundColor: book.coverColor }}
           >
-            <Text className="text-white text-[12px] font-bold">Save Details</Text>
+            <Text className="text-white text-[12px] font-bold">
+              Save Details
+            </Text>
           </TouchableOpacity>
         </View>
       ) : (
         <View className="mb-3">
           <Text
-            className="font-bold text-white leading-tight mb-1"
+            className="font-bold text-leben-text leading-tight mb-1"
             style={{ fontSize: 15 }}
           >
             {book.title}
@@ -106,9 +113,7 @@ export default function BookCard({ book }: BookCardProps) {
         </View>
       )}
 
-      <View
-        className="rounded-full overflow-hidden mb-2 h-1 bg-leben-border-subtle"
-      >
+      <View className="rounded-full overflow-hidden mb-2 h-1 bg-leben-border-subtle">
         <View
           className="h-full rounded-full"
           style={{
@@ -120,7 +125,7 @@ export default function BookCard({ book }: BookCardProps) {
 
       <View className="flex-row items-center justify-between mb-4">
         <Text className="text-[11px] text-leben-text-muted">
-          {pagesLeft > 0 ? `${pagesLeft} pages left` : 'Finished! 🎉'}
+          {pagesLeft > 0 ? `${pagesLeft} pages left` : "Finished! 🎉"}
         </Text>
         <Text
           className="font-bold"
@@ -160,7 +165,9 @@ export default function BookCard({ book }: BookCardProps) {
             borderColor: `${book.coverColor}33`,
           }}
         >
-          <Text style={{ color: book.coverColor, fontSize: 12, fontWeight: 'bold' }}>
+          <Text
+            style={{ color: book.coverColor, fontSize: 12, fontWeight: "bold" }}
+          >
             Update Progress · p.{book.currentPage}
           </Text>
         </TouchableOpacity>

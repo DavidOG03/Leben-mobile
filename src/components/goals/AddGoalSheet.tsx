@@ -86,7 +86,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
   return (
     <BottomSheet visible={visible} onClose={handleCancel}>
       <View className="mb-6 flex-row items-center justify-between">
-        <Text className="font-black text-white text-[20px]" style={{ letterSpacing: -0.4 }}>
+        <Text className="font-black text-leben-text text-[20px]" style={{ letterSpacing: -0.4 }}>
           New Goal
         </Text>
       </View>
@@ -105,7 +105,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                   key={icon}
                   onPress={() => setForm({ ...form, icon })}
                   className={`rounded-xl items-center justify-center border w-[36px] h-[36px] ${
-                    form.icon === icon ? 'bg-leben-accent/15 border-leben-accent' : 'bg-leben-bg-card border-leben-border-subtle'
+                    form.icon === icon ? 'bg-leben-accent/15 border-leben-accent' : 'bg-leben-bg-secondary border-leben-border-subtle'
                   }`}
                 >
                   <Text style={{ fontSize: 18 }}>{icon}</Text>
@@ -124,7 +124,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               onChangeText={(text) => setForm({ ...form, title: text })}
               placeholder="e.g. Master Spanish"
               placeholderTextColor="#555"
-              className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-card border ${
+              className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-secondary border ${
                 errors.title ? 'border-leben-error' : 'border-leben-border-subtle'
               }`}
             />
@@ -143,7 +143,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               onChangeText={(text) => setForm({ ...form, deadline: text })}
               placeholder="YYYY-MM (or YYYY-MM-DD)"
               placeholderTextColor="#555"
-              className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-card border ${
+              className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-secondary border ${
                 errors.deadline ? 'border-leben-error' : 'border-leben-border-subtle'
               }`}
             />
@@ -165,7 +165,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                   onChangeText={(text) => updateMilestone(i, text)}
                   placeholder={`Milestone ${i + 1}`}
                   placeholderTextColor="#555"
-                  className="w-full rounded-xl px-4 py-3 text-leben-text text-[13px] bg-leben-bg-card border border-leben-border-subtle"
+                  className="w-full rounded-xl px-4 py-3 text-leben-text text-[13px] bg-leben-bg-secondary border border-leben-border-subtle"
                 />
               ))}
             </View>
@@ -186,7 +186,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
             <View className="flex-row gap-3 flex-1 ml-3">
               <TouchableOpacity
                 onPress={handleCancel}
-                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-card border border-leben-border-subtle"
+                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-secondary border border-leben-border-subtle"
               >
                 <Text className="text-leben-text-muted text-[13px] font-semibold">Cancel</Text>
               </TouchableOpacity>

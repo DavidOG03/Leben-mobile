@@ -1,16 +1,17 @@
+import { Text } from "@/components/ui/Text";
 import { TrashIcon } from "@/constants/Icons";
 import { useLebenStore } from "@/store/useStore";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
-import { Modal,
+import {
+  Modal,
   Platform,
   Pressable,
   ScrollView,
   TouchableOpacity,
-  View, } from 'react-native';
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Text } from '@/components/ui/Text';
-
 
 function PushPermissionBanner() {
   const [permission, setPermission] =
@@ -72,16 +73,16 @@ export default function NotificationDropdown() {
         style={{
           top: insets.top + (Platform.OS === "ios" ? 60 : 70), // Push it slightly below the header
           right: 16, // Right padding
-          shadowColor: "#000",
+          shadowColor: "#00000050",
           shadowOffset: { width: 0, height: 20 },
           shadowOpacity: 0.5,
-          shadowRadius: 50,
+          shadowRadius: 500,
           elevation: 10,
         }}
       >
         {/* Header */}
         <View className="px-5 py-4 border-b border-leben-border-subtle flex-row items-center justify-between bg-[rgba(255,255,255,0.02)]">
-          <Text className="text-white font-semibold text-[14px]">
+          <Text className="text-leben-text font-semibold text-[14px]">
             Notifications
           </Text>
           <View>
@@ -141,7 +142,7 @@ export default function NotificationDropdown() {
                     onPress={() => deleteNotification(n.id)}
                     className="items-center justify-center w-[26px] h-[26px] rounded-[6px]"
                   >
-                    <TrashIcon className="text-white" />
+                    <TrashIcon color="#71717a" size={16} />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>

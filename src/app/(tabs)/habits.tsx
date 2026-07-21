@@ -46,7 +46,7 @@ export default function HabitsScreen() {
         <HabitList />
 
         {/* Separator */}
-        <View className="h-[1px] w-full my-6 bg-leben-border" />
+        <View className="h-[1px] w-full my-6 bg-leben-border-subtle" />
 
         <ReadingTracker onShowAddBook={setShowAddBook} books={books} />
       </View>

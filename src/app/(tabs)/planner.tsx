@@ -1,9 +1,9 @@
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { AIInsightsCard } from "@/components/planner/AIInsightsCard";
 import { EmptyPlannerState } from "@/components/planner/EmptyPlannerState";
 import { EnergyDistribution } from "@/components/planner/EnergyDistribution";
 import { Timeline } from "@/components/planner/Timeline";
 import { TodaysFocusCard } from "@/components/planner/TodaysFocusCard";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { Text } from "@/components/ui/Text";
 import { PlusIcon, RefreshIcon, TrashIcon } from "@/constants/Icons";
@@ -81,18 +81,8 @@ export default function PlannerScreen() {
         {/* Page Header */}
         <View className="flex-col md:flex-row items-start justify-between gap-6">
           <View className="flex-col gap-3">
-            <View className="flex-row items-center gap-3">
-              <View className="px-2 py-0.5 rounded border bg-leben-accent-dim border-leben-accent/20">
-                <Text
-                  className="text-leben-accent font-bold text-[9px]"
-                  style={{ letterSpacing: 1 }}
-                >
-                  AI GENERATED
-                </Text>
-              </View>
-            </View>
             <Text
-              className="text-leben-text-2 font-bold"
+              className="text-leben-text font-bold"
               style={{ fontSize: 32, letterSpacing: -0.5 }}
             >
               Your Day, Planned
@@ -112,7 +102,7 @@ export default function PlannerScreen() {
             className="flex-row items-center gap-2 px-5 py-2.5 rounded-xl border bg-leben-bg-card border-leben-border"
             style={{ opacity: isRegenerating ? 0.5 : 1 }}
           >
-            <RefreshIcon color="leben-text-2" size={14} />
+            <RefreshIcon color="#a1a1a1" size={14} />
             <Text className="text-leben-text-2 font-bold text-[13px]">
               {isRegenerating ? "Regenerating..." : "Regenerate Plan"}
             </Text>
@@ -148,7 +138,7 @@ export default function PlannerScreen() {
               className="flex-row items-center justify-center gap-2 px-5 py-3 rounded-xl border flex-1 min-w-[140px] bg-leben-bg-card border-leben-border"
             >
               <PlusIcon color="#666" size={16} />
-              <Text className="text-leben-text-dim font-bold text-[13px]">
+              <Text className="text-leben-text font-bold text-[13px]">
                 Add Task
               </Text>
             </TouchableOpacity>

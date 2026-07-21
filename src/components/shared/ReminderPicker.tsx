@@ -36,7 +36,7 @@ export default function ReminderPicker({
     >
       <View className="flex-row items-center gap-2 mb-4">
         <SparkleIcon />
-        <Text className="text-white font-bold text-[14px]">Set Reminder</Text>
+        <Text className="text-leben-text font-bold text-[14px]">Set Reminder</Text>
       </View>
 
       <View className="gap-3 mb-4">
@@ -48,7 +48,7 @@ export default function ReminderPicker({
             onPress={() => setShowDatePicker(true)}
             className="w-full bg-leben-bg-secondary border border-leben-border rounded-lg px-3 py-3"
           >
-            <Text className="text-white text-[13px]">
+            <Text className="text-leben-text text-[13px]">
               {date.toLocaleDateString()}
             </Text>
           </TouchableOpacity>
@@ -62,7 +62,7 @@ export default function ReminderPicker({
             onPress={() => setShowTimePicker(true)}
             className="w-full bg-leben-bg-secondary border border-leben-border rounded-lg px-3 py-3"
           >
-            <Text className="text-white text-[13px]">
+            <Text className="text-leben-text text-[13px]">
               {date.toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
