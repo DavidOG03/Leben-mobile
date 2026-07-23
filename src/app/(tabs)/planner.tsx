@@ -6,14 +6,16 @@ import { Timeline } from "@/components/planner/Timeline";
 import { TodaysFocusCard } from "@/components/planner/TodaysFocusCard";
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { Text } from "@/components/ui/Text";
-import { PlusIcon, RefreshIcon, TrashIcon } from "@/constants/Icons";
+import { PlusIcon, RefreshIcon, SparkleIcon, TrashIcon } from "@/constants/Icons";
 import { generateDayPlan } from "@/lib/ai/aiPlanner";
 import { useLebenStore } from "@/store/useStore";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, TouchableOpacity, View } from "react-native";
 
 export default function PlannerScreen() {
+  const userId = useLebenStore((s) => s.userId);
   const tasks = useLebenStore((s) => s.tasks);
   const habits = useLebenStore((s) => s.habits);
   const goals = useLebenStore((s) => s.goals);
@@ -32,10 +34,54 @@ export default function PlannerScreen() {
   const isAlive = tasks.length > 1;
 
   useEffect(() => {
-    if (isAlive && schedule.length === 0 && !isRegenerating) {
+    if (userId && isAlive && schedule.length === 0 && !isRegenerating) {
       handleRegenerate(false);
     }
-  }, [isAlive]);
+  }, [isAlive, userId]);
+
+  if (!userId) {
+    return (
+      <ScreenLayout scrollable>
+        <DashboardHeader />
+        <View className="flex-1 items-center justify-center pt-10 pb-20 px-6">
+          <View
+            className="items-center justify-center rounded-2xl mb-6"
+            style={{
+              width: 72,
+              height: 72,
+              backgroundColor: "rgba(124,106,240,0.08)",
+              borderColor: "rgba(124,106,240,0.2)",
+              borderWidth: 1,
+            }}
+          >
+            <SparkleIcon size={32} color="#7c6af0" />
+          </View>
+
+          <View className="items-center mb-8">
+            <Text
+              className="text-leben-text font-black text-center"
+              style={{ fontSize: 28, letterSpacing: -0.5, marginBottom: 8 }}
+            >
+              Neural <Text className="text-leben-accent">Day Planner</Text>
+            </Text>
+            <Text className="text-center text-leben-text-muted text-[15px] leading-[22px] max-w-[340px]">
+              Sign in to unlock AI automated day scheduling, energy peak matching, and intelligent focus recommendations.
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => router.push("/(auth)/sign-in" as any)}
+            className="flex-row items-center gap-3 px-8 py-4 rounded-xl mb-8 bg-leben-accent shadow-lg"
+          >
+            <Text className="text-white font-bold text-[15px]">
+              Sign In to Unlock Day Planner
+            </Text>
+            <Ionicons name="arrow-forward" size={18} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
+      </ScreenLayout>
+    );
+  }
 
   const handleRegenerate = async (forceRefresh = true) => {
     if (!isAlive) return;

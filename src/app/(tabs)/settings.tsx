@@ -14,10 +14,10 @@ function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
         width: 44,
         height: 24,
         borderRadius: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         paddingHorizontal: 2,
-        backgroundColor: on ? '#3b82f6' : '#71717a'
+        backgroundColor: on ? "#3b82f6" : "#71717a",
       }}
     >
       <View
@@ -25,8 +25,8 @@ function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
           width: 20,
           height: 20,
           borderRadius: 10,
-          backgroundColor: '#ffffff',
-          transform: [{ translateX: on ? 20 : 0 }]
+          backgroundColor: "#ffffff",
+          transform: [{ translateX: on ? 20 : 0 }],
         }}
       />
     </TouchableOpacity>
@@ -204,7 +204,7 @@ export default function SettingsScreen() {
             <View className="flex-row items-center justify-between">
               <View className="flex-1 pr-4">
                 <Text className="text-leben-text-2 text-[14px]">
-                  Desktop / Mobile Push
+                  Push Notifications
                 </Text>
                 <Text className="text-[11px] text-leben-text-muted mt-0.5">
                   Master switch for system notifications
@@ -216,7 +216,7 @@ export default function SettingsScreen() {
             <View className="flex-row items-center justify-between">
               <View className="flex-1 pr-4">
                 <Text className="text-leben-text-2 text-[14px]">
-                  Morning Briefing (8 AM)
+                  Morning Briefing
                 </Text>
                 <Text className="text-[11px] text-leben-text-muted mt-0.5">
                   Get a summary of your day ahead
@@ -235,7 +235,7 @@ export default function SettingsScreen() {
             <View className="flex-row items-center justify-between">
               <View className="flex-1 pr-4">
                 <Text className="text-leben-text-2 text-[14px]">
-                  Streak Savers (6 PM)
+                  Streak Savers
                 </Text>
                 <Text className="text-[11px] text-leben-text-muted mt-0.5">
                   Reminders if you haven't completed daily habits
@@ -254,7 +254,7 @@ export default function SettingsScreen() {
             <View className="flex-row items-center justify-between">
               <View className="flex-1 pr-4">
                 <Text className="text-leben-text-2 text-[14px]">
-                  Evening Wrap-up (8 PM)
+                  Evening Wrap-up
                 </Text>
                 <Text className="text-[11px] text-leben-text-muted mt-0.5">
                   Log your progress and plan tomorrow
@@ -293,7 +293,9 @@ export default function SettingsScreen() {
               <Text className="text-leben-text-2 text-[14px]">Dark Mode</Text>
               <Toggle
                 on={colorScheme === "dark"}
-                onChange={() => setColorScheme(colorScheme === "dark" ? "light" : "dark")}
+                onChange={() =>
+                  setColorScheme(colorScheme === "dark" ? "light" : "dark")
+                }
               />
             </View>
           </View>

@@ -6,6 +6,8 @@ import {
   GoalIcon,
   GridIcon,
   HabitIcon,
+  HomeIcon,
+  MoreIcon,
   SparkleIcon,
   TaskIcon,
 } from "@/constants/Icons";
@@ -75,13 +77,13 @@ function CustomTabBar() {
           );
         })}
 
-        {/* Neural ✦ — dropup trigger */}
+        {/* More — dropup trigger */}
         <TouchableOpacity
           className="flex-1 items-center justify-center pt-2 pb-1"
           onPress={toggleDropup}
           activeOpacity={0.7}
         >
-          <SparkleIcon
+          <MoreIcon
             size={22}
             color={
               isNeuralActive || dropupOpen ? "#7c6af0" : "#888888"
@@ -94,7 +96,7 @@ function CustomTabBar() {
                 : "text-leben-text-dim"
             }`}
           >
-            Neural
+            More
           </Text>
         </TouchableOpacity>
       </View>

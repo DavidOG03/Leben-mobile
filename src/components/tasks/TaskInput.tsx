@@ -34,7 +34,7 @@ export function TaskInput() {
   return (
     <Card
       className="p-4 mb-6 bg-leben-bg-card border border-leben-border-subtle"
-      style={{ zIndex: 10, elevation: 10 }}
+      style={{ zIndex: 10 }}
     >
       <View className="flex-row items-center mb-4">
         <TextInput
@@ -42,7 +42,7 @@ export function TaskInput() {
           onChangeText={setTask}
           onSubmitEditing={handleAddTask}
           placeholder="What needs to be done?"
-          placeholderTextColor="var(--text-muted)"
+          placeholderTextColor="#555"
           className="flex-1 px-4 py-3 rounded-xl text-leben-text text-[15px]"
         />
       </View>

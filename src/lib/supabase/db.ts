@@ -265,7 +265,7 @@ export async function fetchBooks(): Promise<Book[]> {
     .select("*")
     .order("added_at", { ascending: false });
   if (error) {
-    console.error("fetchBooks:", error.message);
+    console.warn("fetchBooks:", error.message);
     return [];
   }
   return (data ?? []).map(mapBookFromDB);

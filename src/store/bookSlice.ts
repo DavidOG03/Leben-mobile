@@ -69,6 +69,10 @@ export function createBookSlice(
 
     loadBooks: async () => {
       if (get().booksLoaded) return;
+      if (!get().userId) {
+        set(() => ({ booksLoaded: true }));
+        return;
+      }
       const books = await fetchBooks();
       set(() => ({ books, booksLoaded: true }));
     },

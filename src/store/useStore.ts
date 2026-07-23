@@ -110,7 +110,8 @@ export interface LebenStore extends GoalSlice, BookSlice {
   // ── Tasks ───────────────────────────────────────────────────────────────────
   tasks:        Task[];
   tasksLoaded:  boolean;
-  loadTasks:    () => Promise<void>;
+  loadTasks:         () => Promise<void>;
+  cleanStaleTasks:   () => Promise<void>;
   addTask:      (task: Task) => Promise<void>;
   toggleTask:   (id: string) => Promise<void>;
   editTask:     (id: string, updates: Partial<Task>) => Promise<void>;
@@ -140,7 +141,7 @@ export interface LebenStore extends GoalSlice, BookSlice {
   productivityHistory: Record<string, ProductivityRecord>;
   historyLoaded:       boolean;
   loadHistory:         () => Promise<void>;
-  saveHistory:         (date: string) => Promise<void>;
+  updateHistoryDelta:  (date: string, completedDelta: number, totalDelta: number) => Promise<void>;
 
   // ── UI ───────────────────────────────────────────────────────────────────────
   isSidebarOpen:  boolean;
@@ -191,11 +192,11 @@ const initialState = {
   isNotificationOpen: false,
   schedule:       [],
   notificationPrefs: {
-    push:            false,
-    morningBriefing: false,
-    eveningWrapUp:   false,
-    streakSavers:    false,
-    goalUpdates:     false,
+    push:            true,
+    morningBriefing: true,
+    eveningWrapUp:   true,
+    streakSavers:    true,
+    goalUpdates:     true,
   },
 };
 
@@ -218,12 +219,46 @@ export const useLebenStore = create<LebenStore>()(
       // ── Tasks ─────────────────────────────────────────────────────────────────
       loadTasks: async () => {
         if (get().tasksLoaded) return;
+        if (!get().userId) {
+          set({ tasksLoaded: true });
+          return;
+        }
         const tasks = await fetchTasks();
-        set({ tasks, tasksLoaded: true });
+        set({ tasks });
+        await get().cleanStaleTasks();
+        set({ tasksLoaded: true });
+      },
+
+      cleanStaleTasks: async () => {
+        const tasks = get().tasks;
+        const now = Date.now();
+        const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+        
+        const staleTasks = tasks.filter((t) => {
+          if (!t.completed || !t.completedAt) return false;
+          const completedTime = new Date(t.completedAt).getTime();
+          return (now - completedTime) > TWENTY_FOUR_HOURS;
+        });
+
+        if (staleTasks.length > 0) {
+          // Remove them from local state
+          const staleIds = staleTasks.map((t) => t.id);
+          set((s) => ({
+            tasks: s.tasks.filter((t) => !staleIds.includes(t.id)),
+          }));
+          
+          // Remove them from the database
+          for (const id of staleIds) {
+            await deleteTask(id);
+          }
+        }
       },
 
       addTask: async (task) => {
         set((s) => ({ tasks: [task, ...s.tasks] }));
+        const now = new Date();
+        const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+        get().updateHistoryDelta(task.date || localDate, 0, 1);
         await insertTask(task);
       },
 
@@ -233,11 +268,16 @@ export const useLebenStore = create<LebenStore>()(
         if (!task) return;
         const completedAt = task.completed ? null : new Date().toISOString();
         const updates = { completed: !task.completed, completedAt };
+        
+        const now = new Date();
+        const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+        
         set((s) => ({
           tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
         }));
+        get().updateHistoryDelta(localDate, task.completed ? -1 : 1, 0);
+        
         await updateTask(id, updates);
-        await get().saveHistory(new Date().toISOString().split('T')[0]);
       },
 
       editTask: async (id, updates) => {
@@ -247,15 +287,17 @@ export const useLebenStore = create<LebenStore>()(
         set((s) => ({
           tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
         }));
-        await updateTask(id, updates);
 
         if (task && updates.completed !== undefined && updates.completed !== task.completed) {
-          const today = new Date().toISOString().split('T')[0];
+          const now = new Date();
+          const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
           const dateStr = updates.completed 
             ? (updates.completedAt ?? today) 
             : (task.completedAt ?? today);
-          await get().saveHistory(dateStr.split('T')[0]);
+          get().updateHistoryDelta(dateStr.split('T')[0], updates.completed ? 1 : -1, 0);
         }
+
+        await updateTask(id, updates);
       },
 
       removeTask: async (id) => {
@@ -266,6 +308,10 @@ export const useLebenStore = create<LebenStore>()(
       // ── Habits ────────────────────────────────────────────────────────────────
       loadHabits: async () => {
         if (get().habitsLoaded) return;
+        if (!get().userId) {
+          set({ habitsLoaded: true });
+          return;
+        }
         const habits = await fetchHabits();
         set({ habits, habitsLoaded: true });
       },
@@ -276,7 +322,8 @@ export const useLebenStore = create<LebenStore>()(
       },
 
       toggleHabit: async (id) => {
-        const today   = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
         const habits  = get().habits;
         const habit   = habits.find((h) => h.id === id);
         if (!habit) return;
@@ -342,10 +389,11 @@ export const useLebenStore = create<LebenStore>()(
           if (scheduleItem.taskId) {
             newTasks = state.tasks.map((t) => {
               if (t.id === scheduleItem.taskId) {
-                const dateStr =
-                  t.date || new Date().toISOString().split("T")[0];
+                const now = new Date();
+                const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+                const dateStr = t.date || localDate;
                 if (t.completed !== (newStatus === "completed")) {
-                  get().saveHistory(dateStr);
+                  get().updateHistoryDelta(dateStr, newStatus === "completed" ? 1 : -1, 0);
                 }
                 return {
                   ...t,
@@ -378,10 +426,10 @@ export const useLebenStore = create<LebenStore>()(
         set({ productivityHistory: history, historyLoaded: true });
       },
 
-      saveHistory: async (date) => {
-        const tasks     = get().tasks;
-        const completed = tasks.filter((t) => t.completed && t.completedAt?.startsWith(date)).length;
-        const total     = tasks.filter((t) => !t.date || t.date <= date).length;
+      updateHistoryDelta: async (date, completedDelta, totalDelta) => {
+        const existing = get().productivityHistory[date] || { completed: 0, total: 0 };
+        const completed = Math.max(0, Number(existing.completed || 0) + Number(completedDelta || 0));
+        const total = Math.max(0, Number(existing.total || 0) + Number(totalDelta || 0));
         set((s) => ({
           productivityHistory: {
             ...s.productivityHistory,
@@ -461,7 +509,7 @@ export const useLebenStore = create<LebenStore>()(
           ? { getItem: () => Promise.resolve(null), setItem: () => Promise.resolve(), removeItem: () => Promise.resolve() } 
           : AsyncStorage
       ),
-      // Only persist non-sensitive, UI-recoverable data
+      // Persist user data & core app state for offline/guest usage
       partialize: (state) => ({
         userId:              state.userId,
         userEmail:           state.userEmail,
@@ -469,6 +517,11 @@ export const useLebenStore = create<LebenStore>()(
         productivityHistory: state.productivityHistory,
         dayPlan:             state.dayPlan,
         notificationPrefs:   state.notificationPrefs,
+        tasks:               state.tasks,
+        habits:              state.habits,
+        goals:               state.goals,
+        books:               state.books,
+        schedule:            state.schedule,
       }),
     },
   ),

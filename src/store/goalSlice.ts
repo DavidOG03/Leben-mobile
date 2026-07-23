@@ -36,6 +36,10 @@ export function createGoalSlice(
 
     loadGoals: async () => {
       if (get().goalsLoaded) return;
+      if (!get().userId) {
+        set(() => ({ goalsLoaded: true }));
+        return;
+      }
       const goals = await fetchGoals();
       set(() => ({ goals, goalsLoaded: true }));
     },

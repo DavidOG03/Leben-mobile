@@ -188,13 +188,7 @@ export function TodaysFocus() {
                     </Text>
                   </TouchableOpacity>
 
-                  {/* Delete (always visible on mobile vs hover on web) */}
-                  <TouchableOpacity
-                    onPress={() => deleteTask(task.id)}
-                    className="w-7 h-7 items-center justify-center"
-                  >
-                    <Text className="text-leben-text-dim text-xs">🗑️</Text>
-                  </TouchableOpacity>
+
                 </View>
 
                 {/* Reminder Picker Inline */}

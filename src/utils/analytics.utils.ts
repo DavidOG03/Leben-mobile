@@ -47,7 +47,7 @@ export interface AnalyticsData {
 const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function toISODate(date: Date): string {
-  return date.toISOString().split("T")[0];
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split("T")[0];
 }
 
 export function lastNDays(n: number): string[] {
@@ -80,8 +80,10 @@ export function computeStatCards(
   tasks: Task[],
   habits: Habit[],
   goals: any[],
+  productivityHistory: Record<string, { completed: number; total: number }>
 ): StatCard[] {
-  const completedTasks = tasks.filter((t) => t.completed).length;
+  const history = productivityHistory || {};
+  const completedTasks = Object.values(history).reduce((sum, record) => sum + record.completed, 0);
 
   const last7 = lastNDays(7);
   const totalExpected = habits.length * 7;
@@ -128,11 +130,13 @@ export function computeStatCards(
 export function computeWeekActivity(
   tasks: Task[],
   habits: Habit[],
+  productivityHistory: Record<string, { completed: number; total: number }>
 ): DayActivity[] {
   const week = currentWeekDates();
+  const history = productivityHistory || {};
 
   return week.map(({ isoDate, label }) => {
-    const dayTasks = tasks.filter((t) => t.completedAt?.startsWith(isoDate)).length;
+    const dayTasks = history[isoDate]?.completed || 0;
     const dayHabits = habits.reduce(
       (sum, h) => sum + ((h.completedDates ?? []).includes(isoDate) ? 1 : 0),
       0,
@@ -149,11 +153,13 @@ export function computeWeekActivity(
 export function computeProductivity(
   tasks: Task[],
   habits: Habit[],
+  productivityHistory: Record<string, { completed: number; total: number }>
 ): ProductivityData {
   const last30 = lastNDays(30);
+  const history = productivityHistory || {};
 
   const trend = last30.map((isoDate) => {
-    const dayTasks = tasks.filter((t) => t.completedAt?.startsWith(isoDate)).length;
+    const dayTasks = history[isoDate]?.completed || 0;
     const dayHabits = habits.reduce(
       (sum, h) => sum + ((h.completedDates ?? []).includes(isoDate) ? 1 : 0),
       0,
@@ -203,13 +209,15 @@ export function computeAIInsights(
   tasks: Task[],
   habits: Habit[],
   goals: any[],
+  productivityHistory: Record<string, { completed: number; total: number }>
 ): AIInsight[] {
   const insights: AIInsight[] = [];
+  const history = productivityHistory || {};
 
   const week = currentWeekDates();
   const dayTaskCounts = week.map(({ isoDate, label }) => ({
     label,
-    count: tasks.filter((t) => t.completedAt?.startsWith(isoDate)).length,
+    count: history[isoDate]?.completed || 0,
   }));
   const bestDay = dayTaskCounts.reduce(
     (best, d) => (d.count > best.count ? d : best),
@@ -255,18 +263,20 @@ export function buildAnalyticsData(
   tasks: Task[],
   habits: Habit[],
   goals: any[],
+  productivityHistory: Record<string, { completed: number; total: number }>
 ): AnalyticsData {
-  const hasTaskData = tasks.length > 0;
+  const history = productivityHistory || {};
+  const hasTaskData = Object.keys(history).length > 0 || tasks.length > 0;
   const hasHabitData = habits.length > 0;
   const hasGoalData = goals.length > 0;
 
   return {
-    statCards: computeStatCards(tasks, habits, goals),
-    weekActivity: computeWeekActivity(tasks, habits),
-    productivity: computeProductivity(tasks, habits),
+    statCards: computeStatCards(tasks, habits, goals, productivityHistory),
+    weekActivity: computeWeekActivity(tasks, habits, productivityHistory),
+    productivity: computeProductivity(tasks, habits, productivityHistory),
     topHabits: computeHabitStats(habits),
     goalProgress: computeGoalStats(goals),
-    aiInsights: computeAIInsights(tasks, habits, goals),
+    aiInsights: computeAIInsights(tasks, habits, goals, productivityHistory),
     hasTaskData,
     hasHabitData,
     hasGoalData,

@@ -20,20 +20,33 @@
       },
       "predictiveBackGestureEnabled": false
     },
+    "notification": {
+      "icon": "./assets/images/notification-icon.png",
+      "color": "#3b82f6"
+    },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
+      "expo-notifications",
       [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
           "backgroundColor": "#ffffff",
+          "dark": {
+            "image": "./assets/images/notification-icon.png",
+            "backgroundColor": "#0a0a0a"
+          },
           "android": {
             "image": "./assets/images/splash-icon.png",
-            "imageWidth": 76
+            "imageWidth": 120,
+            "dark": {
+              "image": "./assets/images/notification-icon.png",
+              "backgroundColor": "#0a0a0a"
+            }
           }
         }
       ],

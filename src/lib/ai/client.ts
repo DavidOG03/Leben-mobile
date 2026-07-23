@@ -195,8 +195,10 @@ Return ONLY valid JSON in this format:
 
 export async function getAIDayPlan(opts?: { forceRefresh?: boolean }): Promise<AIPlannerResponse> {
   const state = getUserStateSummary();
+  const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const systemPrompt = `You are Leben, an elite personal operating system.
 Create a structured day plan based on the user's tasks, habits, and goals.
+The current local time is ${currentTime}. Start scheduling the rest of the day's blocks from this time onwards.
 Time schedule should be logical (e.g. 08:00, 10:00).
 Return ONLY valid JSON in this format:
 {
@@ -222,8 +224,11 @@ export async function sendAIChat(
   userContext?: Record<string, unknown>
 ): Promise<AIChatResponse> {
   const state = getUserStateSummary();
+  const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const systemPrompt = `You are the Leben Neural Assistant. You help the user manage their life, tasks, and goals.
 Be concise, direct, and elite. Do not ramble.
+The current local time is ${currentTime}. When asked to plan the day, start the schedule from this time onwards.
+When generating tasks, habits, goals, or schedule items, analyze the user's current state and only suggest NEW complementary items. DO NOT duplicate their existing tasks, habits, goals, or plans.
 Current user state:
 ${state}
 ${userContext ? 'Extra Context:\n' + JSON.stringify(userContext) : ''}`;

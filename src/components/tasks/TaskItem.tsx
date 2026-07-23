@@ -4,6 +4,7 @@ import { useLebenStore } from '@/store/useStore';
 import { scheduleReminder, cancelReminder } from '@/hooks/useNotifications';
 import { LC } from '@/constants/theme';
 import { Text } from '@/components/ui/Text';
+import ReminderPicker from '@/components/shared/ReminderPicker';
 
 
 interface TaskItemProps {
@@ -21,7 +22,6 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState('');
   const [showReminder, setShowReminder] = useState(false);
-  const [reminderTime, setReminderTime] = useState('');
 
   if (!task) return null;
 
@@ -34,42 +34,20 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
     setIsEditing(false);
   };
 
-  const handleSetReminder = async () => {
-    if (!reminderTime.includes(':')) {
-      Alert.alert('Invalid Format', 'Please use HH:MM format (e.g. 14:30)');
-      return;
+  const handleSaveReminder = async (isoDate: string | undefined) => {
+    if (!isoDate) {
+      await editTask(taskId, { reminderAt: null });
+      await cancelReminder(taskId);
+    } else {
+      await editTask(taskId, { reminderAt: isoDate });
+      await scheduleReminder({
+        id: taskId,
+        title: 'Task Reminder',
+        body: task.title,
+        date: new Date(isoDate),
+        screen: 'tasks',
+      });
     }
-
-    const [hours, minutes] = reminderTime.split(':').map(Number);
-    if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-      Alert.alert('Invalid Time', 'Please enter a valid time.');
-      return;
-    }
-
-    const now = new Date();
-    const reminderDate = new Date();
-    reminderDate.setHours(hours, minutes, 0, 0);
-
-    if (reminderDate <= now) {
-      reminderDate.setDate(reminderDate.getDate() + 1);
-    }
-
-    await editTask(taskId, { reminderAt: reminderDate.toISOString() });
-    await scheduleReminder({
-      id: taskId,
-      title: 'Task Reminder',
-      body: task.title,
-      date: reminderDate,
-      screen: 'tasks',
-    });
-
-    setShowReminder(false);
-    setReminderTime('');
-  };
-
-  const handleClearReminder = async () => {
-    await editTask(taskId, { reminderAt: null });
-    await cancelReminder(taskId);
     setShowReminder(false);
   };
 
@@ -167,13 +145,7 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
             <Text className="text-[11px] font-medium text-leben-text-muted">Edit</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => removeTask(task.id)}
-            className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[rgba(239,68,68,0.1)] bg-[rgba(239,68,68,0.05)]"
-          >
-            <Text className="text-leben-error opacity-80">🗑</Text>
-            <Text className="text-[11px] font-medium text-leben-error opacity-80">Delete</Text>
-          </TouchableOpacity>
+
 
           <View className="flex-1" />
           
@@ -195,31 +167,12 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
 
       {/* Reminder Inline Form */}
       {showReminder && isExpanded && (
-        <View className="px-4 pb-3 flex-row items-center gap-2">
-          <TextInput
-            value={reminderTime}
-            onChangeText={setReminderTime}
-            placeholderTextColor="gray"
-            className="px-3 py-1.5 rounded bg-leben-bg border border-leben-border text-leben-text-2 text-xs w-20"
-            maxLength={5}
+        <View className="px-4 pb-3">
+          <ReminderPicker
+            initialValue={task.reminderAt ?? undefined}
+            onSave={handleSaveReminder}
+            onClose={() => setShowReminder(false)}
           />
-          <TouchableOpacity
-            onPress={handleSetReminder}
-            disabled={!reminderTime}
-            className={`px-4 py-1.5 rounded border ${
-              reminderTime ? 'bg-leben-accent border-leben-accent opacity-100' : 'bg-transparent border-leben-accent opacity-50'
-            }`}
-          >
-            <Text className={reminderTime ? 'text-white text-xs' : 'text-leben-accent text-xs'}>Set</Text>
-          </TouchableOpacity>
-          {task.reminderAt && (
-            <TouchableOpacity
-              onPress={handleClearReminder}
-              className="px-4 py-1.5 rounded border border-leben-border"
-            >
-              <Text className="text-leben-text-muted text-xs">Clear</Text>
-            </TouchableOpacity>
-          )}
         </View>
       )}
     </View>

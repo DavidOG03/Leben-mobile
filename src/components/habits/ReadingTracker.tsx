@@ -33,7 +33,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
   books,
 }) => {
   return (
-    <View className="mb-6 px-4 md:px-0">
+    <View className="mb-6">
       <View className="flex-row items-center justify-between mb-4 flex-wrap">
         <View>
           <Text className="font-bold text-leben-text text-3xl ">

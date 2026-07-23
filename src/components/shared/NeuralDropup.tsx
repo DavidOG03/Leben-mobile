@@ -1,24 +1,32 @@
 // components/shared/NeuralDropup.tsx
 // Press "Neural ✦" tab → BottomSheet opens showing Planner, AI Chat, Analytics
 import { BottomSheet } from "@/components/ui/BottomSheet";
-import { AIIcon, AnalyticsIcon, SparkleIcon } from "@/constants/Icons";
+import { Text } from "@/components/ui/Text";
+import {
+  AIIcon,
+  AnalyticsIcon,
+  CalIcon,
+  SettingsIcon,
+} from "@/constants/Icons";
 import { useRouter } from "expo-router";
-import { Pressable, View } from 'react-native';
-import { Text } from '@/components/ui/Text';
 import { useColorScheme } from "nativewind";
-
+import { Pressable, View } from "react-native";
 
 interface SubLink {
   label: string;
   icon: React.ElementType;
-  href: "/(tabs)/planner" | "/(tabs)/ai" | "/(tabs)/analytics";
+  href:
+    | "/(tabs)/planner"
+    | "/(tabs)/ai"
+    | "/(tabs)/analytics"
+    | "/(tabs)/settings";
   desc: string;
 }
 
 const SUB_LINKS: SubLink[] = [
   {
     label: "Daily Planner",
-    icon: SparkleIcon,
+    icon: CalIcon,
     href: "/(tabs)/planner",
     desc: "AI-generated schedule",
   },
@@ -34,6 +42,12 @@ const SUB_LINKS: SubLink[] = [
     href: "/(tabs)/analytics",
     desc: "Productivity insights",
   },
+  {
+    label: "Settings",
+    icon: SettingsIcon,
+    href: "/(tabs)/settings",
+    desc: "App preferences",
+  },
 ];
 
 interface NeuralDropupProps {
@@ -45,7 +59,7 @@ interface NeuralDropupProps {
 export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
   const router = useRouter();
   const { colorScheme } = useColorScheme();
-  const bgColor = colorScheme === 'dark' ? '#141419' : '#ffffff';
+  const bgColor = colorScheme === "dark" ? "#141419" : "#ffffff";
 
   return (
     <BottomSheet
@@ -53,16 +67,7 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
       onClose={onClose}
       containerStyle={{ backgroundColor: bgColor }}
     >
-      <View className="mb-6 flex-row items-center justify-between px-4">
-        <Text
-          className="font-black flex items-center gap-2 text-leben-text text-[24px]"
-          style={{ letterSpacing: -0.4 }}
-        >
-          Neural <SparkleIcon size={18} color="#888888" />
-        </Text>
-      </View>
-
-      <View className="gap-3 mb-4 px-4">
+      <View className="gap-3 my-4 px-4">
         {SUB_LINKS.map((link) => {
           const Icon = link.icon;
           return (
@@ -83,7 +88,9 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
                 <Text className="text-leben-text font-bold text-[16px] mb-1">
                   {link.label}
                 </Text>
-                <Text className="text-leben-text-muted text-[13px]">{link.desc}</Text>
+                <Text className="text-leben-text-muted text-[13px]">
+                  {link.desc}
+                </Text>
               </View>
               <Text className="text-leben-text-dim text-xl">›</Text>
             </Pressable>

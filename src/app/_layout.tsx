@@ -9,6 +9,7 @@ import { useAuthSync }      from '@/hooks/useAuthSync';
 import { useLoadUserData }  from '@/hooks/useLoadUserData';
 import { useNotifications } from '@/hooks/useNotifications';
 import { useLebenStore }    from '@/store/useStore';
+import { useColorScheme }   from 'nativewind';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -35,9 +36,7 @@ function AuthGuard() {
   useEffect(() => {
     const inAuthGroup = segments[0] === ('(auth)' as any);
 
-    if (!userId && !inAuthGroup) {
-      router.replace('/(auth)/sign-in' as any);
-    } else if (userId && inAuthGroup) {
+    if (userId && inAuthGroup) {
       router.replace('/(tabs)' as any);
     }
   }, [userId, segments]);
@@ -49,6 +48,8 @@ import NotificationManager from '@/components/shared/NotificationManager';
 import NotificationDropdown from '@/components/shared/NotificationDropdown';
 
 export default function RootLayout() {
+  const { colorScheme } = useColorScheme();
+  
   const [fontsLoaded, fontError] = useFonts({
     'Geist': require('../../assets/fonts/Geist-Regular.otf'),
     'Geist-Medium': require('../../assets/fonts/Geist-Medium.otf'),
@@ -72,7 +73,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={LebenTheme}>
-      <View className="flex-1 bg-leben-bg">
+      <View className={`flex-1 bg-leben-bg ${colorScheme === 'dark' ? 'dark' : ''}`}>
         {/* @ts-ignore */}
         <StatusBar style="light" backgroundColor="#0a0a0a" />
         <AuthGuard />
