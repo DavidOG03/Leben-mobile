@@ -22,7 +22,28 @@ export default function ReminderPicker({
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const handleSave = () => {
-    onSave(date.toISOString());
+    let finalDate = new Date(date);
+    const now = new Date();
+
+    // If the selected date is in the past, adjust it to the future
+    if (finalDate <= now) {
+      const isToday = finalDate.toDateString() === now.toDateString();
+      if (isToday) {
+        // Same day but earlier time -> shift to tomorrow
+        finalDate.setDate(finalDate.getDate() + 1);
+      } else {
+        // It's a completely past day (e.g. they edited an old reminder's time)
+        // Bring it to today, or tomorrow if the time has already passed today
+        const shiftedToToday = new Date(now);
+        shiftedToToday.setHours(finalDate.getHours(), finalDate.getMinutes(), 0, 0);
+        if (shiftedToToday <= now) {
+          shiftedToToday.setDate(shiftedToToday.getDate() + 1);
+        }
+        finalDate = shiftedToToday;
+      }
+    }
+
+    onSave(finalDate.toISOString());
   };
 
   const handleClear = () => {
@@ -77,6 +98,7 @@ export default function ReminderPicker({
           value={date}
           mode="date"
           display="default"
+          minimumDate={new Date()}
           onChange={(event, selectedDate) => {
             setShowDatePicker(false);
             if (selectedDate) setDate(selectedDate);

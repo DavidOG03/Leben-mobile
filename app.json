@@ -30,7 +30,22 @@
     },
     "plugins": [
       "expo-router",
-      "expo-notifications",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#7c6af0",
+          "defaultChannel": "default",
+          "androidMode": "default",
+          "requestPermissionsOnLaunch": false,
+          "androidPermissions": [
+            "RECEIVE_BOOT_COMPLETED",
+            "SCHEDULE_EXACT_ALARM",
+            "USE_EXACT_ALARM",
+            "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"
+          ]
+        }
+      ],
       [
         "expo-splash-screen",
         {

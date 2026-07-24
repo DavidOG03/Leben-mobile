@@ -2,6 +2,7 @@ import ReminderPicker from "@/components/shared/ReminderPicker";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
+import { scheduleReminder } from "@/hooks/useNotifications";
 import { useState } from "react";
 import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -43,11 +44,13 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
   const [reminderAt, setReminderAt] = useState<string | undefined>();
   const [showReminder, setShowReminder] = useState(false);
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!label.trim()) return;
 
-    addHabit({
-      id: `h${Date.now()}`,
+    const habitId = `h${Date.now()}`;
+
+    await addHabit({
+      id: habitId,
       label: label.trim(),
       name: label.trim(),
       sub: sub.trim() || "Daily habit",
@@ -64,6 +67,17 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
       createdAt: new Date().toISOString(),
       reminderAt,
     });
+
+    // Schedule the OS-level notification if a reminder was set
+    if (reminderAt) {
+      await scheduleReminder({
+        id: habitId,
+        title: 'Habit Reminder',
+        body: `Time for: ${label.trim()}`,
+        date: new Date(reminderAt),
+        screen: 'habits',
+      });
+    }
 
     // Reset form
     setLabel("");

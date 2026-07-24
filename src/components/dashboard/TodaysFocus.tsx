@@ -4,7 +4,8 @@ import { cancelReminder, scheduleReminder } from "@/hooks/useNotifications";
 import { useLebenStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
+import ReminderPicker from "@/components/shared/ReminderPicker";
 
 function truncateWords(text: string, maxWords = 4) {
   const words = text.trim().split(/\s+/);
@@ -20,49 +21,8 @@ export function TodaysFocus() {
   const deleteTask = useLebenStore((s) => s.removeTask); // NOTE: mapped to removeTask in zustand
   const updateTask = useLebenStore((s) => s.editTask); // NOTE: mapped to editTask in zustand
   const [reminderTask, setReminderTask] = useState<string | null>(null);
-  const [reminderTime, setReminderTime] = useState<string>("");
 
   const handleToggleTask = (taskId: string) => toggleTask(taskId);
-
-  const handleSetReminder = async (taskId: string, taskTitle: string) => {
-    if (!reminderTime.includes(":")) {
-      Alert.alert("Invalid Format", "Please use HH:MM format (e.g. 14:30)");
-      return;
-    }
-
-    const [hours, minutes] = reminderTime.split(":").map(Number);
-    if (
-      isNaN(hours) ||
-      isNaN(minutes) ||
-      hours < 0 ||
-      hours > 23 ||
-      minutes < 0 ||
-      minutes > 59
-    ) {
-      Alert.alert("Invalid Time", "Please enter a valid time.");
-      return;
-    }
-
-    const now = new Date();
-    const reminderDate = new Date();
-    reminderDate.setHours(hours, minutes, 0, 0);
-
-    if (reminderDate <= now) {
-      reminderDate.setDate(reminderDate.getDate() + 1); // tomorrow if past
-    }
-
-    await updateTask(taskId, { reminderAt: reminderDate.toISOString() });
-    await scheduleReminder({
-      id: taskId,
-      title: "Task Reminder",
-      body: taskTitle,
-      date: reminderDate,
-      screen: "tasks",
-    });
-
-    setReminderTask(null);
-    setReminderTime("");
-  };
 
   const handleClearReminder = async (taskId: string) => {
     await updateTask(taskId, { reminderAt: null });
@@ -193,35 +153,26 @@ export function TodaysFocus() {
 
                 {/* Reminder Picker Inline */}
                 {reminderTask === task.id && (
-                  <View className="px-5 py-3 flex-row items-center gap-2 bg-white/5 border-t border-white/5">
-                    <TextInput
-                      value={reminderTime}
-                      onChangeText={setReminderTime}
-                      placeholderTextColor="gray"
-                      className="px-3 py-1.5 rounded bg-leben-bg border border-leben-border text-leben-text-2 text-xs w-20"
-                      maxLength={5}
+                  <View className="px-5 py-3 bg-white/5 border-t border-white/5">
+                    <ReminderPicker
+                      initialValue={task.reminderAt || undefined}
+                      onSave={async (isoDate) => {
+                        if (isoDate) {
+                          await updateTask(task.id, { reminderAt: isoDate });
+                          await scheduleReminder({
+                            id: task.id,
+                            title: "Task Reminder",
+                            body: task.title,
+                            date: new Date(isoDate),
+                            screen: "tasks",
+                          });
+                        } else {
+                          await handleClearReminder(task.id);
+                        }
+                        setReminderTask(null);
+                      }}
+                      onClose={() => setReminderTask(null)}
                     />
-                    <TouchableOpacity
-                      onPress={() => handleSetReminder(task.id, task.title)}
-                      disabled={!reminderTime}
-                      className={`px-4 py-1.5 rounded border ${
-                        reminderTime
-                          ? "bg-leben-accent border-leben-accent opacity-100"
-                          : "bg-transparent border-leben-accent opacity-50"
-                      }`}
-                    >
-                      <Text className="text-leben-bg-card text-xs">Set</Text>
-                    </TouchableOpacity>
-                    {task.reminderAt && (
-                      <TouchableOpacity
-                        onPress={() => handleClearReminder(task.id)}
-                        className="px-4 py-1.5 rounded border border-leben-border"
-                      >
-                        <Text className="text-leben-text-muted text-xs">
-                          Clear
-                        </Text>
-                      </TouchableOpacity>
-                    )}
                   </View>
                 )}
               </View>

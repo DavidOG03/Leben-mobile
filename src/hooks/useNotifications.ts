@@ -1,54 +1,41 @@
 // hooks/useNotifications.ts
 import { useEffect, useRef }   from 'react';
-import { Platform }            from 'react-native';
+import { Platform, Linking }   from 'react-native';
 import { savePushToken }       from '@/lib/supabase/db';
 import { useLebenStore }       from '@/store/useStore';
 import Constants               from 'expo-constants';
-
-// Only import types to avoid triggering the runtime crash in Expo Go
-import type * as NotificationsType from 'expo-notifications';
-
-const isExpoGo = Constants.appOwnership === 'expo';
+import * as Notifications      from 'expo-notifications';
+import * as Device             from 'expo-device';
 
 // Configure how notifications appear when app is in foreground
-// Wrap in an IIFE so it only runs if not in Expo Go
-if (!isExpoGo) {
-  (async () => {
-    try {
-      const Notifications = await import('expo-notifications');
-      Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-          shouldPlaySound:   true,
-          shouldSetBadge:    false,
-          shouldShowAlert:   true,
-          shouldShowBanner:  true,
-          shouldShowList:    true,
-        }),
-      });
-    } catch (e) {
-      console.warn('Failed to load expo-notifications', e);
-    }
-  })();
-}
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound:   true,
+    shouldSetBadge:    false,
+    shouldShowAlert:   true,
+    shouldShowBanner:  true,
+    shouldShowList:    true,
+  }),
+});
 
 export function useNotifications() {
-  const notificationListener = useRef<NotificationsType.EventSubscription | null>(null);
-  const responseListener     = useRef<NotificationsType.EventSubscription | null>(null);
+  const notificationListener = useRef<Notifications.EventSubscription | null>(null);
+  const responseListener     = useRef<Notifications.EventSubscription | null>(null);
   const userId               = useLebenStore((s) => s.userId);
   const notificationPrefs    = useLebenStore((s) => s.notificationPrefs);
   const goals                = useLebenStore((s) => s.goals);
   const habits               = useLebenStore((s) => s.habits);
 
   useEffect(() => {
-    if (isExpoGo) return;
-
     let mounted = true;
     (async () => {
       try {
-        const Notifications = await import('expo-notifications');
-        
-        await registerForPushNotifications(Notifications);
-        
+        await registerForPushNotifications();
+
+        // Clear any orphaned system/goal notifications that fired while the
+        // app was killed so they don't reappear when the app reopens.
+        await dismissStaleSystemNotifications();
+
         if (!mounted) return;
 
         // Listen for notifications received while app is open
@@ -80,7 +67,6 @@ export function useNotifications() {
 
   // Sync system and goal reminders when preferences or goals change
   useEffect(() => {
-    if (isExpoGo) return;
     syncDailyReminders().catch((e) => console.error('[syncDailyReminders] err', e));
     syncGoalReminders().catch((e) => console.error('[syncGoalReminders] err', e));
   }, [notificationPrefs, goals, habits]);
@@ -90,33 +76,40 @@ export function useNotifications() {
 
 // ── Registration ───────────────────────────────────────────────────────────────
 
-async function registerForPushNotifications(Notifications: typeof NotificationsType) {
-  const Device = await import('expo-device');
-  if (!Device.isDevice || Platform.OS === 'web') {
-    // Push notifications only work on physical mobile devices
-    return;
-  }
-
+async function registerForPushNotifications() {
   // Request permission
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
+  
   if (existingStatus !== 'granted') {
     const { status } = await Notifications.requestPermissionsAsync();
     finalStatus = status;
   }
+  
   if (finalStatus !== 'granted') {
     console.warn('[Notifications] Permission not granted');
     return;
   }
 
-  // Get Expo push token
-  const tokenData = await Notifications.getExpoPushTokenAsync();
-  const token     = tokenData.data;
-  const platform  = Platform.OS;
+  // Get Expo push token (only works on physical devices)
+  if (Device.isDevice && Platform.OS !== 'web') {
+    try {
+      const projectId = Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId;
+      const tokenData = await Notifications.getExpoPushTokenAsync({ projectId });
+      const token     = tokenData.data;
+      const platform  = Platform.OS;
 
-  // Save to Supabase
-  await savePushToken(token, platform);
-  console.log('[Notifications] Push token saved:', token);
+      // Save to Supabase
+      if (token) {
+        await savePushToken(token, platform);
+        console.log('[Notifications] Push token saved:', token);
+      }
+    } catch (e) {
+      console.warn('[Notifications] Failed to fetch Expo push token:', e);
+    }
+  } else {
+    console.log('[Notifications] Must use physical device for Push Notifications. Local notifications will still work.');
+  }
 
   // Android channel setup (required)
   if (Platform.OS === 'android') {
@@ -124,8 +117,65 @@ async function registerForPushNotifications(Notifications: typeof NotificationsT
       name:         'Leben Reminders',
       importance:   Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor:   'var(--accent-blue)',
+      lightColor:   '#7c6af0', // Match Leben accent
     });
+
+    // Ask user to disable battery optimization so notifications fire reliably
+    await requestBatteryOptimizationExemption();
+  }
+}
+
+/**
+ * Opens the system dialog asking the user to exempt this app from battery optimization.
+ * This ensures scheduled notifications (morning briefing, streak savers, etc.) are
+ * delivered reliably even when the app has been in the background for a long time.
+ * Only prompts if not already exempted.
+ */
+async function requestBatteryOptimizationExemption(): Promise<void> {
+  try {
+    const packageName = 'com.david.lebenmobile';
+    const url = `package:${packageName}`;
+
+    // ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS opens a system dialog
+    // that asks the user to allow the app to bypass battery optimization.
+    const intentUrl = `android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`;
+
+    const canOpen = await Linking.canOpenURL(`intent:${url}#Intent;action=${intentUrl};end`);
+    if (canOpen) {
+      await Linking.openURL(`intent:${url}#Intent;action=${intentUrl};end`);
+    } else {
+      // Fallback: open general battery optimization settings page
+      await Linking.openSettings();
+    }
+  } catch (e) {
+    // Non-fatal — some manufacturers restrict this intent
+    console.warn('[Notifications] Could not open battery optimization settings:', e);
+  }
+}
+
+// ── Stale Notification Cleanup ────────────────────────────────────────────────
+
+/**
+ * Dismisses any already-delivered system or goal notifications from the
+ * device notification tray. Called on startup so orphaned notifications
+ * (scheduled before an app kill) don't resurface when the app reopens.
+ * Task/habit reminders are intentionally left intact — the user may still
+ * want to act on them.
+ */
+async function dismissStaleSystemNotifications(): Promise<void> {
+  try {
+    const presented = await Notifications.getPresentedNotificationsAsync();
+    for (const notif of presented) {
+      const itemId = notif.request.content.data?.itemId;
+      if (
+        typeof itemId === 'string' &&
+        (itemId.startsWith('sys_') || itemId.startsWith('goal_'))
+      ) {
+        await Notifications.dismissNotificationAsync(notif.request.identifier);
+      }
+    }
+  } catch (err) {
+    console.error('[dismissStaleSystemNotifications]', err);
   }
 }
 
@@ -142,10 +192,7 @@ export async function scheduleReminder(opts: {
   date:      Date;
   screen:    'tasks' | 'habits';
 }): Promise<string | null> {
-  if (isExpoGo) return null;
-  
   try {
-    const Notifications = await import('expo-notifications');
     // Cancel existing notification for this item first
     await cancelReminder(opts.id);
 
@@ -175,10 +222,7 @@ export async function scheduleReminder(opts: {
  * Cancel a previously scheduled notification.
  */
 export async function cancelReminder(itemId: string): Promise<void> {
-  if (isExpoGo) return;
-  
   try {
-    const Notifications = await import('expo-notifications');
     const scheduled = await Notifications.getAllScheduledNotificationsAsync();
     for (const notif of scheduled) {
       if (notif.content.data?.itemId === itemId) {
@@ -193,9 +237,7 @@ export async function cancelReminder(itemId: string): Promise<void> {
 // ── System Reminders ────────────────────────────────────────────────────────
 
 export async function syncDailyReminders(): Promise<void> {
-  if (isExpoGo) return;
   const prefs = useLebenStore.getState().notificationPrefs;
-  const Notifications = await import('expo-notifications');
 
   // Cancel existing to avoid duplicates
   await cancelReminder('sys_morning_briefing');
@@ -211,10 +253,10 @@ export async function syncDailyReminders(): Promise<void> {
         sound: true,
       },
       trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
         hour: 8,
         minute: 0,
-        repeats: true,
-      } as any,
+      },
     });
   }
   
@@ -227,10 +269,10 @@ export async function syncDailyReminders(): Promise<void> {
         sound: true,
       },
       trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
         hour: 20,
         minute: 0,
-        repeats: true,
-      } as any,
+      },
     });
   }
 
@@ -248,22 +290,19 @@ export async function syncDailyReminders(): Promise<void> {
         sound: true,
       },
       trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
         hour: 18,
         minute: 0,
-        repeats: true,
-      } as any,
+      },
     });
   }
 }
 
 export async function syncGoalReminders(): Promise<void> {
-  if (isExpoGo) return;
   const state = useLebenStore.getState();
   const prefs = state.notificationPrefs;
   const goals = state.goals;
 
-  const Notifications = await import('expo-notifications');
-  
   // First cancel all goal reminders
   const scheduled = await Notifications.getAllScheduledNotificationsAsync();
   for (const notif of scheduled) {

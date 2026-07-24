@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { View, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useLebenStore } from '@/store/useStore';
 import { Card } from '@/components/ui/Card';
 import { scheduleReminder, cancelReminder } from '@/hooks/useNotifications';
 import { Text } from '@/components/ui/Text';
+import ReminderPicker from '@/components/shared/ReminderPicker';
 
 
 export function HabitStreaks() {
@@ -15,49 +16,26 @@ export function HabitStreaks() {
 
   const [loading, setLoading] = useState(true);
   const [reminderHabit, setReminderHabit] = useState<string | null>(null);
-  const [reminderTime, setReminderTime] = useState<string>('');
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 500);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSetReminder = async (habitId: string, habitLabel: string) => {
-    if (!reminderTime.includes(':')) {
-      Alert.alert('Invalid Format', 'Please use HH:MM format (e.g. 14:30)');
-      return;
+  const handleSaveReminder = async (habitId: string, habitLabel: string, isoDate: string | undefined) => {
+    if (!isoDate) {
+      await updateHabit(habitId, { reminderAt: null });
+      await cancelReminder(habitId);
+    } else {
+      await updateHabit(habitId, { reminderAt: isoDate });
+      await scheduleReminder({
+        id: habitId,
+        title: 'Habit Reminder',
+        body: `Time for: ${habitLabel}`,
+        date: new Date(isoDate),
+        screen: 'habits',
+      });
     }
-
-    const [hours, minutes] = reminderTime.split(':').map(Number);
-    if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-      Alert.alert('Invalid Time', 'Please enter a valid time.');
-      return;
-    }
-
-    const now = new Date();
-    const reminderDate = new Date();
-    reminderDate.setHours(hours, minutes, 0, 0);
-
-    if (reminderDate <= now) {
-      reminderDate.setDate(reminderDate.getDate() + 1);
-    }
-
-    await updateHabit(habitId, { reminderAt: reminderDate.toISOString() });
-    await scheduleReminder({
-      id: habitId,
-      title: 'Habit Reminder',
-      body: `Time for: ${habitLabel}`,
-      date: reminderDate,
-      screen: 'habits',
-    });
-
-    setReminderHabit(null);
-    setReminderTime('');
-  };
-
-  const handleClearReminder = async (habitId: string) => {
-    await updateHabit(habitId, { reminderAt: null });
-    await cancelReminder(habitId);
     setReminderHabit(null);
   };
 
@@ -143,31 +121,12 @@ export function HabitStreaks() {
               </View>
 
               {reminderHabit === h.id && (
-                <View className="mt-3 flex-row items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/5">
-                  <TextInput
-                    value={reminderTime}
-                    onChangeText={setReminderTime}
-                    placeholderTextColor="gray"
-                    className="px-3 py-1.5 rounded bg-leben-bg border border-leben-border text-leben-text-2 text-xs flex-1"
-                    maxLength={5}
+                <View className="mt-3">
+                  <ReminderPicker
+                    initialValue={h.reminderAt ?? undefined}
+                    onSave={(val) => handleSaveReminder(h.id, h.label, val)}
+                    onClose={() => setReminderHabit(null)}
                   />
-                  <TouchableOpacity
-                    onPress={() => handleSetReminder(h.id, h.label)}
-                    disabled={!reminderTime}
-                    className={`px-4 py-1.5 rounded border ${
-                      reminderTime ? 'bg-leben-accent border-leben-accent opacity-100' : 'bg-transparent border-leben-accent opacity-50'
-                    }`}
-                  >
-                    <Text className="text-leben-bg-card text-xs">Set</Text>
-                  </TouchableOpacity>
-                  {h.reminderAt && (
-                    <TouchableOpacity
-                      onPress={() => handleClearReminder(h.id)}
-                      className="px-4 py-1.5 rounded border border-leben-border"
-                    >
-                      <Text className="text-leben-text-muted text-xs">Clear</Text>
-                    </TouchableOpacity>
-                  )}
                 </View>
               )}
             </View>
