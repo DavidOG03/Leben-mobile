@@ -76,7 +76,7 @@ export function AIMorningBrief() {
         <View className="flex-row items-center gap-2 mb-4">
           <Text className="text-leben-accent text-lg">✦</Text>
           <Text className="text-leben-accent text-[11px] uppercase tracking-widest font-semibold">
-            AI BRIEF
+            AI MORNING BRIEF
           </Text>
         </View>
 

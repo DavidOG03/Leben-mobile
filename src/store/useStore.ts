@@ -95,6 +95,7 @@ interface ProductivityRecord {
 export interface NotificationPrefs {
   push:            boolean;
   morningBriefing: boolean;
+  middayNudge:     boolean;
   eveningWrapUp:   boolean;
   streakSavers:    boolean;
   goalUpdates:     boolean;
@@ -194,6 +195,7 @@ const initialState = {
   notificationPrefs: {
     push:            true,
     morningBriefing: true,
+    middayNudge:     true,
     eveningWrapUp:   true,
     streakSavers:    true,
     goalUpdates:     true,

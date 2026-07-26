@@ -235,6 +235,25 @@ export default function SettingsScreen() {
             <View className="flex-row items-center justify-between">
               <View className="flex-1 pr-4">
                 <Text className="text-leben-text-2 text-[14px]">
+                  Midday Nudge
+                </Text>
+                <Text className="text-[11px] text-leben-text-muted mt-0.5">
+                  12pm reminder to start tasks, habits & goals
+                </Text>
+              </View>
+              <Toggle
+                on={notificationPrefs.middayNudge}
+                onChange={() =>
+                  updateNotificationPrefs({
+                    middayNudge: !notificationPrefs.middayNudge,
+                  })
+                }
+              />
+            </View>
+
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 pr-4">
+                <Text className="text-leben-text-2 text-[14px]">
                   Streak Savers
                 </Text>
                 <Text className="text-[11px] text-leben-text-muted mt-0.5">
