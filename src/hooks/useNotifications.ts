@@ -1,6 +1,6 @@
 // hooks/useNotifications.ts
 import { useEffect, useRef }   from 'react';
-import { Platform, Linking }   from 'react-native';
+import { Platform }            from 'react-native';
 import { savePushToken }       from '@/lib/supabase/db';
 import { useLebenStore }       from '@/store/useStore';
 import Constants               from 'expo-constants';
@@ -119,37 +119,6 @@ async function registerForPushNotifications() {
       vibrationPattern: [0, 250, 250, 250],
       lightColor:   '#7c6af0', // Match Leben accent
     });
-
-    // Ask user to disable battery optimization so notifications fire reliably
-    await requestBatteryOptimizationExemption();
-  }
-}
-
-/**
- * Opens the system dialog asking the user to exempt this app from battery optimization.
- * This ensures scheduled notifications (morning briefing, streak savers, etc.) are
- * delivered reliably even when the app has been in the background for a long time.
- * Only prompts if not already exempted.
- */
-async function requestBatteryOptimizationExemption(): Promise<void> {
-  try {
-    const packageName = 'com.david.lebenmobile';
-    const url = `package:${packageName}`;
-
-    // ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS opens a system dialog
-    // that asks the user to allow the app to bypass battery optimization.
-    const intentUrl = `android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`;
-
-    const canOpen = await Linking.canOpenURL(`intent:${url}#Intent;action=${intentUrl};end`);
-    if (canOpen) {
-      await Linking.openURL(`intent:${url}#Intent;action=${intentUrl};end`);
-    } else {
-      // Fallback: open general battery optimization settings page
-      await Linking.openSettings();
-    }
-  } catch (e) {
-    // Non-fatal — some manufacturers restrict this intent
-    console.warn('[Notifications] Could not open battery optimization settings:', e);
   }
 }
 

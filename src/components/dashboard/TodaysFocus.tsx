@@ -24,6 +24,17 @@ export function TodaysFocus() {
 
   const handleToggleTask = (taskId: string) => toggleTask(taskId);
 
+  const handleDeleteTask = (taskId: string, taskTitle: string) => {
+    Alert.alert(
+      'Delete Task',
+      `Delete "${taskTitle}"?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: () => deleteTask(taskId) },
+      ],
+    );
+  };
+
   const handleClearReminder = async (taskId: string) => {
     await updateTask(taskId, { reminderAt: null });
     await cancelReminder(taskId);
@@ -146,6 +157,15 @@ export function TodaysFocus() {
                     >
                       🔔
                     </Text>
+                  </TouchableOpacity>
+
+                  {/* Delete Button */}
+                  <TouchableOpacity
+                    onPress={() => handleDeleteTask(task.id, task.title)}
+                    className="w-7 h-7 rounded-md items-center justify-center ml-0.5"
+                    activeOpacity={0.6}
+                  >
+                    <Text className="text-red-400 text-[13px]">🗑</Text>
                   </TouchableOpacity>
 
 

@@ -46,6 +46,7 @@ function AuthGuard() {
 
 import NotificationManager from '@/components/shared/NotificationManager';
 import NotificationDropdown from '@/components/shared/NotificationDropdown';
+import OverlayPermissionModal from '@/components/shared/OverlayPermissionModal';
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
@@ -80,6 +81,7 @@ export default function RootLayout() {
         <Slot />
         <NotificationManager />
         <NotificationDropdown />
+        <OverlayPermissionModal />
       </View>
     </ThemeProvider>
   );

@@ -24,10 +24,11 @@ export default function AnalyticsScreen() {
   const tasks = useLebenStore((s) => s.tasks);
   const habits = useLebenStore((s) => s.habits);
   const goals = useLebenStore((s) => s.goals);
+  const productivityHistory = useLebenStore((s) => s.productivityHistory);
 
   const analytics = useMemo(
-    () => buildAnalyticsData(tasks, habits, goals),
-    [tasks, habits, goals],
+    () => buildAnalyticsData(tasks, habits, goals, productivityHistory),
+    [tasks, habits, goals, productivityHistory],
   );
 
   return (

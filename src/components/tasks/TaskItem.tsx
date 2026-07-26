@@ -145,6 +145,23 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
             <Text className="text-[11px] font-medium text-leben-text-muted">Edit</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity
+            onPress={() =>
+              Alert.alert(
+                'Delete Task',
+                `Delete "${task.title}"?`,
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Delete', style: 'destructive', onPress: () => removeTask(taskId) },
+                ],
+              )
+            }
+            className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-500/30 bg-red-500/10"
+          >
+            <Text className="text-red-400">🗑</Text>
+            <Text className="text-[11px] font-medium text-red-400">Delete</Text>
+          </TouchableOpacity>
+
 
 
           <View className="flex-1" />
