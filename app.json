@@ -18,11 +18,12 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
-    },
-    "notification": {
-      "icon": "./assets/images/notification-icon.png",
-      "color": "#3b82f6"
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.SCHEDULE_EXACT_ALARM",
+        "android.permission.USE_EXACT_ALARM",
+        "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"
+      ]
     },
     "web": {
       "output": "static",
@@ -35,15 +36,7 @@
         {
           "icon": "./assets/images/notification-icon.png",
           "color": "#7c6af0",
-          "defaultChannel": "default",
-          "androidMode": "default",
-          "requestPermissionsOnLaunch": false,
-          "androidPermissions": [
-            "RECEIVE_BOOT_COMPLETED",
-            "SCHEDULE_EXACT_ALARM",
-            "USE_EXACT_ALARM",
-            "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"
-          ]
+          "defaultChannel": "default"
         }
       ],
       [
