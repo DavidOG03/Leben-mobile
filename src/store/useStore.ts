@@ -9,6 +9,7 @@ import {
   fetchTasks, insertTask, updateTask, deleteTask,
   fetchHabits, insertHabit, updateHabit, removeHabit,
   fetchProductivityHistory, upsertProductivityHistory,
+  upsertNotificationPrefs,
   purgeAllData,
 } from '@/lib/supabase/db';
 import { calcStreak, calcLongestStreak } from '@/utils/habits';
@@ -476,10 +477,14 @@ export const useLebenStore = create<LebenStore>()(
           notifications: state.notifications.filter((n) => n.id !== id),
         })),
 
-      updateNotificationPrefs: (prefs) =>
+      updateNotificationPrefs: async (prefs) => {
         set((state) => ({
           notificationPrefs: { ...state.notificationPrefs, ...prefs },
-        })),
+        }));
+        if (get().userId) {
+          await upsertNotificationPrefs(get().notificationPrefs);
+        }
+      },
 
       purgeAll: async () => {
         set({

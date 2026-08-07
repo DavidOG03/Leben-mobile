@@ -6,7 +6,12 @@ import { Timeline } from "@/components/planner/Timeline";
 import { TodaysFocusCard } from "@/components/planner/TodaysFocusCard";
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { Text } from "@/components/ui/Text";
-import { PlusIcon, RefreshIcon, SparkleIcon, TrashIcon } from "@/constants/Icons";
+import {
+  PlusIcon,
+  RefreshIcon,
+  SparkleIcon,
+  TrashIcon,
+} from "@/constants/Icons";
 import { generateDayPlan } from "@/lib/ai/aiPlanner";
 import { useLebenStore } from "@/store/useStore";
 import { Ionicons } from "@expo/vector-icons";
@@ -65,7 +70,8 @@ export default function PlannerScreen() {
               Neural <Text className="text-leben-accent">Day Planner</Text>
             </Text>
             <Text className="text-center text-leben-text-muted text-[15px] leading-[22px] max-w-[340px]">
-              Sign in to unlock AI automated day scheduling, energy peak matching, and intelligent focus recommendations.
+              Sign in to unlock AI automated day scheduling, energy peak
+              matching, and intelligent focus recommendations.
             </Text>
           </View>
 
@@ -148,7 +154,9 @@ export default function PlannerScreen() {
             className="flex-row items-center gap-2 px-5 py-2.5 rounded-xl border bg-leben-bg-card border-leben-border"
             style={{ opacity: isRegenerating ? 0.5 : 1 }}
           >
-            <RefreshIcon color="#a1a1a1" size={14} />
+            <View className={isRegenerating ? "animate-spin" : ""}>
+              <RefreshIcon color="#a1a1a1" size={14} />
+            </View>
             <Text className="text-leben-text-2 font-bold text-[13px]">
               {isRegenerating ? "Regenerating..." : "Regenerate Plan"}
             </Text>

@@ -350,6 +350,32 @@ export async function savePushToken(
   if (error) console.error("savePushToken:", error.message);
 }
 
+// ── Notification Preferences ───────────────────────────────────────────────────
+
+export async function upsertNotificationPrefs(
+  prefs: import("@/store/useStore").NotificationPrefs
+): Promise<void> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+  const { error } = await supabase
+    .from("notification_prefs")
+    .upsert(
+      { 
+        user_id: user.id, 
+        push: prefs.push,
+        morning_briefing: prefs.morningBriefing,
+        midday_nudge: prefs.middayNudge,
+        evening_wrap_up: prefs.eveningWrapUp,
+        streak_savers: prefs.streakSavers,
+        goal_updates: prefs.goalUpdates
+      }, 
+      { onConflict: "user_id" }
+    );
+  if (error) console.error("upsertNotificationPrefs:", error.message);
+}
+
 // ── System ─────────────────────────────────────────────────────────────────────
 
 export async function purgeAllData(): Promise<void> {

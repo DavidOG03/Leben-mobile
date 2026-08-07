@@ -3,32 +3,25 @@ import { useEffect, useRef }   from 'react';
 import { Platform }            from 'react-native';
 import { savePushToken }       from '@/lib/supabase/db';
 import { useLebenStore }       from '@/store/useStore';
+import { useRouter }           from 'expo-router';
 import Constants               from 'expo-constants';
 import * as Notifications      from 'expo-notifications';
 import * as Device             from 'expo-device';
 
-// Configure how notifications appear when app is in foreground.
-// Task/habit local reminders are suppressed in the foreground — the user is
-// already in the app and doesn't need a banner interrupting them.
-// System notifications (morning briefing, streak saver) still show.
 Notifications.setNotificationHandler({
   handleNotification: async (notification) => {
-    const itemId = notification.request.content.data?.itemId;
-    const isSystemNotif =
-      typeof itemId === 'string' &&
-      (itemId.startsWith('sys_') || itemId.startsWith('goal_'));
-
     return {
-      shouldPlaySound:  isSystemNotif,
+      shouldPlaySound:  true,
       shouldSetBadge:   false,
-      shouldShowAlert:  isSystemNotif,
-      shouldShowBanner: isSystemNotif,
+      shouldShowAlert:  true,
+      shouldShowBanner: true,
       shouldShowList:   true,
     };
   },
 });
 
 export function useNotifications() {
+  const router               = useRouter();
   const notificationListener = useRef<Notifications.EventSubscription | null>(null);
   const responseListener     = useRef<Notifications.EventSubscription | null>(null);
   const userId               = useLebenStore((s) => s.userId);
@@ -61,7 +54,11 @@ export function useNotifications() {
           (response) => {
             const data = response.notification.request.content.data;
             console.log('[Notification tapped]', data);
-            // TODO: navigate to the relevant screen based on data.screen
+            
+            if (data && typeof data.screen === 'string') {
+              const route = `/(tabs)/${data.screen}`;
+              router.navigate(route as any);
+            }
           },
         );
       } catch (e) {

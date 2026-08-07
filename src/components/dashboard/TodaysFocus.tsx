@@ -1,3 +1,4 @@
+import ReminderPicker from "@/components/shared/ReminderPicker";
 import { Card } from "@/components/ui/Card";
 import { Text } from "@/components/ui/Text";
 import { cancelReminder, scheduleReminder } from "@/hooks/useNotifications";
@@ -5,14 +6,13 @@ import { useLebenStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, TouchableOpacity, View } from "react-native";
-import ReminderPicker from "@/components/shared/ReminderPicker";
 
-function truncateWords(text: string, maxWords = 4) {
-  const words = text.trim().split(/\s+/);
-  return words.length > maxWords
-    ? `${words.slice(0, maxWords).join(" ")}…`
-    : text;
-}
+// function truncateWords(text: string, maxWords = 4) {
+//   const words = text.trim().split(/\s+/);
+//   return words.length > maxWords
+//     ? `${words.slice(0, maxWords).join(" ")}…`
+//     : text;
+// }
 
 export function TodaysFocus() {
   const router = useRouter();
@@ -25,14 +25,14 @@ export function TodaysFocus() {
   const handleToggleTask = (taskId: string) => toggleTask(taskId);
 
   const handleDeleteTask = (taskId: string, taskTitle: string) => {
-    Alert.alert(
-      'Delete Task',
-      `Delete "${taskTitle}"?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => deleteTask(taskId) },
-      ],
-    );
+    Alert.alert("Delete Task", `Delete "${taskTitle}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => deleteTask(taskId),
+      },
+    ]);
   };
 
   const handleClearReminder = async (taskId: string) => {
@@ -87,10 +87,10 @@ export function TodaysFocus() {
                   {/* Checkbox */}
                   <TouchableOpacity
                     onPress={() => handleToggleTask(task.id)}
-                    className={`w-[18px] h-[18px] rounded-[5px] items-center justify-center border ${
+                    className={`w-[21px] h-[21px] rounded-[5px] items-center justify-center border ${
                       task.completed
                         ? "border-leben-success bg-leben-success/20"
-                        : "border-leben-border-subtle bg-leben-bg-secondary"
+                        : "border-leben-border bg-leben-bg-secondary"
                     }`}
                     activeOpacity={0.7}
                   >
@@ -108,7 +108,10 @@ export function TodaysFocus() {
                     }`}
                     numberOfLines={1}
                   >
-                    {truncateWords(task.title, 4)}
+                    {/* {truncateWords(task.title, 4)} */}
+                    {task.title.length > 25
+                      ? `${task.title.substring(0, 25)}...`
+                      : task.title}
                   </Text>
 
                   {/* Right side: Tag + Date */}
@@ -167,8 +170,6 @@ export function TodaysFocus() {
                   >
                     <Text className="text-red-400 text-[13px]">🗑</Text>
                   </TouchableOpacity>
-
-
                 </View>
 
                 {/* Reminder Picker Inline */}

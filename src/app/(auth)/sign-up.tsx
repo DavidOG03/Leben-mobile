@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { View, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ActivityIndicator, Alert, ScrollView, } from 'react-native';
+  KeyboardAvoidingView, Platform, ActivityIndicator, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { supabase }  from '@/lib/supabase/client';
 import { Feather } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import { Text } from '@/components/ui/Text';
-
+import { BellIcon, GoogleIcon } from '@/constants/Icons';
 
 // Complete auth session for web/browser
 WebBrowser.maybeCompleteAuthSession();
@@ -21,7 +21,7 @@ function passwordStrength(pw: string): { label: string; color: string; pct: numb
 
 export default function SignUpScreen() {
   const router    = useRouter();
-  const [fullName, setFullName]   = useState('');
+  const [fullName, setFullName]         = useState('');
   const [email, setEmail]               = useState('');
   const [password, setPassword]         = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +29,11 @@ export default function SignUpScreen() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const strength = passwordStrength(password);
+
+  const showErrorToast = (msg: string) => {
+    setErrorMessage(msg);
+    setTimeout(() => setErrorMessage(null), 5000);
+  };
 
   const getFriendlyErrorMessage = (message: string) => {
     if (message.includes('User already registered')) {
@@ -46,11 +51,11 @@ export default function SignUpScreen() {
   const handleSignUp = async () => {
     setErrorMessage(null);
     if (!fullName || !email || !password) {
-      setErrorMessage('Please fill in all fields.');
+      showErrorToast('Please fill in all fields.');
       return;
     }
     if (password.length < 6) {
-      setErrorMessage('Password must be at least 6 characters.');
+      showErrorToast('Password must be at least 6 characters.');
       return;
     }
     setLoading(true);
@@ -61,13 +66,9 @@ export default function SignUpScreen() {
     });
     setLoading(false);
     if (error) {
-      setErrorMessage(getFriendlyErrorMessage(error.message));
+      showErrorToast(getFriendlyErrorMessage(error.message));
     } else {
-      Alert.alert(
-        'Check your email',
-        'We sent a confirmation link to your email. Click it to activate your account.',
-        [{ text: 'OK', onPress: () => router.replace('/(auth)/sign-in' as any) }],
-      );
+      router.replace('/(auth)/sign-in' as any);
     }
   };
 
@@ -86,29 +87,36 @@ export default function SignUpScreen() {
       });
 
       if (error) throw error;
-      if (!data.url) throw new Error('No OAuth URL returned');
+      if (!data.url) throw new Error('No OAuth URL returned from provider.');
 
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
 
       if (result.type === 'success') {
         const { url } = result;
-        // Parse the URL to pass the hash to Supabase
-        const params = new URL(url.replace('#', '?')).searchParams;
-        const accessToken = params.get('access_token');
-        const refreshToken = params.get('refresh_token');
+        // Parse the URL robustly, handling fragments as query params
+        const parsed = Linking.parse(url.replace('#', '?'));
+        const accessToken = parsed.queryParams?.access_token as string | undefined;
+        const refreshToken = parsed.queryParams?.refresh_token as string | undefined;
 
         if (accessToken && refreshToken) {
-          await supabase.auth.setSession({
+          const { error: sessionError } = await supabase.auth.setSession({
             access_token: accessToken,
             refresh_token: refreshToken,
           });
+          if (sessionError) throw sessionError;
         } else {
           // Alternative fallback for implicit grant parsing
           await supabase.auth.getSession();
         }
+      } else if (result.type === 'cancel' || result.type === 'dismiss') {
+        // User cancelled, do nothing
+      } else {
+        throw new Error('Authentication was unsuccessful.');
       }
     } catch (err: any) {
-      setErrorMessage(getFriendlyErrorMessage(err.message));
+      showErrorToast(
+        err.message || 'An error occurred during Google Sign Up. Please try again or use email.'
+      );
     } finally {
       setLoading(false);
     }
@@ -119,11 +127,23 @@ export default function SignUpScreen() {
       className="flex-1 bg-leben-bg"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 40 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 40, position: 'relative' }}>
+        
+        {/* Toast Error Notification */}
+        {errorMessage ? (
+          <View 
+            className="absolute top-10 left-6 right-6 bg-[#2a1a1a] border border-red-500/40 p-4 rounded-xl z-50 shadow-lg flex-row items-center"
+            style={{ elevation: 5, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }}
+          >
+            <View className="w-1 h-full bg-red-500 rounded-full mr-3" />
+            <Text className="text-leben-text text-sm font-medium flex-1">{errorMessage}</Text>
+          </View>
+        ) : null}
+
         {/* Logo */}
-        <View className="items-center mb-8">
+        <View className="items-center mb-8 mt-6">
           <View className="w-14 h-14 rounded-2xl bg-leben-bg-card border border-leben-border items-center justify-center mb-4">
-            <Text className="text-2xl">✦</Text>
+            <BellIcon size={24} color="#7c6af0" />
           </View>
           <Text className="text-3xl font-bold text-leben-text tracking-tight">
             Create Account
@@ -135,12 +155,6 @@ export default function SignUpScreen() {
 
         {/* Form */}
         <View className="gap-3">
-          {errorMessage ? (
-            <View className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl mb-1">
-              <Text className="text-red-500 text-sm text-center">{errorMessage}</Text>
-            </View>
-          ) : null}
-
           <TextInput
             className="bg-leben-bg-card border border-leben-border text-leben-text px-4 py-3.5 rounded-input text-[15px]"
             placeholder="Full Name"
@@ -162,7 +176,7 @@ export default function SignUpScreen() {
           />
 
           <View className="gap-1.5">
-            <View className="relative justify-center">
+            <View className="relative justify-center z-10">
               <TextInput
                 className="bg-leben-bg-card border border-leben-border text-leben-text px-4 py-3.5 pr-12 rounded-input text-[15px]"
                 placeholder="Password"
@@ -172,8 +186,9 @@ export default function SignUpScreen() {
                 onChangeText={setPassword}
               />
               <TouchableOpacity 
-                className="absolute right-4"
+                className="absolute right-0 top-0 bottom-0 px-4 justify-center items-center z-20"
                 onPress={() => setShowPassword(!showPassword)}
+                hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
               >
                 <Feather name={showPassword ? "eye" : "eye-off"} size={20} color="#888" />
               </TouchableOpacity>
@@ -198,7 +213,7 @@ export default function SignUpScreen() {
           </View>
 
           <TouchableOpacity
-            className="bg-leben-accent rounded-btn py-3.5 items-center mt-2"
+            className="bg-leben-accent rounded-btn py-3.5 items-center mt-2 z-0"
             onPress={handleSignUp}
             disabled={loading}
           >
@@ -223,7 +238,7 @@ export default function SignUpScreen() {
           onPress={handleGoogleSignIn}
           disabled={loading}
         >
-          <Text className="text-xl">G</Text>
+          <GoogleIcon size={20} />
           <Text className="text-leben-text font-medium text-[15px]">
             Continue with Google
           </Text>
@@ -233,6 +248,7 @@ export default function SignUpScreen() {
         <TouchableOpacity
           className="mt-8 items-center"
           onPress={() => router.replace('/(auth)/sign-in' as any)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Text className="text-leben-text-2 text-sm">
             Already have an account?{' '}

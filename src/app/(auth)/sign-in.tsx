@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ActivityIndicator, Alert, } from 'react-native';
+  KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { useRouter }  from 'expo-router';
 import { supabase }   from '@/lib/supabase/client';
 
@@ -8,7 +8,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import { Feather } from '@expo/vector-icons';
 import { Text } from '@/components/ui/Text';
-
+import { BellIcon, GoogleIcon } from '@/constants/Icons';
 
 // Complete auth session for web/browser
 WebBrowser.maybeCompleteAuthSession();
@@ -20,6 +20,11 @@ export default function SignInScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading]           = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const showErrorToast = (msg: string) => {
+    setErrorMessage(msg);
+    setTimeout(() => setErrorMessage(null), 5000);
+  };
 
   // ── Email / Password Sign In ──────────────────────────────────────────────
 
@@ -42,13 +47,13 @@ export default function SignInScreen() {
   const handleSignIn = async () => {
     setErrorMessage(null);
     if (!email || !password) {
-      setErrorMessage('Please enter your email and password.');
+      showErrorToast('Please enter your email and password.');
       return;
     }
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
-    if (error) setErrorMessage(getFriendlyErrorMessage(error.message));
+    if (error) showErrorToast(getFriendlyErrorMessage(error.message));
     // On success, useAuthSync will detect the session change and AuthGuard will redirect
   };
 
@@ -69,29 +74,36 @@ export default function SignInScreen() {
       });
 
       if (error) throw error;
-      if (!data.url) throw new Error('No OAuth URL returned');
+      if (!data.url) throw new Error('No OAuth URL returned from provider.');
 
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
 
       if (result.type === 'success') {
         const { url } = result;
-        // Parse the URL to pass the hash to Supabase
-        const params = new URL(url.replace('#', '?')).searchParams;
-        const accessToken = params.get('access_token');
-        const refreshToken = params.get('refresh_token');
+        // Parse the URL robustly, handling fragments as query params
+        const parsed = Linking.parse(url.replace('#', '?'));
+        const accessToken = parsed.queryParams?.access_token as string | undefined;
+        const refreshToken = parsed.queryParams?.refresh_token as string | undefined;
 
         if (accessToken && refreshToken) {
-          await supabase.auth.setSession({
+          const { error: sessionError } = await supabase.auth.setSession({
             access_token: accessToken,
             refresh_token: refreshToken,
           });
+          if (sessionError) throw sessionError;
         } else {
           // Alternative fallback for implicit grant parsing
           await supabase.auth.getSession();
         }
+      } else if (result.type === 'cancel' || result.type === 'dismiss') {
+        // User cancelled, do nothing
+      } else {
+        throw new Error('Authentication was unsuccessful.');
       }
     } catch (err: any) {
-      setErrorMessage(getFriendlyErrorMessage(err.message));
+      showErrorToast(
+        err.message || 'An error occurred during Google Sign In. Please try again or use email.'
+      );
     } finally {
       setLoading(false);
     }
@@ -102,11 +114,22 @@ export default function SignInScreen() {
       className="flex-1 bg-leben-bg"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View className="flex-1 justify-center px-6">
+      <View className="flex-1 justify-center px-6 relative">
+        {/* Toast Error Notification */}
+        {errorMessage ? (
+          <View 
+            className="absolute top-16 left-6 right-6 bg-[#2a1a1a] border border-red-500/40 p-4 rounded-xl z-50 shadow-lg flex-row items-center"
+            style={{ elevation: 5, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }}
+          >
+            <View className="w-1 h-full bg-red-500 rounded-full mr-3" />
+            <Text className="text-leben-text text-sm font-medium flex-1">{errorMessage}</Text>
+          </View>
+        ) : null}
+
         {/* Logo */}
         <View className="items-center mb-10">
           <View className="w-14 h-14 rounded-2xl bg-leben-bg-card border border-leben-border items-center justify-center mb-4">
-            <Text className="text-2xl">✦</Text>
+            <BellIcon size={24} color="#7c6af0" />
           </View>
           <Text className="text-3xl font-bold text-leben-text tracking-tight">
             Leben
@@ -118,12 +141,6 @@ export default function SignInScreen() {
 
         {/* Form */}
         <View className="gap-3">
-          {errorMessage ? (
-            <View className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl mb-1">
-              <Text className="text-red-500 text-sm text-center">{errorMessage}</Text>
-            </View>
-          ) : null}
-
           <TextInput
             className="bg-leben-bg-card border border-leben-border text-leben-text px-4 py-3.5 rounded-input text-[15px]"
             placeholder="Email"
@@ -135,7 +152,7 @@ export default function SignInScreen() {
             onChangeText={setEmail}
           />
 
-          <View className="relative justify-center">
+          <View className="relative justify-center z-10">
             <TextInput
               className="bg-leben-bg-card border border-leben-border text-leben-text px-4 py-3.5 pr-12 rounded-input text-[15px]"
               placeholder="Password"
@@ -145,15 +162,16 @@ export default function SignInScreen() {
               onChangeText={setPassword}
             />
             <TouchableOpacity 
-              className="absolute right-4"
+              className="absolute right-0 top-0 bottom-0 px-4 justify-center items-center z-20"
               onPress={() => setShowPassword(!showPassword)}
+              hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
             >
               <Feather name={showPassword ? "eye" : "eye-off"} size={20} color="#888" />
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            className="bg-leben-accent rounded-btn py-3.5 items-center mt-2"
+            className="bg-leben-accent rounded-btn py-3.5 items-center mt-2 z-0"
             onPress={handleSignIn}
             disabled={loading}
           >
@@ -178,7 +196,7 @@ export default function SignInScreen() {
           onPress={handleGoogleSignIn}
           disabled={loading}
         >
-          <Text className="text-xl">G</Text>
+          <GoogleIcon size={20} />
           <Text className="text-leben-text font-medium text-[15px]">
             Continue with Google
           </Text>
@@ -188,6 +206,7 @@ export default function SignInScreen() {
         <TouchableOpacity
           className="mt-8 items-center"
           onPress={() => router.push('/(auth)/sign-up' as any)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Text className="text-leben-text-2 text-sm">
             Don't have an account?{' '}

@@ -81,7 +81,14 @@ export function HabitStreaks() {
         </View>
       ) : (
         <View className="flex-1 gap-4">
-          {habits.slice(0, 3).map((h) => (
+          {habits.slice(0, 3).map((h) => {
+            const now = new Date();
+            const todayStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+              .toISOString()
+              .slice(0, 10);
+            const isCheckedToday = (h.completedDates ?? []).includes(todayStr);
+            
+            return (
             <View key={h.id}>
               <View className="flex-row items-center justify-between">
                 <View className="flex-row items-center gap-3">
@@ -110,11 +117,11 @@ export function HabitStreaks() {
                     onPress={() => toggleHabit(h.id)}
                     className="w-[42px] h-[26px] rounded-lg items-center justify-center border border-leben-border-subtle"
                     style={{
-                      backgroundColor: h.checked ? h.color : 'transparent',
+                      backgroundColor: isCheckedToday ? h.color : 'transparent',
                     }}
                   >
-                    <Text className={`text-xs ${h.checked ? 'text-white' : 'text-leben-text-muted'}`}>
-                      {h.checked ? '✓' : '○'}
+                    <Text className={`text-xs ${isCheckedToday ? 'text-white' : 'text-leben-text-muted'}`}>
+                      {isCheckedToday ? '✓' : '○'}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -130,7 +137,7 @@ export function HabitStreaks() {
                 </View>
               )}
             </View>
-          ))}
+          )})}
           {habits.length > 3 && (
             <TouchableOpacity onPress={() => router.push('/(tabs)/habits' as any)} className="mt-auto pt-2 items-center">
               <Text className="text-leben-text-dim text-[11px]">

@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase/client";
 import { useLebenStore } from "@/store/useStore";
 import { useColorScheme } from "nativewind";
 import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
 
 function Toggle({ on, onChange }: { on: boolean; onChange: () => void }) {
   return (
@@ -51,6 +52,7 @@ export default function SettingsScreen() {
   );
 
   const { colorScheme, setColorScheme } = useColorScheme();
+  const router = useRouter();
 
   const userId = useLebenStore((s) => s.userId);
   const userFullName = useLebenStore((s: any) => s.userFullName);
@@ -107,6 +109,8 @@ export default function SettingsScreen() {
           const { error } = await supabase.auth.signOut();
           if (error) {
             Alert.alert("Error", error.message);
+          } else {
+            router.replace('/(auth)/logout' as any);
           }
         },
       },
@@ -126,18 +130,6 @@ export default function SettingsScreen() {
                 <Text className="text-[40px]">👤</Text>
               </View>
             </View>
-            {/* <TouchableOpacity
-              className="absolute bottom-1.5 right-1.5 items-center justify-center rounded-full"
-              style={{
-                width: 26,
-                height: 26,
-                backgroundColor: "#1e1e1e",
-                borderColor: "#333",
-                borderWidth: 1,
-              }}
-            >
-               <Text style={{ fontSize: 12, color: "#888" }}>✏️</Text> 
-            </TouchableOpacity> */}
           </View>
 
           {/* Name / badge */}
@@ -149,7 +141,7 @@ export default function SettingsScreen() {
               {userId ? displayName : "Guest"}
             </Text>
             <Text className="text-[13px] text-leben-text-muted">
-              {displayEmail}
+              {userId ? displayEmail : "Guest Mode - Local Data Only"}
             </Text>
           </View>
         </View>
@@ -157,10 +149,10 @@ export default function SettingsScreen() {
         {/* Display name + Workspace ID */}
         <View className="flex-row flex-wrap gap-4 mb-4">
           {[
-            { label: "DISPLAY NAME", val: displayName },
+            { label: "DISPLAY NAME", val: userId ? displayName : "Guest" },
             {
               label: "WORKSPACE ID",
-              val: userId ? `OS-${userId.substring(0, 8).toUpperCase()}` : "--",
+              val: userId ? `OS-${userId.substring(0, 8).toUpperCase()}` : "LOCAL-WORKSPACE",
             },
           ].map(({ label, val }) => (
             <View
@@ -341,15 +333,26 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Sign Out */}
-        <TouchableOpacity
-          onPress={handleSignOut}
-          className="rounded-xl p-4 mt-4 items-center justify-center flex-row gap-2 active:opacity-80 bg-leben-bg-card border border-leben-border"
-        >
-          <Text className="text-leben-text-2 text-[14px] font-semibold">
-            Sign Out
-          </Text>
-        </TouchableOpacity>
+        {/* Sign Out / Sign In conditionally */}
+        {userId ? (
+          <TouchableOpacity
+            onPress={handleSignOut}
+            className="rounded-xl p-4 mt-4 items-center justify-center flex-row gap-2 active:opacity-80 bg-leben-bg-card border border-leben-border"
+          >
+            <Text className="text-leben-text-2 text-[14px] font-semibold">
+              Sign Out
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => router.push('/(auth)/sign-in' as any)}
+            className="rounded-xl p-4 mt-4 items-center justify-center flex-row gap-2 active:opacity-80 bg-leben-accent shadow-sm"
+          >
+            <Text className="text-white text-[14px] font-semibold">
+              Sign In / Sign Up
+            </Text>
+          </TouchableOpacity>
+        )}
 
         {/* Footer */}
         <View className="flex-row items-center justify-between mt-8 pt-4 mb-10 border-t border-leben-border">
