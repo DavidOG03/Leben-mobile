@@ -59,7 +59,7 @@ export default function SignUpScreen() {
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName } },
@@ -68,7 +68,16 @@ export default function SignUpScreen() {
     if (error) {
       showErrorToast(getFriendlyErrorMessage(error.message));
     } else {
-      router.replace('/(auth)/sign-in' as any);
+      if (!data.session && data.user) {
+        // Email confirmation required
+        showErrorToast('Success! Please check your email to confirm your account before signing in.');
+        setTimeout(() => {
+          router.replace('/(auth)/sign-in' as any);
+        }, 3000);
+      } else {
+        // Logged in immediately (email confirmation disabled)
+        router.replace('/(auth)/sign-in' as any);
+      }
     }
   };
 
@@ -93,19 +102,26 @@ export default function SignUpScreen() {
 
       if (result.type === 'success') {
         const { url } = result;
-        // Parse the URL robustly, handling fragments as query params
-        const parsed = Linking.parse(url.replace('#', '?'));
-        const accessToken = parsed.queryParams?.access_token as string | undefined;
-        const refreshToken = parsed.queryParams?.refresh_token as string | undefined;
+        
+        // Robustly parse the URL using the newly polyfilled URL object
+        const urlObj = new URL(url);
+        const fragment = urlObj.hash.substring(1);
+        
+        // If there's a fragment, it contains our access_token (implicit grant)
+        if (fragment) {
+          const params = new URLSearchParams(fragment);
+          const accessToken = params.get('access_token');
+          const refreshToken = params.get('refresh_token');
 
-        if (accessToken && refreshToken) {
-          const { error: sessionError } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
-          if (sessionError) throw sessionError;
+          if (accessToken && refreshToken) {
+            const { error: sessionError } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            });
+            if (sessionError) throw sessionError;
+          }
         } else {
-          // Alternative fallback for implicit grant parsing
+          // Alternative fallback for PKCE / Server-side flow
           await supabase.auth.getSession();
         }
       } else if (result.type === 'cancel' || result.type === 'dismiss') {

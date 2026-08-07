@@ -80,19 +80,25 @@ export default function SignInScreen() {
 
       if (result.type === 'success') {
         const { url } = result;
-        // Parse the URL robustly, handling fragments as query params
-        const parsed = Linking.parse(url.replace('#', '?'));
-        const accessToken = parsed.queryParams?.access_token as string | undefined;
-        const refreshToken = parsed.queryParams?.refresh_token as string | undefined;
+        // Robustly parse the URL using the newly polyfilled URL object
+        const urlObj = new URL(url);
+        const fragment = urlObj.hash.substring(1);
+        
+        // If there's a fragment, it contains our access_token (implicit grant)
+        if (fragment) {
+          const params = new URLSearchParams(fragment);
+          const accessToken = params.get('access_token');
+          const refreshToken = params.get('refresh_token');
 
-        if (accessToken && refreshToken) {
-          const { error: sessionError } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
-          if (sessionError) throw sessionError;
+          if (accessToken && refreshToken) {
+            const { error: sessionError } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            });
+            if (sessionError) throw sessionError;
+          }
         } else {
-          // Alternative fallback for implicit grant parsing
+          // Alternative fallback for PKCE / Server-side flow
           await supabase.auth.getSession();
         }
       } else if (result.type === 'cancel' || result.type === 'dismiss') {
