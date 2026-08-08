@@ -21,7 +21,7 @@ export function useAuthSync() {
     });
 
     // Subscribe to changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         const meta = session.user.user_metadata;
         setUser(
@@ -31,7 +31,9 @@ export function useAuthSync() {
         );
       } else {
         setUser(null, null, null);
-        useLebenStore.getState().clearStore();
+        if (event === 'SIGNED_OUT') {
+          useLebenStore.getState().clearStore();
+        }
       }
     });
 

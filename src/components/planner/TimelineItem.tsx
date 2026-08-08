@@ -14,10 +14,10 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
   const toggleScheduleItem = useLebenStore((s) => s.toggleScheduleItem);
   const updateScheduleItem = useLebenStore((s) => s.updateScheduleItem);
 
-  const isDeepWork = item.tag.toLowerCase().includes("work");
+  const isDeepWork = item.tag?.toLowerCase().includes("work");
   const isRecharge =
-    item.tag.toLowerCase().includes("health") ||
-    item.tag.toLowerCase().includes("mind");
+    item.tag?.toLowerCase().includes("health") ||
+    item.tag?.toLowerCase().includes("mind");
 
   return (
     <View className="flex-row gap-4 mb-8">
@@ -107,7 +107,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
               className="text-leben-text-2 font-medium"
               style={{ fontSize: 10 }}
             >
-              {item.priority.toUpperCase()}
+              {item.priority?.toUpperCase() || 'MEDIUM'}
             </Text>
           </View>
         </View>

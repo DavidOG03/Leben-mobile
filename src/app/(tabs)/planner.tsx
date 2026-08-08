@@ -36,7 +36,7 @@ export default function PlannerScreen() {
     reason: string;
   } | null>(null);
 
-  const isAlive = tasks.length > 1;
+  const isAlive = tasks.length > 0;
 
   useEffect(() => {
     if (userId && isAlive && schedule.length === 0 && !isRegenerating) {
@@ -106,8 +106,8 @@ export default function PlannerScreen() {
         forceRefresh,
       );
 
-      setSchedule(newSchedule);
-      setAiInsights(insights);
+      setSchedule(newSchedule || []);
+      setAiInsights(insights || []);
       if (newMainFocus) setMainFocus(newMainFocus);
     } catch (err: any) {
       console.error("Planner AI failed:", err);

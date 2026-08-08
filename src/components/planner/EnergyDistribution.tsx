@@ -6,16 +6,19 @@ export function EnergyDistribution() {
   const schedule = useLebenStore((s) => s.schedule);
 
   const morningTasks = schedule.filter((item) => {
+    if (!item.start) return false;
     const hour = parseInt(item.start.split(":")[0]);
     return hour >= 6 && hour < 12;
   });
 
   const peakTasks = schedule.filter((item) => {
+    if (!item.start) return false;
     const hour = parseInt(item.start.split(":")[0]);
     return hour >= 12 && hour < 18;
   });
 
   const eveningTasks = schedule.filter((item) => {
+    if (!item.start) return false;
     const hour = parseInt(item.start.split(":")[0]);
     return hour >= 18 || hour < 6;
   });
@@ -33,8 +36,8 @@ export function EnergyDistribution() {
   const getTopTasks = (tasks: ScheduleItem[]) => {
     return tasks
       .sort((a, b) => {
-        const pMap = { high: 3, medium: 2, low: 1 };
-        return pMap[b.priority] - pMap[a.priority];
+        const pMap: any = { high: 3, medium: 2, low: 1 };
+        return (pMap[b.priority] || 0) - (pMap[a.priority] || 0);
       })
       .slice(0, 3);
   };
