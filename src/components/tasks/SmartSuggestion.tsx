@@ -18,7 +18,7 @@ export function SmartSuggestion() {
   const dotsRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const pendingTasks = tasks.filter((t) => !t.completed);
-  const hasTasks = pendingTasks.length > 0;
+  const hasTasks = pendingTasks.length > 1;
 
   // Animate dots while loading
   useEffect(() => {

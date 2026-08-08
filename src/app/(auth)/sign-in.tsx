@@ -1,24 +1,30 @@
-import { useState } from 'react';
-import { View, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
-import { useRouter }  from 'expo-router';
-import { supabase }   from '@/lib/supabase/client';
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
-import { Feather } from '@expo/vector-icons';
-import { Text } from '@/components/ui/Text';
-import { BellIcon, GoogleIcon } from '@/constants/Icons';
+import { Text } from "@/components/ui/Text";
+import { BellIcon, GoogleIcon } from "@/constants/Icons";
+import { Feather } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
 
 // Complete auth session for web/browser
 WebBrowser.maybeCompleteAuthSession();
 
 export default function SignInScreen() {
-  const router  = useRouter();
-  const [email, setEmail]               = useState('');
-  const [password, setPassword]         = useState('');
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading]           = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const showErrorToast = (msg: string) => {
@@ -29,17 +35,17 @@ export default function SignInScreen() {
   // ── Email / Password Sign In ──────────────────────────────────────────────
 
   const getFriendlyErrorMessage = (message: string) => {
-    if (message.includes('Invalid login credentials')) {
-      return 'The email or password you entered is incorrect. Please double-check and try again.';
+    if (message.includes("Invalid login credentials")) {
+      return "The email or password you entered is incorrect. Please double-check and try again.";
     }
-    if (message.includes('Email not confirmed')) {
-      return 'Please verify your email address before signing in. Check your inbox for the confirmation link.';
+    if (message.includes("Email not confirmed")) {
+      return "Please verify your email address before signing in. Check your inbox for the confirmation link.";
     }
-    if (message.includes('User not found')) {
-      return 'We could not find an account with this email. Please sign up first.';
+    if (message.includes("User not found")) {
+      return "We could not find an account with this email. Please sign up first.";
     }
-    if (message.includes('rate limit')) {
-      return 'You have tried signing in too many times. Please wait a moment and try again.';
+    if (message.includes("rate limit")) {
+      return "You have tried signing in too many times. Please wait a moment and try again.";
     }
     return message;
   };
@@ -47,11 +53,14 @@ export default function SignInScreen() {
   const handleSignIn = async () => {
     setErrorMessage(null);
     if (!email || !password) {
-      showErrorToast('Please enter your email and password.');
+      showErrorToast("Please enter your email and password.");
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     setLoading(false);
     if (error) showErrorToast(getFriendlyErrorMessage(error.message));
     // On success, useAuthSync will detect the session change and AuthGuard will redirect
@@ -63,10 +72,10 @@ export default function SignInScreen() {
     setErrorMessage(null);
     setLoading(true);
     try {
-      const redirectUrl = Linking.createURL('/(auth)/callback');
-      
+      const redirectUrl = Linking.createURL("/(auth)/callback");
+
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider: "google",
         options: {
           redirectTo: redirectUrl,
           skipBrowserRedirect: true,
@@ -74,21 +83,24 @@ export default function SignInScreen() {
       });
 
       if (error) throw error;
-      if (!data.url) throw new Error('No OAuth URL returned from provider.');
+      if (!data.url) throw new Error("No OAuth URL returned from provider.");
 
-      const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
+      const result = await WebBrowser.openAuthSessionAsync(
+        data.url,
+        redirectUrl,
+      );
 
-      if (result.type === 'success') {
+      if (result.type === "success") {
         const { url } = result;
         // Robustly parse the URL using the newly polyfilled URL object
         const urlObj = new URL(url);
         const fragment = urlObj.hash.substring(1);
-        
+
         // If there's a fragment, it contains our access_token (implicit grant)
         if (fragment) {
           const params = new URLSearchParams(fragment);
-          const accessToken = params.get('access_token');
-          const refreshToken = params.get('refresh_token');
+          const accessToken = params.get("access_token");
+          const refreshToken = params.get("refresh_token");
 
           if (accessToken && refreshToken) {
             const { error: sessionError } = await supabase.auth.setSession({
@@ -101,14 +113,15 @@ export default function SignInScreen() {
           // Alternative fallback for PKCE / Server-side flow
           await supabase.auth.getSession();
         }
-      } else if (result.type === 'cancel' || result.type === 'dismiss') {
+      } else if (result.type === "cancel" || result.type === "dismiss") {
         // User cancelled, do nothing
       } else {
-        throw new Error('Authentication was unsuccessful.');
+        throw new Error("Authentication was unsuccessful.");
       }
     } catch (err: any) {
       showErrorToast(
-        err.message || 'An error occurred during Google Sign In. Please try again or use email.'
+        err.message ||
+          "An error occurred during Google Sign In. Please try again or use email.",
       );
     } finally {
       setLoading(false);
@@ -118,17 +131,25 @@ export default function SignInScreen() {
   return (
     <KeyboardAvoidingView
       className="flex-1 bg-leben-bg"
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View className="flex-1 justify-center px-6 relative">
         {/* Toast Error Notification */}
         {errorMessage ? (
-          <View 
+          <View
             className="absolute top-16 left-6 right-6 bg-[#2a1a1a] border border-red-500/40 p-4 rounded-xl z-50 shadow-lg flex-row items-center"
-            style={{ elevation: 5, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }}
+            style={{
+              elevation: 5,
+              shadowColor: "#000",
+              shadowOpacity: 0.3,
+              shadowRadius: 10,
+              shadowOffset: { width: 0, height: 4 },
+            }}
           >
             <View className="w-1 h-full bg-red-500 rounded-full mr-3" />
-            <Text className="text-leben-text text-sm font-medium flex-1">{errorMessage}</Text>
+            <Text className="text-leben-text text-sm font-medium flex-1">
+              {errorMessage}
+            </Text>
           </View>
         ) : null}
 
@@ -167,12 +188,16 @@ export default function SignInScreen() {
               value={password}
               onChangeText={setPassword}
             />
-            <TouchableOpacity 
+            <TouchableOpacity
               className="absolute right-0 top-0 bottom-0 px-4 justify-center items-center z-20"
               onPress={() => setShowPassword(!showPassword)}
               hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
             >
-              <Feather name={showPassword ? "eye" : "eye-off"} size={20} color="#888" />
+              <Feather
+                name={showPassword ? "eye" : "eye-off"}
+                size={20}
+                color="#888"
+              />
             </TouchableOpacity>
           </View>
 
@@ -184,7 +209,9 @@ export default function SignInScreen() {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text className="text-white font-semibold text-[15px]">Sign In</Text>
+              <Text className="text-white font-semibold text-[15px]">
+                Sign In
+              </Text>
             )}
           </TouchableOpacity>
         </View>
@@ -202,20 +229,27 @@ export default function SignInScreen() {
           onPress={handleGoogleSignIn}
           disabled={loading}
         >
-          <GoogleIcon size={20} />
-          <Text className="text-leben-text font-medium text-[15px]">
-            Continue with Google
-          </Text>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <>
+              <GoogleIcon size={20} />
+
+              <Text className="text-leben-text font-medium text-[15px]">
+                Continue with Google
+              </Text>
+            </>
+          )}
         </TouchableOpacity>
 
         {/* Sign Up Link */}
         <TouchableOpacity
           className="mt-8 items-center"
-          onPress={() => router.push('/(auth)/sign-up' as any)}
+          onPress={() => router.push("/(auth)/sign-up" as any)}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Text className="text-leben-text-2 text-sm">
-            Don't have an account?{' '}
+            Don't have an account?{" "}
             <Text className="text-leben-accent font-semibold">Sign up</Text>
           </Text>
         </TouchableOpacity>
