@@ -164,6 +164,9 @@ export interface LebenStore extends GoalSlice, BookSlice {
   markAllNotificationsRead: () => void;
   deleteNotification: (id: string) => void;
 
+  lastDigestDate: string | null;
+  setLastDigestDate: (date: string) => void;
+
   // Notification Preferences
   notificationPrefs: NotificationPrefs;
   updateNotificationPrefs: (prefs: Partial<NotificationPrefs>) => void;
@@ -192,6 +195,7 @@ const initialState = {
   isSyncing:      false,
   notifications:  [],
   isNotificationOpen: false,
+  lastDigestDate: null,
   schedule:       [],
   notificationPrefs: {
     push:            true,
@@ -476,6 +480,7 @@ export const useLebenStore = create<LebenStore>()(
         set((state) => ({
           notifications: state.notifications.filter((n) => n.id !== id),
         })),
+      setLastDigestDate: (date) => set({ lastDigestDate: date }),
 
       updateNotificationPrefs: async (prefs) => {
         set((state) => ({
@@ -529,6 +534,7 @@ export const useLebenStore = create<LebenStore>()(
         goals:               state.goals,
         books:               state.books,
         schedule:            state.schedule,
+        lastDigestDate:      state.lastDigestDate,
       }),
     },
   ),

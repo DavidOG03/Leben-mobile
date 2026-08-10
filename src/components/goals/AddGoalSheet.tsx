@@ -1,15 +1,22 @@
-import { useState } from 'react';
-import { View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { useLebenStore } from '@/store/useStore';
-import { GoalFormData } from '@/utils/goals.types';
-import { BottomSheet } from '@/components/ui/BottomSheet';
-import ReminderPicker from '@/components/shared/ReminderPicker';
-import { Text } from '@/components/ui/Text';
-
+import ReminderPicker from "@/components/shared/ReminderPicker";
+import { BottomSheet } from "@/components/ui/BottomSheet";
+import { Text } from "@/components/ui/Text";
+import { useLebenStore } from "@/store/useStore";
+import { GoalFormData } from "@/utils/goals.types";
+import { useState } from "react";
+import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
 const ICON_OPTIONS = [
-  "🌐", "🏃", "🚀", "💰", "📚",
-  "🎯", "🧠", "🎨", "💪", "🌱",
+  "🌐",
+  "🏃",
+  "🚀",
+  "💰",
+  "📚",
+  "🎯",
+  "🧠",
+  "🎨",
+  "💪",
+  "🌱",
 ];
 
 interface AddGoalSheetProps {
@@ -32,15 +39,18 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
   });
   const [showReminder, setShowReminder] = useState(false);
 
-  const [errors, setErrors] = useState<Partial<Record<keyof GoalFormData, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof GoalFormData, string>>
+  >({});
 
   function validate(): boolean {
     const next: typeof errors = {};
     if (!form.title.trim()) next.title = "Goal title is required";
     if (!form.deadline.trim()) next.deadline = "Deadline is required";
     const filledMilestones = form.milestones.filter((m) => m.trim() !== "");
-    if (filledMilestones.length === 0) next.milestones = "Add at least one milestone";
-    
+    if (filledMilestones.length === 0)
+      next.milestones = "Add at least one milestone";
+
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -86,14 +96,16 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
   return (
     <BottomSheet visible={visible} onClose={handleCancel}>
       <View className="mb-6 flex-row items-center justify-between">
-        <Text className="font-black text-leben-text text-[20px]" style={{ letterSpacing: -0.4 }}>
+        <Text
+          className="font-black text-leben-text text-[20px]"
+          style={{ letterSpacing: -0.4 }}
+        >
           New Goal
         </Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} className="max-h-[85%]">
         <View className="gap-5 pb-8">
-          
           {/* Icon picker */}
           <View>
             <Text className="text-[10px] text-leben-text-muted tracking-[1px] uppercase mb-2">
@@ -105,7 +117,9 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                   key={icon}
                   onPress={() => setForm({ ...form, icon })}
                   className={`rounded-xl items-center justify-center border w-[36px] h-[36px] ${
-                    form.icon === icon ? 'bg-leben-accent/15 border-leben-accent' : 'bg-leben-bg-secondary border-leben-border-subtle'
+                    form.icon === icon
+                      ? "bg-leben-accent/15 border-leben-accent"
+                      : "bg-leben-bg-secondary border-leben-border-subtle"
                   }`}
                 >
                   <Text style={{ fontSize: 18 }}>{icon}</Text>
@@ -125,11 +139,15 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               placeholder="e.g. Master Spanish"
               placeholderTextColor="#555"
               className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-secondary border ${
-                errors.title ? 'border-leben-error' : 'border-leben-border-subtle'
+                errors.title
+                  ? "border-leben-error"
+                  : "border-leben-border-subtle"
               }`}
             />
             {errors.title ? (
-              <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.title}</Text>
+              <Text style={{ fontSize: 11, color: "#e05c5c", marginTop: 4 }}>
+                {errors.title}
+              </Text>
             ) : null}
           </View>
 
@@ -144,11 +162,15 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               placeholder="YYYY-MM (or YYYY-MM-DD)"
               placeholderTextColor="#555"
               className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-secondary border ${
-                errors.deadline ? 'border-leben-error' : 'border-leben-border-subtle'
+                errors.deadline
+                  ? "border-leben-error"
+                  : "border-leben-border-subtle"
               }`}
             />
             {errors.deadline ? (
-              <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.deadline}</Text>
+              <Text style={{ fontSize: 11, color: "#e05c5c", marginTop: 4 }}>
+                {errors.deadline}
+              </Text>
             ) : null}
           </View>
 
@@ -170,17 +192,31 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               ))}
             </View>
             {errors.milestones ? (
-              <Text style={{ fontSize: 11, color: '#e05c5c', marginTop: 4 }}>{errors.milestones}</Text>
+              <Text style={{ fontSize: 11, color: "#e05c5c", marginTop: 4 }}>
+                {errors.milestones}
+              </Text>
             ) : null}
             <TouchableOpacity onPress={addMilestoneField} className="mt-3">
-              <Text className="text-[12px] text-leben-accent">+ Add milestone</Text>
+              <Text className="text-[12px] text-leben-accent">
+                + Add milestone
+              </Text>
             </TouchableOpacity>
           </View>
 
           {/* Actions */}
           <View className="flex-row items-center justify-between mt-4">
-            <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1.5 p-2 bg-leben-bg-secondary rounded-lg border border-leben-border">
-              <Text className="text-leben-text-muted text-[12px]">{form.reminderAt ? new Date(form.reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Add Reminder"}</Text>
+            <TouchableOpacity
+              onPress={() => setShowReminder(true)}
+              className="flex-row items-center gap-1.5 p-2 bg-leben-bg-secondary rounded-lg border border-leben-border"
+            >
+              <Text className="text-leben-text-muted text-[12px]">
+                {form.reminderAt
+                  ? new Date(form.reminderAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "Add Reminder"}
+              </Text>
             </TouchableOpacity>
 
             <View className="flex-row gap-3 flex-1 ml-3">
@@ -188,26 +224,32 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                 onPress={handleCancel}
                 className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-secondary border border-leben-border-subtle"
               >
-                <Text className="text-leben-text-muted text-[13px] font-semibold">Cancel</Text>
+                <Text className="text-leben-text-muted text-[13px] font-semibold">
+                  Cancel
+                </Text>
               </TouchableOpacity>
-              
+
               <TouchableOpacity
                 onPress={handleSubmit}
-                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-text"
+                className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-accent"
               >
-                <Text className="text-leben-bg font-semibold text-[13px]">Create Goal</Text>
+                <Text className="text-leben-bg font-semibold text-[13px]">
+                  Create Goal
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
-
         </View>
       </ScrollView>
 
       {showReminder && (
-        <View style={{ position: 'absolute', bottom: 20, left: 20, right: 20 }}>
+        <View style={{ position: "absolute", bottom: 20, left: 20, right: 20 }}>
           <ReminderPicker
             initialValue={form.reminderAt}
-            onSave={(val) => { setForm({ ...form, reminderAt: val }); setShowReminder(false); }}
+            onSave={(val) => {
+              setForm({ ...form, reminderAt: val });
+              setShowReminder(false);
+            }}
             onClose={() => setShowReminder(false)}
           />
         </View>

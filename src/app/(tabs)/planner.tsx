@@ -18,6 +18,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, TouchableOpacity, View } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  Easing,
+  cancelAnimation,
+} from "react-native-reanimated";
 
 export default function PlannerScreen() {
   const userId = useLebenStore((s) => s.userId);
@@ -37,6 +45,27 @@ export default function PlannerScreen() {
   } | null>(null);
 
   const isAlive = tasks.length > 0;
+
+  const rotation = useSharedValue(0);
+
+  useEffect(() => {
+    if (isRegenerating) {
+      rotation.value = withRepeat(
+        withTiming(360, { duration: 1000, easing: Easing.linear }),
+        -1,
+        false
+      );
+    } else {
+      cancelAnimation(rotation);
+      rotation.value = 0;
+    }
+  }, [isRegenerating]);
+
+  const spinStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ rotate: `${rotation.value}deg` }],
+    };
+  });
 
   useEffect(() => {
     if (userId && isAlive && schedule.length === 0 && !isRegenerating) {
@@ -154,11 +183,11 @@ export default function PlannerScreen() {
             className="flex-row items-center gap-2 px-5 py-2.5 rounded-xl border bg-leben-bg-card border-leben-border"
             style={{ opacity: isRegenerating ? 0.5 : 1 }}
           >
-            <View className={isRegenerating ? "animate-spin" : ""}>
+            <Animated.View style={spinStyle}>
               <RefreshIcon color="#a1a1a1" size={14} />
-            </View>
+            </Animated.View>
             <Text className="text-leben-text-2 font-bold text-[13px]">
-              {isRegenerating ? "Regenerating..." : "Regenerate Plan"}
+              {isRegenerating ? "Regenerating..." : "Regenerate plan"}
             </Text>
           </TouchableOpacity>
         </View>

@@ -4,8 +4,10 @@ import { useRouter } from 'expo-router';
 import { supabase }  from '@/lib/supabase/client';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
+import { makeRedirectUri } from 'expo-auth-session';
 import { Text } from '@/components/ui/Text';
-import { BellIcon, GoogleIcon } from '@/constants/Icons';
+import { GoogleIcon } from '@/constants/Icons';
+import { Image } from 'react-native';
 
 export default function LogoutScreen() {
   const router = useRouter();
@@ -21,7 +23,9 @@ export default function LogoutScreen() {
     setErrorMessage(null);
     setLoading(true);
     try {
-      const redirectUrl = Linking.createURL('/(auth)/callback');
+      const redirectUrl = makeRedirectUri({
+        path: '/(auth)/callback'
+      });
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -83,7 +87,11 @@ export default function LogoutScreen() {
         {/* Logo */}
         <View className="items-center mb-10 mt-6">
           <View className="w-16 h-16 rounded-2xl bg-leben-bg-card border border-leben-border items-center justify-center mb-6 shadow-sm">
-            <BellIcon size={28} color="#7c6af0" />
+            <Image 
+              source={require("../../../assets/images/notification-icon.png")}
+              style={{ width: 28, height: 28 }}
+              resizeMode="contain"
+            />
           </View>
           <Text className="text-3xl font-bold text-leben-text tracking-tight mb-2">
             You're Signed Out

@@ -13,7 +13,6 @@ Notifications.setNotificationHandler({
     return {
       shouldPlaySound:  true,
       shouldSetBadge:   false,
-      shouldShowAlert:  true,
       shouldShowBanner: true,
       shouldShowList:   true,
     };

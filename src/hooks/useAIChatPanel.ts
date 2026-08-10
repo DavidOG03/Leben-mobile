@@ -1,8 +1,7 @@
-import { useRef, useState } from "react";
+import { sendAIChat } from "@/lib/ai/client";
 import { useAIStore } from "@/store/useAiStore";
-import { useLebenStore } from "@/store/useStore";
 import type { Habit, ScheduleItem } from "@/store/useStore";
-import type { ImportedEntityTracker, ImportKind } from "@/utils/aiChatTypes";
+import { useLebenStore } from "@/store/useStore";
 import {
   buildGoalDraft,
   buildHabitDraft,
@@ -17,7 +16,8 @@ import {
   shortenImportedText,
   summarizeCounts,
 } from "@/utils/aiChatImportUtils";
-import { sendAIChat } from "@/lib/ai/client";
+import type { ImportedEntityTracker, ImportKind } from "@/utils/aiChatTypes";
+import { useRef, useState } from "react";
 
 export function useAIChatPanel() {
   const messages = useAIStore((s) => s.messages);

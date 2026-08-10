@@ -3,6 +3,7 @@ import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { SmartSuggestion } from "@/components/tasks/SmartSuggestion";
 import { TaskInput } from "@/components/tasks/TaskInput";
 import { TaskList } from "@/components/tasks/TaskList";
+import { WeeklyProductivity } from "@/components/tasks/WeeklyProductivity";
 import { Text } from "@/components/ui/Text";
 import { View } from "react-native";
 
@@ -24,6 +25,7 @@ export default function TasksScreen() {
         <TaskInput />
         <TaskList />
         <SmartSuggestion />
+        <WeeklyProductivity />
       </View>
     </ScreenLayout>
   );

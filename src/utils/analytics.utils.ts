@@ -136,7 +136,15 @@ export function computeWeekActivity(
   const history = productivityHistory || {};
 
   return week.map(({ isoDate, label }) => {
-    const dayTasks = history[isoDate]?.completed || 0;
+    // Fallback: check live tasks in case history is out of sync
+    const liveCompleted = tasks.filter((t) => {
+      if (!t.completed || !t.completedAt) return false;
+      const d = new Date(t.completedAt);
+      const localStr = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+      return localStr === isoDate;
+    }).length;
+
+    const dayTasks = Math.max(history[isoDate]?.completed || 0, liveCompleted);
     const dayHabits = habits.reduce(
       (sum, h) => sum + ((h.completedDates ?? []).includes(isoDate) ? 1 : 0),
       0,
@@ -159,7 +167,14 @@ export function computeProductivity(
   const history = productivityHistory || {};
 
   const trend = last30.map((isoDate) => {
-    const dayTasks = history[isoDate]?.completed || 0;
+    const liveCompleted = tasks.filter((t) => {
+      if (!t.completed || !t.completedAt) return false;
+      const d = new Date(t.completedAt);
+      const localStr = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+      return localStr === isoDate;
+    }).length;
+
+    const dayTasks = Math.max(history[isoDate]?.completed || 0, liveCompleted);
     const dayHabits = habits.reduce(
       (sum, h) => sum + ((h.completedDates ?? []).includes(isoDate) ? 1 : 0),
       0,

@@ -6,8 +6,10 @@ import { supabase }  from '@/lib/supabase/client';
 import { Feather } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
+import { makeRedirectUri } from 'expo-auth-session';
 import { Text } from '@/components/ui/Text';
-import { BellIcon, GoogleIcon } from '@/constants/Icons';
+import { GoogleIcon } from '@/constants/Icons';
+import { Image } from 'react-native';
 
 // Complete auth session for web/browser
 WebBrowser.maybeCompleteAuthSession();
@@ -74,10 +76,8 @@ export default function SignUpScreen() {
         setTimeout(() => {
           router.replace('/(auth)/sign-in' as any);
         }, 3000);
-      } else {
-        // Logged in immediately (email confirmation disabled)
-        router.replace('/(auth)/sign-in' as any);
       }
+      // If logged in immediately (email confirmation disabled), AuthGuard will detect the session and redirect to /(tabs) automatically.
     }
   };
 
@@ -85,7 +85,9 @@ export default function SignUpScreen() {
     setErrorMessage(null);
     setLoading(true);
     try {
-      const redirectUrl = Linking.createURL('/(auth)/callback');
+      const redirectUrl = makeRedirectUri({
+        path: '/(auth)/callback'
+      });
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -159,7 +161,11 @@ export default function SignUpScreen() {
         {/* Logo */}
         <View className="items-center mb-8 mt-6">
           <View className="w-14 h-14 rounded-2xl bg-leben-bg-card border border-leben-border items-center justify-center mb-4">
-            <BellIcon size={24} color="#7c6af0" />
+            <Image 
+              source={require("../../../assets/images/notification-icon.png")}
+              style={{ width: 24, height: 24 }}
+              resizeMode="contain"
+            />
           </View>
           <Text className="text-3xl font-bold text-leben-text tracking-tight">
             Create Account

@@ -62,6 +62,8 @@ export default function NotificationManager() {
   const goals    = useLebenStore((state) => state.goals);
   const books    = useLebenStore((state) => state.books);
   const addNotification = useLebenStore((state) => state.addNotification);
+  const lastDigestDate = useLebenStore((state) => state.lastDigestDate);
+  const setLastDigestDate = useLebenStore((state) => state.setLastDigestDate);
 
   const notifiedRef = useRef<Set<string>>(new Set());
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -91,8 +93,6 @@ export default function NotificationManager() {
     [addNotification],
   );
 
-  const streakNudgeRef = useRef<Set<string>>(new Set());
-  
   useEffect(() => {
     const checkStreakNudge = () => {
       const hour = new Date().getHours();
@@ -100,10 +100,9 @@ export default function NotificationManager() {
       if (hour < 19 || hour >= 22) return;
       
       const today = new Date().toISOString().split("T")[0];
-      const digestKey = `daily-digest::${today}`;
 
-      if (!streakNudgeRef.current.has(digestKey)) {
-        streakNudgeRef.current.add(digestKey);
+      if (lastDigestDate !== today) {
+        setLastDigestDate(today);
 
         const unfinishedTasks = tasks.filter((t: any) => !t.completed).length;
         const unfinishedHabits = habits.filter((h: any) => !h.checked);
@@ -118,6 +117,7 @@ export default function NotificationManager() {
 
         if (messages.length > 0) {
           const body = messages.join(" ");
+          const digestKey = `daily-digest::${today}`;
           setToasts((prev) => [...prev, { id: digestKey, title: "Evening Digest 🌙", body }]);
           addNotification({ id: digestKey, title: "Evening Digest", body });
 
@@ -136,7 +136,7 @@ export default function NotificationManager() {
     const interval = setInterval(checkStreakNudge, 60_000);
     checkStreakNudge();
     return () => clearInterval(interval);
-  }, [tasks, habits, goals, books, addNotification]);
+  }, [tasks, habits, goals, books, addNotification, lastDigestDate, setLastDigestDate]);
 
   useEffect(() => {
     const checkReminders = () => {

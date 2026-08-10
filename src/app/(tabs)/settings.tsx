@@ -106,12 +106,16 @@ export default function SettingsScreen() {
         text: "Sign Out",
         style: "destructive",
         onPress: async () => {
-          const { error } = await supabase.auth.signOut();
-          if (error) {
-            Alert.alert("Error", error.message);
-          } else {
-            router.replace('/(auth)/logout' as any);
-          }
+          // We navigate first to prevent the Tabs navigator from crashing
+          // when the Zustand store clears the userId synchronously.
+          router.replace('/(auth)/logout' as any);
+          
+          setTimeout(async () => {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+              Alert.alert("Error", error.message);
+            }
+          }, 50);
         },
       },
     ]);

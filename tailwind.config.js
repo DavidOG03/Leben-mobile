@@ -19,6 +19,8 @@ module.exports = {
         'leben-accent': 'var(--accent-blue)',
         'leben-accent-light': 'var(--accent-blue-light)',
         'leben-accent-dim': 'rgba(107,127,255,0.12)',
+        'leben-accent-75': 'rgba(59,130,246,0.15)',
+        'leben-accent-90': 'rgba(59,130,246,0.40)',
 
         // Text
         'leben-text': 'var(--text-primary)',

@@ -1,15 +1,16 @@
+import { Text } from "@/components/ui/Text";
 import { useAIChatPanel } from "@/hooks/useAIChatPanel";
 import { useRef } from "react";
-import { KeyboardAvoidingView,
+import {
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   TextInput,
   TouchableOpacity,
-  View, } from 'react-native';
+  View,
+} from "react-native";
 import { SendIcon } from "../../constants/Icons";
 import AIChatMessages from "./AIChatMessages";
-import { Text } from '@/components/ui/Text';
-
 
 const suggestions = [
   { label: "Analyze my productivity" },
@@ -32,7 +33,8 @@ export default function AIChatPanel() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === "ios" ? "padding" : "padding"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 65}
       style={{ flex: 1 }}
       className="border-r border-leben-border-subtle"
     >
@@ -80,15 +82,15 @@ export default function AIChatPanel() {
             onPress={() => sendMessage(input)}
             disabled={!input.trim() || isThinking}
             className={`w-9 h-9 rounded-xl items-center justify-center border ${
-              input.trim() 
-                ? "bg-leben-accent-dim border-leben-accent/40" 
+              input.trim()
+                ? "bg-leben-accent-dim border-leben-accent/40"
                 : "bg-leben-bg-element border-leben-border-subtle"
             }`}
             style={{
               opacity: input.trim() && !isThinking ? 1 : 0.5,
             }}
           >
-            <Text className="text-leben-text-2 text-lg leading-none mt-[-2px]">
+            <Text className="text-leben-text text-lg leading-none mt-[-2px]">
               <SendIcon color="currentColor" size={16} />
             </Text>
           </TouchableOpacity>

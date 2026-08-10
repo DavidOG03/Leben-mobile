@@ -11,7 +11,7 @@ import {
   SparkleIcon,
   TaskIcon,
 } from "@/constants/Icons";
-import { Tabs, usePathname } from "expo-router";
+import { Tabs, usePathname, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -115,7 +115,6 @@ function TabButton({
   active: boolean;
   onPress: () => void;
 }) {
-  const { useRouter } = require("expo-router");
   const router = useRouter();
   const Icon = tab.icon;
 

@@ -1,11 +1,10 @@
+import ReminderPicker from "@/components/shared/ReminderPicker";
+import { BottomSheet } from "@/components/ui/BottomSheet";
+import { Text } from "@/components/ui/Text";
 import { BOOK_COLORS } from "@/constants/habits";
 import type { BookFormData } from "@/store/bookSlice";
 import { useState } from "react";
-import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import { BottomSheet } from "@/components/ui/BottomSheet";
-import ReminderPicker from "@/components/shared/ReminderPicker";
-import { Text } from '@/components/ui/Text';
-
+import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
 interface AddBookModalProps {
   visible: boolean;
@@ -81,9 +80,7 @@ export default function AddBookModal({
         </View>
 
         <View>
-          <Text
-            className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase"
-          >
+          <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">
             Book Title
           </Text>
           <TextInput
@@ -96,9 +93,7 @@ export default function AddBookModal({
         </View>
 
         <View>
-          <Text
-            className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase"
-          >
+          <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">
             Author
           </Text>
           <TextInput
@@ -111,9 +106,7 @@ export default function AddBookModal({
         </View>
 
         <View>
-          <Text
-            className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase"
-          >
+          <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">
             Total Pages
           </Text>
           <TextInput
@@ -126,8 +119,18 @@ export default function AddBookModal({
           />
           {/* Buttons */}
           <View className="flex-row items-center justify-between mt-4">
-            <TouchableOpacity onPress={() => setShowReminder(true)} className="flex-row items-center gap-1.5 p-2 bg-leben-bg-secondary rounded-lg border border-leben-border">
-              <Text className="text-leben-text-muted text-[12px]">{reminderAt ? new Date(reminderAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Add Reminder"}</Text>
+            <TouchableOpacity
+              onPress={() => setShowReminder(true)}
+              className="flex-row items-center gap-1.5 p-2 bg-leben-bg-secondary rounded-lg border border-leben-border"
+            >
+              <Text className="text-leben-text-muted text-[12px]">
+                {reminderAt
+                  ? new Date(reminderAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "Add Reminder"}
+              </Text>
             </TouchableOpacity>
 
             <View className="flex-row gap-3 flex-1 ml-3">
@@ -135,19 +138,23 @@ export default function AddBookModal({
                 onPress={handleCancel}
                 className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-secondary border border-leben-border-subtle"
               >
-                <Text className="text-leben-text-muted text-[13px] font-semibold">Cancel</Text>
+                <Text className="text-leben-text-muted text-[13px] font-semibold">
+                  Cancel
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={handleAdd}
                 disabled={!title.trim() || !totalPages}
-                className={`flex-1 py-3 rounded-xl items-center justify-center bg-leben-text ${
+                className={`flex-1 py-3 rounded-xl items-center justify-center bg-leben-accent ${
                   !(title.trim() && totalPages) ? "opacity-50" : ""
                 }`}
               >
                 <Text
                   className={`text-[14px] font-semibold ${
-                    title.trim() && totalPages ? "text-leben-bg" : "text-leben-text-muted"
+                    title.trim() && totalPages
+                      ? "text-leben-bg"
+                      : "text-leben-text-muted"
                   }`}
                 >
                   Add Book
@@ -159,10 +166,13 @@ export default function AddBookModal({
       </ScrollView>
 
       {showReminder && (
-        <View style={{ position: 'absolute', bottom: 20, left: 20, right: 20 }}>
+        <View style={{ position: "absolute", bottom: 20, left: 20, right: 20 }}>
           <ReminderPicker
             initialValue={reminderAt}
-            onSave={(val) => { setReminderAt(val); setShowReminder(false); }}
+            onSave={(val) => {
+              setReminderAt(val);
+              setShowReminder(false);
+            }}
             onClose={() => setShowReminder(false)}
           />
         </View>

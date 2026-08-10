@@ -32,17 +32,17 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
         <View
           className={`mt-3 relative z-10 items-center justify-center w-2 h-2 rounded-full border ${isCurrent ? "bg-leben-accent border-black shadow-sm" : "bg-leben-border border-leben-border"}`}
         >
-          {item.reminderAt && (
+          {/* {isCurrent && (
             <View className="absolute top-4">
               <BellIcon color="#7c6af0" size={10} />
             </View>
-          )}
+          )} */}
         </View>
       </View>
 
       {/* Card */}
       <View
-        className={`flex-1 rounded-2xl p-5 border ${isCurrent ? "bg-leben-accent-dim border-leben-accent" : "bg-leben-bg-card border-leben-text-dim"}`}
+        className={`flex-1 rounded-2xl p-5 border ${isCurrent ? "bg-leben-accent-dim border-leben-accent/50" : "bg-leben-bg-card border-leben-border"}`}
       >
         <View className="flex-row items-start justify-between mb-4">
           <View className="flex-col gap-1 flex-1 pr-2">
@@ -107,7 +107,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
               className="text-leben-text-2 font-medium"
               style={{ fontSize: 10 }}
             >
-              {item.priority?.toUpperCase() || 'MEDIUM'}
+              {item.priority?.toUpperCase() || "MEDIUM"}
             </Text>
           </View>
         </View>

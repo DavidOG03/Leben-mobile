@@ -11,10 +11,12 @@ import {
 } from "react-native";
 
 import { Text } from "@/components/ui/Text";
-import { BellIcon, GoogleIcon } from "@/constants/Icons";
+import { GoogleIcon } from "@/constants/Icons";
 import { Feather } from "@expo/vector-icons";
+import { Image } from "react-native";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
+import { makeRedirectUri } from "expo-auth-session";
 
 // Complete auth session for web/browser
 WebBrowser.maybeCompleteAuthSession();
@@ -72,7 +74,9 @@ export default function SignInScreen() {
     setErrorMessage(null);
     setLoading(true);
     try {
-      const redirectUrl = Linking.createURL("/(auth)/callback");
+      const redirectUrl = makeRedirectUri({
+        path: "/(auth)/callback"
+      });
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
@@ -156,7 +160,11 @@ export default function SignInScreen() {
         {/* Logo */}
         <View className="items-center mb-10">
           <View className="w-14 h-14 rounded-2xl bg-leben-bg-card border border-leben-border items-center justify-center mb-4">
-            <BellIcon size={24} color="#7c6af0" />
+            <Image 
+              source={require("../../../assets/images/notification-icon.png")}
+              style={{ width: 24, height: 24 }}
+              resizeMode="contain"
+            />
           </View>
           <Text className="text-3xl font-bold text-leben-text tracking-tight">
             Leben

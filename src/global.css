@@ -41,13 +41,15 @@
   .dark {
     /* Leben Design Tokens - Dark Mode */
     --bg-primary: #0a0a0a;
-    --bg-secondary: #1a1a1a;
-    --bg-card: #161616;
+    --bg-secondary: #1e1e1e;
+    --bg-card: #111111;
     --bg-element: #212225;
     --border-primary: #222222;
     --border-subtle: #1a1a1a;
-    --accent-blue: #3b82f6;
-    --accent-blue-light: #60a5fa;
+    /* --accent-blue: #3b82f6; */
+    --accent-blue: #7c6af0;
+    /* --accent-blue-light: #60a5fa; */
+    --accent-blue-light: #9d8ff5;
     --text-primary: #f0f0f0;
     --text-secondary: #acacac;
     --text-muted: #888888;

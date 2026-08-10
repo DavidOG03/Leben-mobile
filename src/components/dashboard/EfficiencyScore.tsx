@@ -2,16 +2,16 @@ import { Card } from "@/components/ui/Card";
 import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
+import { useColorScheme } from "nativewind";
 import { useEffect, useMemo, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
-import { useColorScheme } from "nativewind";
 import Animated, {
   Easing,
   useAnimatedProps,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import Svg, { Circle } from "react-native-svg";
+import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -163,9 +163,9 @@ export function EfficiencyScore() {
   });
 
   const { colorScheme } = useColorScheme();
-  const strokeBorder = colorScheme === 'dark' ? '#2a2a3a' : '#e5e5ea';
-  const strokeSubtle = colorScheme === 'dark' ? '#1e1e2e' : '#f4f4f5';
-  const strokeAccent = '#7c6af0';
+  const strokeBorder = colorScheme === "dark" ? "#1e1e1e" : "#e5e5ea";
+  const strokeSubtle = colorScheme === "dark" ? "#1a1a1a" : "#f4f4f5";
+  const strokeAccent = "#7c6af0";
 
   return (
     <Card className="min-h-[260px] items-center justify-center p-7 bg-leben-bg-card border border-leben-border-subtle">
@@ -276,6 +276,12 @@ export function EfficiencyScore() {
         <View className="items-center justify-center w-full">
           <View className="relative items-center justify-center mb-5">
             <Svg width="140" height="140" viewBox="0 0 140 140">
+              <Defs>
+                <LinearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
+                  <Stop offset="0" stopColor="#7c6af0" stopOpacity="1" />
+                  <Stop offset="1" stopColor="#9d8ff5" stopOpacity="1" />
+                </LinearGradient>
+              </Defs>
               <Circle
                 cx="70"
                 cy="70"
@@ -289,7 +295,7 @@ export function EfficiencyScore() {
                 cy={70}
                 r={54}
                 fill="none"
-                stroke={strokeAccent}
+                stroke="url(#scoreGrad)"
                 strokeWidth={8}
                 strokeLinecap="round"
                 strokeDasharray={`${2 * Math.PI * 54}`}

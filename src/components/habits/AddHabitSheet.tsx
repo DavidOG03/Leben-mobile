@@ -1,8 +1,8 @@
 import ReminderPicker from "@/components/shared/ReminderPicker";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { Text } from "@/components/ui/Text";
-import { useLebenStore } from "@/store/useStore";
 import { scheduleReminder } from "@/hooks/useNotifications";
+import { useLebenStore } from "@/store/useStore";
 import { useState } from "react";
 import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -72,10 +72,10 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
     if (reminderAt) {
       await scheduleReminder({
         id: habitId,
-        title: 'Habit Reminder',
+        title: "Habit Reminder",
         body: `Time for: ${label.trim()}`,
         date: new Date(reminderAt),
-        screen: 'habits',
+        screen: "habits",
       });
     }
 
@@ -104,14 +104,18 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
         <View className="gap-5 pb-8">
           {/* Icon */}
           <View>
-            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">Icon</Text>
+            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">
+              Icon
+            </Text>
             <View className="flex-row flex-wrap gap-2">
               {HABIT_ICONS.map((ic) => (
                 <TouchableOpacity
                   key={ic}
                   onPress={() => setIcon(ic)}
                   className={`rounded-xl items-center justify-center border w-[38px] h-[38px] ${
-                    icon === ic ? "bg-leben-accent/15 border-leben-accent" : "bg-leben-bg-secondary border-leben-border-subtle"
+                    icon === ic
+                      ? "bg-leben-accent/15 border-leben-accent"
+                      : "bg-leben-bg-secondary border-leben-border-subtle"
                   }`}
                 >
                   <Text style={{ fontSize: 18 }}>{ic}</Text>
@@ -122,7 +126,9 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
 
           {/* Color */}
           <View>
-            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">Color</Text>
+            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">
+              Color
+            </Text>
             <View className="flex-row gap-2">
               {HABIT_COLORS.map((c) => (
                 <TouchableOpacity
@@ -144,7 +150,9 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
 
           {/* Name */}
           <View>
-            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">Habit Name</Text>
+            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">
+              Habit Name
+            </Text>
             <TextInput
               value={label}
               onChangeText={setLabel}
@@ -156,7 +164,9 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
 
           {/* Target / Sub */}
           <View>
-            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">Target</Text>
+            <Text className="text-[11px] text-leben-text-muted mb-2 tracking-[1.2px] uppercase">
+              Target
+            </Text>
             <TextInput
               value={sub}
               onChangeText={setSub}
@@ -187,9 +197,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
                 onPress={onClose}
                 className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-secondary border border-leben-border-subtle"
               >
-                <Text
-                  className="text-leben-text-muted text-[13px] font-semibold"
-                >
+                <Text className="text-leben-text-muted text-[13px] font-semibold">
                   Cancel
                 </Text>
               </TouchableOpacity>
@@ -197,7 +205,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
               <TouchableOpacity
                 onPress={handleAdd}
                 disabled={!label.trim()}
-                className={`flex-1 py-3 rounded-xl items-center justify-center bg-leben-text ${
+                className={`flex-1 py-3 rounded-xl items-center justify-center bg-leben-accent ${
                   !label.trim() ? "opacity-50" : ""
                 }`}
               >
@@ -229,5 +237,3 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
     </BottomSheet>
   );
 }
-
-
