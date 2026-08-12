@@ -70,75 +70,37 @@ export function SmartSuggestion() {
   const canAnalyze = hasTasks && !loading;
 
   return (
-    <View
-      style={{
-        borderRadius: 14,
-        padding: 16,
-        marginTop: 16,
-        minHeight: 200,
-        justifyContent: "space-between",
-        backgroundColor: "#172554",
-        borderWidth: 1,
-        borderColor: "rgba(59,130,246,0.3)",
-        overflow: "hidden",
-        position: "relative",
-      }}
-    >
+    <View className="rounded-2xl p-4 mt-4 min-h-[200px] justify-between border overflow-hidden relative bg-leben-accent-75 border-leben-accent-light">
       {/* Glow accent */}
       <View
-        style={{
-          position: "absolute",
-          top: -30,
-          right: -30,
-          width: 120,
-          height: 120,
-          borderRadius: 60,
-          backgroundColor: "rgba(59,130,246,0.12)",
-        }}
+        className="absolute -top-[30px] -right-[30px] w-[120px] h-[120px] rounded-full bg-leben-accent-90"
         pointerEvents="none"
       />
 
       <View>
         {/* Sparkle icon badge */}
-        <View
-          style={{
-            width: 30,
-            height: 30,
-            borderRadius: 8,
-            backgroundColor: "rgba(59,130,246,0.2)",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 12,
-          }}
-        >
-          <Text style={{ fontSize: 14, color: "#fff" }}>✦</Text>
+        <View className="w-[30px] h-[30px] rounded-lg bg-leben-accent-90 items-center justify-center mb-3">
+          <Text className="text-sm text-white">✦</Text>
         </View>
 
         {/* Label */}
         <Text
-          style={{
-            fontSize: 10,
-            color: "rgba(191,219,254,0.8)",
-            letterSpacing: 1,
-            textTransform: "uppercase",
-            fontWeight: "600",
-            marginBottom: 10,
-            textDecorationLine: loading ? "none" : "none",
-          }}
+          className={`text-[10px] text-leben-accent tracking-widest uppercase font-semibold mb-2.5 ${
+            loading ? "no-underline" : "no-underline"
+          }`}
         >
           {loading ? `Prioritizing${dots}` : "Priority Insight"}
         </Text>
 
         {/* Loading skeleton */}
         {loading && (
-          <View style={{ gap: 8 }}>
+          <View className="gap-2">
             {[1, 0.7, 0.5].map((opacity, i) => (
               <View
                 key={i}
+                className="h-2.5 rounded bg-white"
                 style={{
-                  height: 10,
-                  borderRadius: 4,
-                  backgroundColor: `rgba(255,255,255,${opacity * 0.07})`,
+                  opacity: opacity * 0.07,
                   width: `${100 - i * 20}%`,
                 }}
               />
@@ -148,30 +110,13 @@ export function SmartSuggestion() {
 
         {/* Suggestion result */}
         {!loading && suggestion && (
-          <View style={{ gap: 10 }}>
-            <Text
-              style={{
-                fontSize: 14,
-                fontWeight: "700",
-                color: "#fff",
-                lineHeight: 20,
-              }}
-            >
+          <View className="gap-2.5">
+            <Text className="text-sm font-bold text-white leading-5">
               {suggestion.task}
             </Text>
-            <View
-              style={{
-                padding: 10,
-                borderRadius: 8,
-                backgroundColor: "rgba(0,0,0,0.2)",
-                borderLeftWidth: 2,
-                borderLeftColor: "#3b82f6",
-              }}
-            >
-              <Text style={{ fontSize: 11, color: "#93c5fd", lineHeight: 16 }}>
-                <Text style={{ color: "#a5b4fc", fontStyle: "italic" }}>
-                  Reason:{" "}
-                </Text>
+            <View className="p-2.5  bg-black/20 border-l-2 border-leben-accent">
+              <Text className="text-[11px] text-leben-accent4">
+                <Text className="text-indigo-300 italic">Reason: </Text>
                 {suggestion.reason}
               </Text>
             </View>
@@ -180,13 +125,7 @@ export function SmartSuggestion() {
 
         {/* Idle copy */}
         {!loading && !suggestion && (
-          <Text
-            style={{
-              fontSize: 12,
-              color: "rgba(191,219,254,0.4)",
-              lineHeight: 18,
-            }}
-          >
+          <Text className="text-xs text-leben-accent leading-relaxed">
             {hasTasks
               ? "Analysis required to find your high-impact task."
               : "No pending tasks found. Add some to get a strategy."}
@@ -195,55 +134,37 @@ export function SmartSuggestion() {
       </View>
 
       {/* CTA */}
-      <View style={{ marginTop: 16 }}>
+      <View className="mt-4">
         {suggestion && !loading ? (
-          <TouchableOpacity
-            onPress={fetchSuggestion}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-            activeOpacity={0.7}
-          >
-            <Text style={{ fontSize: 11, color: "#60a5fa", fontWeight: "700" }}>
-              {suggestion.action}
-            </Text>
-            <Text style={{ fontSize: 9, color: "rgba(96,165,250,0.4)" }}>
-              Re-analyze
-            </Text>
-          </TouchableOpacity>
+          <View className="flex-row items-center justify-between">
+            <View>
+              <Text className="text-[11px] text-leben-text font-bold">
+                {suggestion.action}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={fetchSuggestion} activeOpacity={0.7}>
+              <Text className="text-[11px] text-leben-accent">Re-analyze</Text>
+            </TouchableOpacity>
+          </View>
         ) : (
           <TouchableOpacity
             onPress={fetchSuggestion}
             disabled={!canAnalyze}
             activeOpacity={0.8}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 6,
-              borderRadius: 10,
-              paddingVertical: 11,
-              backgroundColor: canAnalyze
-                ? "#3b82f6"
-                : "rgba(255,255,255,0.04)",
-              shadowColor: canAnalyze ? "#3b82f6" : "transparent",
-              shadowOpacity: canAnalyze ? 0.35 : 0,
-              shadowRadius: 10,
-              elevation: canAnalyze ? 4 : 0,
-            }}
+            className={`flex-row items-center justify-center gap-1.5 rounded-xl py-3 ${
+              canAnalyze
+                ? "bg-leben-accent shadow-lg shadow-leben-accent/35"
+                : "bg-white/5"
+            }`}
+            style={{ elevation: canAnalyze ? 4 : 0 }}
           >
             {loading ? (
               <ActivityIndicator color="#fff" size="small" />
             ) : (
               <Text
-                style={{
-                  fontSize: 11,
-                  fontWeight: "700",
-                  letterSpacing: 0.3,
-                  color: canAnalyze ? "#fff" : "rgba(191,219,254,0.25)",
-                }}
+                className={`text-[11px] font-bold tracking-[0.3px] ${
+                  canAnalyze ? "text-white" : "text-leben-accent"
+                }`}
               >
                 Identify Priority
               </Text>

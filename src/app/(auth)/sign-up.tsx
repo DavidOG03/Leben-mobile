@@ -4,15 +4,14 @@ import { View, TextInput, TouchableOpacity,
 import { useRouter } from 'expo-router';
 import { supabase }  from '@/lib/supabase/client';
 import { Feather } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
-import { makeRedirectUri } from 'expo-auth-session';
 import { Text } from '@/components/ui/Text';
 import { GoogleIcon } from '@/constants/Icons';
 import { Image } from 'react-native';
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 
-// Complete auth session for web/browser
-WebBrowser.maybeCompleteAuthSession();
+GoogleSignin.configure({
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+});
 
 function passwordStrength(pw: string): { label: string; color: string; pct: number } {
   if (pw.length === 0)  return { label: '',       color: 'transparent',    pct: 0 };
@@ -85,56 +84,32 @@ export default function SignUpScreen() {
     setErrorMessage(null);
     setLoading(true);
     try {
-      const redirectUrl = makeRedirectUri({
-        path: '/(auth)/callback'
-      });
-      
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: redirectUrl,
-          skipBrowserRedirect: true,
-        },
-      });
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
 
-      if (error) throw error;
-      if (!data.url) throw new Error('No OAuth URL returned from provider.');
+      if (userInfo.data?.idToken) {
+        const { error } = await supabase.auth.signInWithIdToken({
+          provider: "google",
+          token: userInfo.data.idToken,
+        });
 
-      const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
-
-      if (result.type === 'success') {
-        const { url } = result;
-        
-        // Robustly parse the URL using the newly polyfilled URL object
-        const urlObj = new URL(url);
-        const fragment = urlObj.hash.substring(1);
-        
-        // If there's a fragment, it contains our access_token (implicit grant)
-        if (fragment) {
-          const params = new URLSearchParams(fragment);
-          const accessToken = params.get('access_token');
-          const refreshToken = params.get('refresh_token');
-
-          if (accessToken && refreshToken) {
-            const { error: sessionError } = await supabase.auth.setSession({
-              access_token: accessToken,
-              refresh_token: refreshToken,
-            });
-            if (sessionError) throw sessionError;
-          }
-        } else {
-          // Alternative fallback for PKCE / Server-side flow
-          await supabase.auth.getSession();
-        }
-      } else if (result.type === 'cancel' || result.type === 'dismiss') {
-        // User cancelled, do nothing
+        if (error) throw error;
       } else {
-        throw new Error('Authentication was unsuccessful.');
+        throw new Error("No ID token returned from Google Sign-In.");
       }
     } catch (err: any) {
-      showErrorToast(
-        err.message || 'An error occurred during Google Sign Up. Please try again or use email.'
-      );
+      if (err.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (err.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (err.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        showErrorToast("Google Play Services are not available on this device.");
+      } else {
+        showErrorToast(
+          err.message ||
+            "An error occurred during Google Sign Up. Please try again or use email.",
+        );
+      }
     } finally {
       setLoading(false);
     }

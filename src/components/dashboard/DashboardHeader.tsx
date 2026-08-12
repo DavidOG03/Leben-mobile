@@ -1,7 +1,8 @@
 import { Text } from "@/components/ui/Text";
-import { BellIcon } from "@/constants/Icons";
+import { BellIcon, ProfileIcon } from "@/constants/Icons";
 import { useLebenStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 
 export function DashboardHeader() {
@@ -19,20 +20,37 @@ export function DashboardHeader() {
     firstName = userEmail.split("@")[0];
   }
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
+  const getGreeting = (date: Date) => {
+    const hour = date.getHours();
     if (hour < 12) return "Good morning";
     if (hour < 18) return "Good afternoon";
     return "Good evening";
   };
 
-  const currentDate = new Date()
-    .toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "short",
-      day: "numeric",
-    })
-    .toUpperCase();
+  const getFormattedDate = (date: Date) => {
+    return date
+      .toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+      })
+      .toUpperCase();
+  };
+
+  const [greeting, setGreeting] = useState(() => getGreeting(new Date()));
+  const [currentDate, setCurrentDate] = useState(() =>
+    getFormattedDate(new Date()),
+  );
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      setGreeting(getGreeting(now));
+      setCurrentDate(getFormattedDate(now));
+    }, 60000); // Check every minute
+
+    return () => clearInterval(timer);
+  }, []);
 
   const hasUnread = notifications.some((n: any) => !n.read);
 
@@ -42,7 +60,7 @@ export function DashboardHeader() {
         {/* Left: Greeting */}
         <View>
           <Text className="text-leben-text font-semibold text-lg leading-snug">
-            {getGreeting()}, {firstName}
+            {greeting}, {firstName}
           </Text>
           <Text className="text-leben-text-muted text-[10px] tracking-widest font-medium uppercase mt-0.5">
             {currentDate}
@@ -65,10 +83,9 @@ export function DashboardHeader() {
           {/* Avatar */}
           <TouchableOpacity
             onPress={() => router.push("/(tabs)/settings" as any)}
-            className="w-9 h-9 rounded-full items-center justify-center border-[1.5px] border-leben-border"
-            style={{ backgroundColor: "#2a2a3a" }}
+            className="w-9 h-9 rounded-full items-center justify-center border-[1.5px] border-leben-border bg-leben-accent-dim"
           >
-            <Text className="text-leben-text-muted text-sm">👤</Text>
+            <ProfileIcon size={18} color="#7c6af0" />
           </TouchableOpacity>
         </View>
       </View>

@@ -73,14 +73,14 @@ export function AIMorningBrief() {
   return (
     <Card
       variant="none"
-      className="justify-between overflow-hidden p-0"
+      className="justify-between overflow-hidden p-0 bg-leben-accent-75"
       style={{
         minHeight: 260,
         borderWidth: 1,
-        borderColor: "#252535",
+        borderColor: "rgba(124, 106, 240, 0.5)",
       }}
     >
-      {/* Background Gradient */}
+      {/* Background Gradient
       <View className="absolute inset-0">
         <Svg width="100%" height="100%">
           <Defs>
@@ -91,8 +91,7 @@ export function AIMorningBrief() {
           </Defs>
           <Rect width="100%" height="100%" fill="url(#cardGrad)" />
         </Svg>
-      </View>
-
+      </View> */}
       <View className="relative z-10 flex-1 justify-between p-5">
         <View>
           {/* Header */}
@@ -110,7 +109,7 @@ export function AIMorningBrief() {
               <View className="h-6 bg-leben-text-dim rounded-full w-3/4 animate-pulse" />
             </View>
           ) : (
-            <Text className="text-leben-text text-2xl font-bold tracking-tight mb-4 leading-tight">
+            <Text className="text-leben-text text-2xl font-extrabold tracking-tight mb-4 leading-tight">
               {hasData ? (
                 brief ? (
                   brief.summary
@@ -214,11 +213,7 @@ export function AIMorningBrief() {
                           x2="1"
                           y2="0"
                         >
-                          <Stop
-                            offset="0"
-                            stopColor="#9d8ff5"
-                            stopOpacity="1"
-                          />
+                          <Stop offset="0" stopColor="706af1" stopOpacity="1" />
                           <Stop
                             offset="1"
                             stopColor="#7c6af0"

@@ -18,9 +18,9 @@ module.exports = {
         // Accent
         'leben-accent': 'var(--accent-blue)',
         'leben-accent-light': 'var(--accent-blue-light)',
-        'leben-accent-dim': 'rgba(107,127,255,0.12)',
-        'leben-accent-75': 'rgba(59,130,246,0.15)',
-        'leben-accent-90': 'rgba(59,130,246,0.40)',
+        'leben-accent-dim': 'rgb(124, 106, 240,0.12)',
+        'leben-accent-75': 'rgba(124, 106, 240,0.15)',
+        'leben-accent-90': 'rgba(124, 106, 240,0.35)',
 
         // Text
         'leben-text': 'var(--text-primary)',
@@ -59,7 +59,7 @@ module.exports = {
         card: '16px',
         input: '10px',
         btn: '10px',
-        chip: '20px',
+        chip: '10px',
       },
     },
   },
