@@ -56,5 +56,10 @@
     "web": "expo start --web",
     "lint": "expo lint"
   },
-  "private": true
+  "private": true,
+  "pnpm": {
+    "patchedDependencies": {
+      "react-native-css-interop@0.2.6": "patches/react-native-css-interop@0.2.6.patch"
+    }
+  }
 }
