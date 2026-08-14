@@ -1,0 +1,16 @@
+diff --git a/dist/metro/index.js b/dist/metro/index.js
+--- a/dist/metro/index.js
++++ b/dist/metro/index.js
+@@ -100,9 +100,11 @@
+                     if (!isRadonIDE) {
+                         virtualModulesPossible = bundler
+                             .getDependencyGraph()
+                             .then(async (graph) => {
+                             haste = graph._haste;
+                             fileSystem = graph._fileSystem;
+-                            ensureFileSystemPatched(fileSystem);
++                            if (fileSystem) {
++                                ensureFileSystemPatched(fileSystem);
++                            }
+                             ensureBundlerPatched(bundler);
+                         });
