@@ -11,9 +11,8 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 
 export function AIMorningBrief() {
   const router = useRouter();
-  const { tasks, habits, goals, userId } = useLebenStore();
+  const { tasks, habits, goals, userId, morningBrief: brief, setMorningBrief: setBrief, morningBriefGeneratedAt } = useLebenStore();
 
-  const [brief, setBrief] = useState<AIBriefResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [unavailable, setUnavail] = useState(false);
@@ -50,25 +49,22 @@ export function AIMorningBrief() {
     [userId, router],
   );
 
-  // Initial load logic matching web
-  const isFirstRun = useRef(true);
-  const prevTasksCount = useRef(tasks.length);
-
+  // Caching logic
   useEffect(() => {
     if (!hasData || !userId) {
       setBrief(null);
       return;
     }
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      prevTasksCount.current = tasks.length;
-      handleGenerate();
-    } else if (tasks.length !== prevTasksCount.current) {
-      prevTasksCount.current = tasks.length;
-      const timeoutId = setTimeout(() => handleGenerate(), 2000);
+
+    // Check if brief is stale (10 mins) or null
+    const TEN_MINS = 10 * 60 * 1000;
+    const isStale = !brief || !morningBriefGeneratedAt || (Date.now() - morningBriefGeneratedAt > TEN_MINS);
+
+    if (isStale) {
+      const timeoutId = setTimeout(() => handleGenerate(), 1000);
       return () => clearTimeout(timeoutId);
     }
-  }, [hasData, userId, tasks.length, handleGenerate]);
+  }, [hasData, userId, morningBriefGeneratedAt, brief, handleGenerate]);
 
   return (
     <Card
