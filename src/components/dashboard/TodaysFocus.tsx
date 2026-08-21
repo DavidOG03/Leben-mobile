@@ -45,12 +45,12 @@ export function TodaysFocus() {
     <Card className="min-h-[200px] p-0 overflow-hidden bg-leben-bg-card border border-leben-border-subtle">
       {/* Header */}
       <View className="flex-row items-center justify-between p-6 pb-4">
-        <Text className="text-leben-text font-semibold text-[15px]">
+        <Text className="text-leben-text font-geist-semibold text-[15px]">
           Today's Focus
         </Text>
         {tasks.length > 0 && (
           <TouchableOpacity onPress={() => router.push("/(tabs)/tasks" as any)}>
-            <Text className="text-leben-accent text-[11px] font-semibold">
+            <Text className="text-leben-accent text-[11px] font-geist-semibold">
               Go to Tasks
             </Text>
           </TouchableOpacity>
@@ -60,15 +60,15 @@ export function TodaysFocus() {
       {/* Content */}
       {tasks.length === 0 ? (
         <View className="flex-1 items-center justify-center py-6 gap-3">
-          <Text className="text-leben-text-dim text-2xl">十</Text>
-          <Text className="text-leben-text-dim text-xs text-center leading-relaxed">
+          <Text className="text-leben-text-dim text-2xl font-geist-medium">十</Text>
+          <Text className="text-leben-text-dim text-xs text-center leading-relaxed font-geist-medium">
             No tasks yet
           </Text>
           <TouchableOpacity
             onPress={() => router.push("/(tabs)/tasks" as any)}
             className="px-4 py-1.5 rounded-lg border border-leben-border active:opacity-70"
           >
-            <Text className="text-leben-text-dim text-[11px]">
+            <Text className="text-leben-text-dim text-[11px] font-geist-medium">
               Add your first task
             </Text>
           </TouchableOpacity>
@@ -95,7 +95,7 @@ export function TodaysFocus() {
                     activeOpacity={0.7}
                   >
                     {task.completed && (
-                      <Text className="text-leben-success text-[10px]">✓</Text>
+                      <Text className="text-leben-success text-[10px] font-geist-medium">✓</Text>
                     )}
                   </TouchableOpacity>
 
@@ -120,13 +120,13 @@ export function TodaysFocus() {
                       <View
                         className={`rounded px-2 py-0.5 border ${
                           isWork
-                            ? "bg-leben-accent/10 border-leben-accent/20"
-                            : "bg-green-500/10 border-green-500/20"
+                            ? "bg-tag-work-bg border-tag-work-border"
+                            : "bg-tag-personal-bg border-tag-personal-border"
                         }`}
                       >
                         <Text
-                          className={`text-[9px] font-medium tracking-widest ${
-                            isWork ? "text-leben-accent" : "text-green-500"
+                          className={`text-[9px] font-geist-medium tracking-widest ${
+                            isWork ? "text-tag-work-text" : "text-tag-personal-text"
                           }`}
                         >
                           {task.tag}
@@ -134,7 +134,7 @@ export function TodaysFocus() {
                       </View>
                     )}
                     {task.date && (
-                      <Text className="text-[10px] text-leben-text-dim">
+                      <Text className="text-[10px] text-leben-text-dim font-geist-medium">
                         {task.date}
                       </Text>
                     )}
@@ -168,7 +168,7 @@ export function TodaysFocus() {
                     className="w-7 h-7 rounded-md items-center justify-center ml-0.5"
                     activeOpacity={0.6}
                   >
-                    <Text className="text-red-400 text-[13px]">🗑</Text>
+                    <Text className="text-red-400 text-[13px] font-geist-medium">🗑</Text>
                   </TouchableOpacity>
                 </View>
 

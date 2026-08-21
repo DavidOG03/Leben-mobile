@@ -30,7 +30,7 @@ export default function AIScreen() {
 
           <View className="items-center mb-8">
             <Text
-              className="text-leben-text font-black text-center"
+              className="text-leben-text font-geist-ultrablack text-center"
               style={{ fontSize: 28, letterSpacing: -0.5, marginBottom: 8 }}
             >
               Neural <Text className="text-leben-accent">AI Assistant</Text>
@@ -44,7 +44,7 @@ export default function AIScreen() {
             onPress={() => router.push("/(auth)/sign-in" as any)}
             className="flex-row items-center gap-3 px-8 py-4 rounded-xl mb-8 bg-leben-accent shadow-lg"
           >
-            <Text className="text-white font-bold text-[15px]">
+            <Text className="text-white font-geist-bold text-[15px]">
               Sign In to Access AI
             </Text>
             <Ionicons name="arrow-forward" size={18} color="#ffffff" />
@@ -54,14 +54,14 @@ export default function AIScreen() {
             <View className="p-4 rounded-xl bg-leben-bg-card border border-leben-border flex-row items-center gap-3">
               <SparkleIcon size={18} color="#7c6af0" />
               <View className="flex-1">
-                <Text className="text-[13px] font-semibold text-leben-text">Context-Aware Planning</Text>
+                <Text className="text-[13px] font-geist-semibold text-leben-text">Context-Aware Planning</Text>
                 <Text className="text-[11px] text-leben-text-dim mt-0.5">AI analyzes your energy and habits</Text>
               </View>
             </View>
             <View className="p-4 rounded-xl bg-leben-bg-card border border-leben-border flex-row items-center gap-3">
               <SparkleIcon size={18} color="#7c6af0" />
               <View className="flex-1">
-                <Text className="text-[13px] font-semibold text-leben-text">Sub-Task Decomposition</Text>
+                <Text className="text-[13px] font-geist-semibold text-leben-text">Sub-Task Decomposition</Text>
                 <Text className="text-[11px] text-leben-text-dim mt-0.5">Automatically break complex goals down</Text>
               </View>
             </View>

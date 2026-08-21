@@ -97,7 +97,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
     <BottomSheet visible={visible} onClose={handleCancel}>
       <View className="mb-6 flex-row items-center justify-between">
         <Text
-          className="font-black text-leben-text text-[20px]"
+          className="font-geist-ultrablack text-leben-text text-[20px]"
           style={{ letterSpacing: -0.4 }}
         >
           New Goal
@@ -224,7 +224,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                 onPress={handleCancel}
                 className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-secondary border border-leben-border-subtle"
               >
-                <Text className="text-leben-text-muted text-[13px] font-semibold">
+                <Text className="text-leben-text-muted text-[13px] font-geist-semibold">
                   Cancel
                 </Text>
               </TouchableOpacity>
@@ -233,7 +233,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                 onPress={handleSubmit}
                 className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-accent"
               >
-                <Text className="text-leben-bg font-semibold text-[13px]">
+                <Text className="text-leben-bg font-geist-semibold text-[13px]">
                   Create Goal
                 </Text>
               </TouchableOpacity>

@@ -46,7 +46,7 @@ interface Props {
 export function ProductivityScore({ data, hasData }: Props) {
   return (
     <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border">
-      <Text className="font-semibold text-leben-text-2 mb-1 text-[14px]">
+      <Text className="font-geist-semibold text-leben-text-2 mb-1 text-[14px]">
         Productivity Score
       </Text>
       <Text className="text-[11px] text-leben-text-muted mb-4">
@@ -55,7 +55,7 @@ export function ProductivityScore({ data, hasData }: Props) {
 
       <View className="flex-row items-end justify-between gap-2">
         <View>
-          <Text className="font-black text-leben-text-2 text-[36px] -tracking-[1px] leading-[40px]">
+          <Text className="font-geist-ultrablack text-leben-text-2 text-[36px] -tracking-[1px] leading-[40px]">
             {data.score} %
           </Text>
           <Text className="text-[11px] text-leben-accent mt-1">

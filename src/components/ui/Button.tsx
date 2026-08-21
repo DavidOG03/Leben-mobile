@@ -35,10 +35,10 @@ export function Button({
   };
   
   const textClasses = {
-    primary: 'text-white font-semibold',
-    secondary: 'text-leben-text font-medium',
-    danger: 'text-white font-semibold',
-    ghost: 'text-leben-accent font-medium',
+    primary: 'text-white font-geist-semibold',
+    secondary: 'text-leben-text font-geist-medium',
+    danger: 'text-white font-geist-semibold',
+    ghost: 'text-leben-accent font-geist-medium',
   };
 
   const isDisabled = disabled || loading;

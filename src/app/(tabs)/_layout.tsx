@@ -6,9 +6,7 @@ import {
   GoalIcon,
   GridIcon,
   HabitIcon,
-  HomeIcon,
   MoreIcon,
-  SparkleIcon,
   TaskIcon,
 } from "@/constants/Icons";
 import { Tabs, usePathname, useRouter } from "expo-router";
@@ -60,7 +58,7 @@ function CustomTabBar() {
       {/* Tab bar */}
       <View
         style={{ height: totalHeight, paddingBottom: insets.bottom }}
-        className="flex-row bg-leben-bg-card border-t border-leben-border items-center px-2"
+        className="flex-row bg-leben-bg-card border-t border-leben-border-subtle items-center px-2"
       >
         {MAIN_TABS.map((tab) => {
           const active =
@@ -85,12 +83,10 @@ function CustomTabBar() {
         >
           <MoreIcon
             size={22}
-            color={
-              isNeuralActive || dropupOpen ? "#7c6af0" : "#888888"
-            }
+            color={isNeuralActive || dropupOpen ? "#7c6af0" : "#888888"}
           />
           <Text
-            className={`text-[10px] mt-1.5 font-medium ${
+            className={`text-[10px] mt-1.5 font-geist-medium ${
               isNeuralActive || dropupOpen
                 ? "text-leben-accent"
                 : "text-leben-text-dim"
@@ -129,7 +125,7 @@ function TabButton({
     >
       <Icon size={22} color={active ? "#7c6af0" : "#888888"} />
       <Text
-        className={`text-[10px] mt-1.5 font-medium ${
+        className={`text-[10px] mt-1.5 font-geist-medium ${
           active ? "text-leben-accent" : "text-leben-text-dim"
         }`}
       >

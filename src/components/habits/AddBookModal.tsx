@@ -55,7 +55,7 @@ export default function AddBookModal({
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="flex-row items-center justify-between mb-6">
           <Text
-            className="font-black text-leben-text text-[20px]"
+            className="font-geist-ultrablack text-leben-text text-[20px]"
             style={{ letterSpacing: -0.4 }}
           >
             Track a Book
@@ -138,7 +138,7 @@ export default function AddBookModal({
                 onPress={handleCancel}
                 className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-secondary border border-leben-border-subtle"
               >
-                <Text className="text-leben-text-muted text-[13px] font-semibold">
+                <Text className="text-leben-text-muted text-[13px] font-geist-semibold">
                   Cancel
                 </Text>
               </TouchableOpacity>
@@ -151,7 +151,7 @@ export default function AddBookModal({
                 }`}
               >
                 <Text
-                  className={`text-[14px] font-semibold ${
+                  className={`text-[14px] font-geist-semibold ${
                     title.trim() && totalPages
                       ? "text-leben-bg"
                       : "text-leben-text-muted"

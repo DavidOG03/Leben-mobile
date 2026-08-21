@@ -23,7 +23,7 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
       </View>
 
       <Text
-        className="text-leben-text-2 font-bold mb-3 text-center"
+        className="text-leben-text-2 font-geist-bold mb-3 text-center"
         style={{ fontSize: 20, letterSpacing: -0.5 }}
       >
         System Idle
@@ -34,7 +34,7 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
       >
         The AI Planner requires more contextual input to generate an optimized
         daily plan. Add{" "}
-        <Text className="text-leben-accent font-bold">
+        <Text className="text-leben-accent font-geist-bold">
           {remaining} more {remaining === 1 ? "task" : "tasks"}
         </Text>{" "}
         to activate high-performance scheduling.
@@ -46,13 +46,13 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
           className="flex-row items-center justify-center gap-2 px-6 py-3 rounded-xl bg-leben-accent"
         >
           <PlusIcon color="#fff" size={16} />
-          <Text className="text-white text-[14px] font-bold">
+          <Text className="text-white text-[14px] font-geist-bold">
             Add Tasks
           </Text>
         </TouchableOpacity>
 
         <Text
-          className="text-center text-leben-text-dim text-[11px] font-semibold tracking-[1px] uppercase"
+          className="text-center text-leben-text-dim text-[11px] font-geist-semibold tracking-[1px] uppercase"
         >
           Current tasks: {taskCount} / 3
         </Text>

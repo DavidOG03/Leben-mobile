@@ -85,7 +85,7 @@ export function SmartSuggestion() {
 
         {/* Label */}
         <Text
-          className={`text-[10px] text-leben-accent tracking-widest uppercase font-semibold mb-2.5 ${
+          className={`text-[10px] text-leben-accent tracking-widest uppercase font-geist-semibold mb-2.5 ${
             loading ? "no-underline" : "no-underline"
           }`}
         >
@@ -111,7 +111,7 @@ export function SmartSuggestion() {
         {/* Suggestion result */}
         {!loading && suggestion && (
           <View className="gap-2.5">
-            <Text className="text-sm font-bold text-white leading-5">
+            <Text className="text-sm font-geist-bold text-white leading-5">
               {suggestion.task}
             </Text>
             <View className="p-2.5  bg-black/20 border-l-2 border-leben-accent">
@@ -138,7 +138,7 @@ export function SmartSuggestion() {
         {suggestion && !loading ? (
           <View className="flex-row items-center justify-between">
             <View>
-              <Text className="text-[11px] text-leben-text font-bold">
+              <Text className="text-[11px] text-leben-text font-geist-bold">
                 {suggestion.action}
               </Text>
             </View>
@@ -162,7 +162,7 @@ export function SmartSuggestion() {
               <ActivityIndicator color="#fff" size="small" />
             ) : (
               <Text
-                className={`text-[11px] font-bold tracking-[0.3px] ${
+                className={`text-[11px] font-geist-bold tracking-[0.3px] ${
                   canAnalyze ? "text-white" : "text-leben-accent"
                 }`}
               >

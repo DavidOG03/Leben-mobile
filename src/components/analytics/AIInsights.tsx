@@ -21,7 +21,7 @@ export default function AIInsights({ insights, hasData }: AIInsightsProps) {
         >
           <Ionicons name="sparkles" size={12} color="#3b82f6" />
         </View>
-        <Text className="font-semibold text-leben-text-2 text-[14px]">
+        <Text className="font-geist-semibold text-leben-text-2 text-[14px]">
           AI Insights
         </Text>
       </View>

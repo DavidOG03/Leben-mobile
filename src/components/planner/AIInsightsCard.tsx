@@ -15,7 +15,7 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
           <View className="p-1.5 rounded-lg bg-leben-bg-element border border-leben-border-subtle">
             <SparkleIcon color="#3b82f6" size={16} />
           </View>
-          <Text className="text-leben-text font-semibold text-[14px]">
+          <Text className="text-leben-text font-geist-semibold text-[14px]">
             AI Insights
           </Text>
         </View>
@@ -32,7 +32,7 @@ export function AIInsightsCard({ insights, isLoading }: AIInsightsCardProps) {
         <View className="p-1.5 rounded-lg bg-leben-bg-element border border-leben-border-subtle">
           <Text className="text-leben-accent text-[16px]">✨</Text>
         </View>
-        <Text className="text-leben-text font-semibold text-[14px]">
+        <Text className="text-leben-text font-geist-semibold text-[14px]">
           AI Insights
         </Text>
       </View>

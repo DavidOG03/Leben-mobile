@@ -22,12 +22,12 @@ export function GoalProgress() {
   return (
     <Card className="min-h-[260px] p-6 bg-leben-bg-card border border-leben-border-subtle">
       <View className="flex-row items-center justify-between mb-5">
-        <Text className="text-leben-text font-semibold text-[15px]">
+        <Text className="text-leben-text font-geist-semibold text-[15px]">
           Goal Progress
         </Text>
         {!loading && goals.length > 0 && (
           <TouchableOpacity onPress={() => router.push('/(tabs)/goals' as any)}>
-            <Text className="text-leben-accent text-[11px] font-semibold">
+            <Text className="text-leben-accent text-[11px] font-geist-semibold">
               Go to Goals
             </Text>
           </TouchableOpacity>
@@ -55,15 +55,15 @@ export function GoalProgress() {
         </View>
       ) : goals.length === 0 ? (
         <View className="flex-1 items-center justify-center py-4 gap-3">
-          <Text className="text-leben-text-dim text-2xl">十</Text>
-          <Text className="text-leben-text-dim text-[11px]">
+          <Text className="text-leben-text-dim text-2xl font-geist-medium">十</Text>
+          <Text className="text-leben-text-dim text-[11px] font-geist-medium">
             No goals added yet
           </Text>
           <TouchableOpacity
             onPress={() => router.push('/(tabs)/goals' as any)}
             className="px-4 py-1.5 rounded-lg border border-leben-border active:opacity-70"
           >
-            <Text className="text-leben-text-dim text-[11px]">Create a goal</Text>
+            <Text className="text-leben-text-dim text-[11px] font-geist-medium">Create a goal</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -75,12 +75,12 @@ export function GoalProgress() {
               <View key={g.id}>
                 <View className="flex-row items-center justify-between mb-2">
                   <View className="flex-row items-center gap-2 max-w-[70%]">
-                    <Text className="text-[14px]">{g.icon}</Text>
-                    <Text className="text-leben-text font-medium text-[13px]" numberOfLines={1}>
+                    <Text className="text-[14px] font-geist-medium">{g.icon}</Text>
+                    <Text className="text-leben-text font-geist-medium text-[13px]" numberOfLines={1}>
                       {g.title}
                     </Text>
                   </View>
-                  <Text className="text-leben-text-muted font-medium text-[11px]">
+                  <Text className="text-leben-text-muted font-geist-medium text-[11px]">
                     {progress}%
                   </Text>
                 </View>
@@ -104,7 +104,7 @@ export function GoalProgress() {
                           m.done ? 'bg-leben-accent/20 border-leben-accent' : 'bg-transparent border-leben-border-subtle'
                         }`}
                       >
-                        {m.done && <Text className="text-leben-accent text-[8px]">✓</Text>}
+                        {m.done && <Text className="text-leben-accent text-[8px] font-geist-medium">✓</Text>}
                       </View>
                       <Text 
                         className={`flex-1 text-[11px] ${m.done ? 'text-leben-text-muted' : 'text-leben-text-dim'}`}
@@ -116,7 +116,7 @@ export function GoalProgress() {
                   ))}
                   {safeGoal.milestones.length > 3 && (
                     <TouchableOpacity onPress={() => router.push('/(tabs)/goals' as any)}>
-                      <Text className="text-leben-text-dim text-[11px]">
+                      <Text className="text-leben-text-dim text-[11px] font-geist-medium">
                         +{g.milestones.length - 3} more
                       </Text>
                     </TouchableOpacity>
@@ -127,7 +127,7 @@ export function GoalProgress() {
           })}
           {goals.length > 2 && (
             <TouchableOpacity onPress={() => router.push('/(tabs)/goals' as any)} className="mt-2 items-center">
-              <Text className="text-leben-text-dim text-[11px]">
+              <Text className="text-leben-text-dim text-[11px] font-geist-medium">
                 See all {goals.length} goals
               </Text>
             </TouchableOpacity>

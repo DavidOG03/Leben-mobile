@@ -123,12 +123,12 @@ export function HabitItem({ habit }: HabitItemProps) {
               marginTop: 4,
             }}
           >
-            <Text className="text-white font-semibold text-[12px]">Save</Text>
+            <Text className="text-white font-geist-semibold text-[12px]">Save</Text>
           </TouchableOpacity>
         </View>
       ) : (
         <>
-          <Text className="text-[15px] font-bold text-leben-text mb-0.5">
+          <Text className="text-[15px] font-geist-bold text-leben-text mb-0.5">
             {habit.label}
           </Text>
           <Text className="text-[11px] text-leben-text-secondary mb-1">

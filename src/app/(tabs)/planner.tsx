@@ -93,7 +93,7 @@ export default function PlannerScreen() {
 
           <View className="items-center mb-8">
             <Text
-              className="text-leben-text font-black text-center"
+              className="text-leben-text font-geist-ultrablack text-center"
               style={{ fontSize: 28, letterSpacing: -0.5, marginBottom: 8 }}
             >
               Neural <Text className="text-leben-accent">Day Planner</Text>
@@ -108,7 +108,7 @@ export default function PlannerScreen() {
             onPress={() => router.push("/(auth)/sign-in" as any)}
             className="flex-row items-center gap-3 px-8 py-4 rounded-xl mb-8 bg-leben-accent shadow-lg"
           >
-            <Text className="text-white font-bold text-[15px]">
+            <Text className="text-white font-geist-bold text-[15px]">
               Sign In to Unlock Day Planner
             </Text>
             <Ionicons name="arrow-forward" size={18} color="#ffffff" />
@@ -163,7 +163,7 @@ export default function PlannerScreen() {
         <View className="flex-col md:flex-row items-start justify-between gap-6">
           <View className="flex-col gap-3">
             <Text
-              className="text-leben-text font-bold"
+              className="text-leben-text font-geist-bold"
               style={{ fontSize: 32, letterSpacing: -0.5 }}
             >
               Your Day, Planned
@@ -186,7 +186,7 @@ export default function PlannerScreen() {
             <Animated.View style={spinStyle}>
               <RefreshIcon color="#a1a1a1" size={14} />
             </Animated.View>
-            <Text className="text-leben-text-2 font-bold text-[13px]">
+            <Text className="text-leben-text-2 font-geist-bold text-[13px]">
               {isRegenerating ? "Regenerating..." : "Regenerate plan"}
             </Text>
           </TouchableOpacity>
@@ -197,7 +197,7 @@ export default function PlannerScreen() {
           <View>
             <View className="flex-row items-center justify-between mb-8">
               <Text
-                className="text-leben-text-2 font-bold"
+                className="text-leben-text-2 font-geist-bold"
                 style={{ fontSize: 18 }}
               >
                 Timeline
@@ -221,7 +221,7 @@ export default function PlannerScreen() {
               className="flex-row items-center justify-center gap-2 px-5 py-3 rounded-xl border flex-1 min-w-[140px] bg-leben-bg-card border-leben-border"
             >
               <PlusIcon color="#666" size={16} />
-              <Text className="text-leben-text font-bold text-[13px]">
+              <Text className="text-leben-text font-geist-bold text-[13px]">
                 Add Task
               </Text>
             </TouchableOpacity>
@@ -231,7 +231,7 @@ export default function PlannerScreen() {
               className="flex-row items-center justify-center gap-2 px-5 py-3 rounded-xl border flex-1 min-w-[140px] bg-leben-bg-card border-leben-border"
             >
               <TrashIcon color="#e85555" size={14} />
-              <Text className="text-leben-error font-bold text-[13px]">
+              <Text className="text-leben-error font-geist-bold text-[13px]">
                 Clear Schedule
               </Text>
             </TouchableOpacity>

@@ -94,7 +94,7 @@ export default function BookCard({ book }: BookCardProps) {
             className="rounded-lg px-3 py-2 items-center mt-1"
             style={{ backgroundColor: book.coverColor }}
           >
-            <Text className="text-white text-[12px] font-bold">
+            <Text className="text-white text-[12px] font-geist-bold">
               Save Details
             </Text>
           </TouchableOpacity>
@@ -102,7 +102,7 @@ export default function BookCard({ book }: BookCardProps) {
       ) : (
         <View className="mb-3">
           <Text
-            className="font-bold text-leben-text leading-tight mb-1"
+            className="font-geist-bold text-leben-text leading-tight mb-1"
             style={{ fontSize: 15 }}
           >
             {book.title}
@@ -128,7 +128,7 @@ export default function BookCard({ book }: BookCardProps) {
           {pagesLeft > 0 ? `${pagesLeft} pages left` : "Finished! 🎉"}
         </Text>
         <Text
-          className="font-bold"
+          className="font-geist-bold"
           style={{ fontSize: 13, color: book.coverColor }}
         >
           {pct}%
@@ -152,7 +152,7 @@ export default function BookCard({ book }: BookCardProps) {
             className="rounded-lg px-3 py-2 items-center justify-center"
             style={{ backgroundColor: book.coverColor }}
           >
-            <Text className="text-white text-[12px] font-bold">Save</Text>
+            <Text className="text-white text-[12px] font-geist-bold">Save</Text>
           </TouchableOpacity>
         </View>
       ) : (

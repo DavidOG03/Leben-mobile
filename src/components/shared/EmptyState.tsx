@@ -26,7 +26,7 @@ export function EmptyState({
         <Text className="text-3xl">{icon}</Text>
       </View>
       
-      <Text className="text-leben-text text-lg font-semibold mb-2 text-center">
+      <Text className="text-leben-text text-lg font-geist-semibold mb-2 text-center">
         {title}
       </Text>
       

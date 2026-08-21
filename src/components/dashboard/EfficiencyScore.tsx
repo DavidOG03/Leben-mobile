@@ -169,7 +169,7 @@ export function EfficiencyScore() {
 
   return (
     <Card className="min-h-[260px] items-center justify-center p-7 bg-leben-bg-card border border-leben-border-subtle">
-      <Text className="uppercase tracking-widest text-leben-text-dim text-[10px] font-semibold mb-6">
+      <Text className="uppercase tracking-widest text-leben-text-dim text-[10px] font-geist-semibold mb-6">
         Efficiency Score
       </Text>
 
@@ -218,17 +218,17 @@ export function EfficiencyScore() {
               />
             </Svg>
             <View className="absolute">
-              <Text className="text-leben-text-dim text-2xl">🔒</Text>
+              <Text className="text-leben-text-dim text-2xl font-geist-medium">🔒</Text>
             </View>
           </View>
-          <Text className="text-leben-text-muted text-xs text-center leading-relaxed mb-4">
+          <Text className="text-leben-text-muted text-xs text-center leading-relaxed mb-4 font-geist-medium">
             Sign in to analyze{"\n"}your daily performance.
           </Text>
           <TouchableOpacity
             onPress={() => router.push("/(auth)/sign-in" as any)}
             className="px-4 py-2 rounded-lg border border-[rgba(124,106,240,0.25)] bg-[rgba(124,106,240,0.1)] active:opacity-70"
           >
-            <Text className="text-leben-accent font-semibold text-xs">
+            <Text className="text-leben-accent font-geist-semibold text-xs">
               Sign In
             </Text>
           </TouchableOpacity>
@@ -260,15 +260,15 @@ export function EfficiencyScore() {
               />
             </Svg>
             <View className="absolute items-center">
-              <Text className="text-leben-text-dim text-3xl font-bold leading-none">
+              <Text className="text-leben-text-dim text-3xl font-geist-bold leading-none">
                 —
               </Text>
-              <Text className="text-leben-text-dim text-[9px] uppercase tracking-widest mt-1">
+              <Text className="text-leben-text-dim text-[9px] uppercase tracking-widest mt-1 font-geist-medium">
                 No data
               </Text>
             </View>
           </View>
-          <Text className="text-leben-text-dim text-[11px] text-center leading-relaxed">
+          <Text className="text-leben-text-dim text-[11px] text-center leading-relaxed font-geist-medium">
             Score appears after{"\n"}your first active week
           </Text>
         </View>
@@ -306,15 +306,15 @@ export function EfficiencyScore() {
               />
             </Svg>
             <View className="absolute items-center">
-              <Text className="text-leben-text text-3xl font-extrabold tracking-tight">
+              <Text className="text-leben-text text-3xl font-geist-black tracking-tight">
                 {analytics.score}%
               </Text>
-              <Text className="text-leben-accent text-[10px] uppercase tracking-widest font-semibold mt-1">
+              <Text className="text-leben-accent text-[10px] uppercase tracking-widest font-geist-semibold mt-1">
                 {analytics.rating}
               </Text>
             </View>
           </View>
-          <Text className="text-leben-text-dim text-xs text-center leading-relaxed">
+          <Text className="text-leben-text-dim text-xs text-center leading-relaxed font-geist-medium">
             Based on your activity{"\n"}over the last 7 days.
           </Text>
         </View>

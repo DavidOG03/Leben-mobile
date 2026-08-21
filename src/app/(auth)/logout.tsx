@@ -67,7 +67,7 @@ export default function LogoutScreen() {
             style={{ elevation: 5, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 10, shadowOffset: { width: 0, height: 4 } }}
           >
             <View className="w-1 h-full bg-red-500 rounded-full mr-3" />
-            <Text className="text-leben-text text-sm font-medium flex-1">{errorMessage}</Text>
+            <Text className="text-leben-text text-sm font-geist-medium flex-1">{errorMessage}</Text>
           </View>
         ) : null}
 
@@ -80,7 +80,7 @@ export default function LogoutScreen() {
               resizeMode="contain"
             />
           </View>
-          <Text className="text-3xl font-bold text-leben-text tracking-tight mb-2">
+          <Text className="text-3xl font-geist-bold text-leben-text tracking-tight mb-2">
             You're Signed Out
           </Text>
           <Text className="text-leben-text-muted text-[15px] text-center px-4 leading-[22px]">
@@ -94,7 +94,7 @@ export default function LogoutScreen() {
             onPress={() => router.replace('/(auth)/sign-in' as any)}
             disabled={loading}
           >
-            <Text className="text-white font-semibold text-[16px]">Sign In Again</Text>
+            <Text className="text-white font-geist-semibold text-[16px]">Sign In Again</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -107,7 +107,7 @@ export default function LogoutScreen() {
             ) : (
               <>
                 <GoogleIcon size={20} />
-                <Text className="text-leben-text font-medium text-[16px]">Continue with Google</Text>
+                <Text className="text-leben-text font-geist-medium text-[16px]">Continue with Google</Text>
               </>
             )}
           </TouchableOpacity>
@@ -117,7 +117,7 @@ export default function LogoutScreen() {
             onPress={() => router.replace('/(tabs)' as any)}
             disabled={loading}
           >
-            <Text className="text-leben-text-2 font-medium text-[15px]">Continue as Guest</Text>
+            <Text className="text-leben-text-2 font-geist-medium text-[15px]">Continue as Guest</Text>
           </TouchableOpacity>
         </View>
       </View>

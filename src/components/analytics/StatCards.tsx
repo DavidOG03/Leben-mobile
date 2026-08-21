@@ -40,7 +40,7 @@ export default function StatCards({ cards }: StatCardsProps) {
           <Text className="text-[11px] text-leben-text-muted mb-2">
             {s.label}
           </Text>
-          <Text className="font-black text-leben-text-2 text-[28px] leading-[28px] -tracking-[0.5px]">
+          <Text className="font-geist-ultrablack text-leben-text-2 text-[28px] leading-[28px] -tracking-[0.5px]">
             {s.val}
           </Text>
           <View className="flex-row items-center gap-1 mt-2">

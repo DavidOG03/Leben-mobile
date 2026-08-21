@@ -58,17 +58,17 @@ export function TaskInput() {
                 className={`px-2 py-1 rounded-md border ${
                   tag === t
                     ? t === "WORK"
-                      ? "bg-leben-accent/80 border-leben-accent"
-                      : "bg-green-500/10 border-green-500/20"
+                      ? "bg-tag-work-bg border-tag-work-border text-tag-work-text"
+                      : "bg-tag-personal-bg border-tag-personal-border text-tag-personal-text"
                     : "bg-transparent border-transparent"
                 }`}
               >
                 <Text
-                  className={`text-[10px] uppercase font-bold tracking-wider ${
+                  className={`text-[10px] uppercase font-geist-bold tracking-wider ${
                     tag === t
                       ? t === "WORK"
-                        ? "text-leben-accent"
-                        : "text-green-500"
+                        ? "text-tag-work-text"
+                        : "text-tag-personal-text"
                       : "text-leben-text-dim"
                   }`}
                 >
@@ -103,7 +103,7 @@ export function TaskInput() {
           }`}
         >
           <Text
-            className={`font-semibold text-[12px] ${task.trim() ? "text-white" : "text-leben-text-dim"}`}
+            className={`font-geist-semibold text-[12px] ${task.trim() ? "text-white" : "text-leben-text-dim"}`}
           >
             Add Task
           </Text>

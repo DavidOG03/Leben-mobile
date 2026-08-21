@@ -37,7 +37,7 @@ export default function AnalyticsScreen() {
       <View className="flex-1 px-4 py-6">
         <View className="flex-row items-center justify-between mb-6">
           <View>
-            <Text className="text-leben-text-2 font-bold text-3xl tracking-tight leading-tight mb-1">
+            <Text className="text-leben-text-2 font-geist-bold text-3xl tracking-tight leading-tight mb-1">
               Analytics
             </Text>
             <Text className="text-leben-text-muted text-[13px]">
@@ -64,7 +64,7 @@ export default function AnalyticsScreen() {
 
             <View className="items-center space-y-3 mb-8">
               <Text
-                className="text-leben-text-2 font-bold text-center"
+                className="text-leben-text-2 font-geist-bold text-center"
                 style={{ fontSize: 28, letterSpacing: -0.5 }}
               >
                 Deep Performance{" "}
@@ -80,13 +80,10 @@ export default function AnalyticsScreen() {
               onPress={() => router.push("/(auth)/sign-in" as any)} // Navigate to your auth screen
               className="flex-row items-center gap-3 px-7 py-3.5 rounded-xl mb-8 bg-leben-accent"
             >
-              <Text
-                className="text-leben-text-2 font-bold"
-                style={{ fontSize: 14 }}
-              >
+              <Text className="text-white font-geist-bold" style={{ fontSize: 14 }}>
                 Sign In to View Analytics
               </Text>
-              <Ionicons name="arrow-forward" size={16} color="leben-text-2" />
+              <Ionicons name="arrow-forward" size={16} color="white" />
             </TouchableOpacity>
 
             <View className="flex-row w-full gap-4">
@@ -98,7 +95,7 @@ export default function AnalyticsScreen() {
                   borderWidth: 1,
                 }}
               >
-                <Text className="text-[10px] text-leben-text-dim font-bold uppercase tracking-[1px] mb-1">
+                <Text className="text-[10px] text-leben-text-dim font-geist-bold uppercase tracking-[1px] mb-1">
                   Trends
                 </Text>
                 <Text className="text-[11px] text-leben-text-dim mt-1">
@@ -113,7 +110,7 @@ export default function AnalyticsScreen() {
                   borderWidth: 1,
                 }}
               >
-                <Text className="text-[10px] text-leben-text-dim font-bold uppercase tracking-[1px] mb-1">
+                <Text className="text-[10px] text-leben-text-dim font-geist-bold uppercase tracking-[1px] mb-1">
                   Correlations
                 </Text>
                 <Text className="text-[11px] text-leben-text-dim mt-1">

@@ -6,12 +6,11 @@ export interface TextProps extends RNTextProps {
 }
 
 export function Text({ className = '', style, ...props }: TextProps) {
-  let processedClassName = className
-    .replace(/\bfont-medium\b/g, 'font-geist-medium')
-    .replace(/\bfont-semibold\b/g, 'font-geist-semibold')
-    .replace(/\bfont-bold\b/g, 'font-geist-bold');
+  // Only apply font-sans if no other font class is explicitly provided
+  const hasFontClass = /\bfont-(geist|sans|mono|serif)\b/.test(className);
+  const defaultFont = hasFontClass ? '' : 'font-sans';
 
-  const finalClassName = `font-sans text-leben-text ${processedClassName}`.trim();
+  const finalClassName = `${defaultFont} text-leben-text ${className}`.trim();
 
   return <RNText className={finalClassName} style={style} {...props} />;
 }

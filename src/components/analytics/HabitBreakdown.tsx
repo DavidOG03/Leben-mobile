@@ -13,7 +13,7 @@ interface HabitBreakdownProps {
 export default function HabitBreakdown({ habits, hasData }: HabitBreakdownProps) {
   return (
     <View className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border">
-      <Text className="font-semibold text-leben-text-2 mb-4 text-[14px]">
+      <Text className="font-geist-semibold text-leben-text-2 mb-4 text-[14px]">
         Habit Consistency
       </Text>
 

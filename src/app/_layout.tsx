@@ -54,10 +54,15 @@ export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   
   const [fontsLoaded, fontError] = useFonts({
+    'Geist-Thin': require('../../assets/fonts/Geist-Thin.otf'),
+    'Geist-UltraLight': require('../../assets/fonts/Geist-UltraLight.otf'),
+    'Geist-Light': require('../../assets/fonts/Geist-Light.otf'),
     'Geist': require('../../assets/fonts/Geist-Regular.otf'),
     'Geist-Medium': require('../../assets/fonts/Geist-Medium.otf'),
     'Geist-SemiBold': require('../../assets/fonts/Geist-SemiBold.otf'),
     'Geist-Bold': require('../../assets/fonts/Geist-Bold.otf'),
+    'Geist-Black': require('../../assets/fonts/Geist-Black.otf'),
+    'Geist-UltraBlack': require('../../assets/fonts/Geist-UltraBlack.otf'),
   });
 
   useEffect(() => {

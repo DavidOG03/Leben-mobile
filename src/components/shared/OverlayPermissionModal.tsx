@@ -74,7 +74,7 @@ export default function OverlayPermissionModal() {
           </View>
 
           {/* Heading */}
-          <Text className="text-leben-text font-bold text-2xl mb-2.5 tracking-tight">
+          <Text className="text-leben-text font-geist-bold text-2xl mb-2.5 tracking-tight">
             Enable Notifications
           </Text>
 
@@ -82,7 +82,7 @@ export default function OverlayPermissionModal() {
           <Text className="text-leben-text-muted text-sm leading-[20px] mb-7">
             To receive task reminders, habit nudges, and goal alerts even when
             Leben is running in the background, please enable{" "}
-            <Text className="text-leben-accent-light font-semibold">
+            <Text className="text-leben-accent-light font-geist-semibold">
               Display over other apps
             </Text>{" "}
             in your Android settings for Leben.

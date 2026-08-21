@@ -51,9 +51,14 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Geist', 'system-ui', 'sans-serif'],
+        'geist-thin': ['Geist-Thin', 'system-ui', 'sans-serif'],
+        'geist-ultralight': ['Geist-UltraLight', 'system-ui', 'sans-serif'],
+        'geist-light': ['Geist-Light', 'system-ui', 'sans-serif'],
         'geist-medium': ['Geist-Medium', 'system-ui', 'sans-serif'],
         'geist-semibold': ['Geist-SemiBold', 'system-ui', 'sans-serif'],
         'geist-bold': ['Geist-Bold', 'system-ui', 'sans-serif'],
+        'geist-black': ['Geist-Black', 'system-ui', 'sans-serif'],
+        'geist-ultrablack': ['Geist-UltraBlack', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         card: '16px',

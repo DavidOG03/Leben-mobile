@@ -24,7 +24,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
       {/* Time label and dot */}
       <View className="flex-col items-center w-12 pt-1 pb-4 ">
         <Text
-          className="text-leben-text-muted font-bold bg-leben-bg"
+          className="text-leben-text-muted font-geist-bold bg-leben-bg"
           style={{ fontSize: 11 }}
         >
           {item.start}
@@ -51,7 +51,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
                 className={`px-2 py-0.5 rounded border ${isDeepWork ? "bg-leben-accent border-leben-accent" : isRecharge ? "bg-leben-success border-leben-success" : "bg-tag-personal-text border-leben-border"}`}
               >
                 <Text
-                  className={`font-bold uppercase tracking-widest text-[9px] ${isDeepWork || isRecharge ? "text-white" : "text-white"}`}
+                  className={`font-geist-bold uppercase tracking-widest text-[9px] ${isDeepWork || isRecharge ? "text-white" : "text-white"}`}
                 >
                   {item.tag}
                 </Text>
@@ -59,7 +59,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
               {item.reminderAt && (
                 <View className="flex-row items-center gap-1">
                   <BellIcon color="currentColor" size={9} />
-                  <Text className="text-leben-accent text-[9px] font-bold">
+                  <Text className="text-leben-accent text-[9px] font-geist-bold">
                     Reminder set
                   </Text>
                 </View>
@@ -67,7 +67,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
             </View>
             <Text
               className="text-leben-text
-               font-bold mt-1"
+               font-geist-bold mt-1"
               style={{ fontSize: 18 }}
             >
               {item.title}
@@ -96,7 +96,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
         <View className="flex-row gap-2 mt-5">
           <View className="px-3 py-1 rounded-full bg-leben-bg-secondary border border-leben-border">
             <Text
-              className="text-leben-text-2 font-medium"
+              className="text-leben-text-2 font-geist-medium"
               style={{ fontSize: 10 }}
             >
               {item.tag}
@@ -104,7 +104,7 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
           </View>
           <View className="px-3 py-1 rounded-full bg-leben-bg-secondary border border-leben-border">
             <Text
-              className="text-leben-text-2 font-medium"
+              className="text-leben-text-2 font-geist-medium"
               style={{ fontSize: 10 }}
             >
               {item.priority?.toUpperCase() || "MEDIUM"}

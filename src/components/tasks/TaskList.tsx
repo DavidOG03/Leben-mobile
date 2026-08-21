@@ -13,7 +13,7 @@ export function TaskList() {
       {tasks.length === 0 ? (
         <View className="items-center justify-center py-10 gap-3 border-t border-leben-border-subtle">
           <Text className="text-leben-text-dim text-4xl">◎</Text>
-          <Text className="text-leben-text-dim font-medium text-[13px]">No tasks yet</Text>
+          <Text className="text-leben-text-dim font-geist-medium text-[13px]">No tasks yet</Text>
           <Text className="text-leben-text-dim text-[12px] text-center leading-relaxed">
             Type above to add your first task{'\n'}and start building momentum.
           </Text>

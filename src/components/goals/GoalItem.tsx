@@ -70,7 +70,7 @@ export function GoalItem({ goal }: GoalItemProps) {
             style={{ borderColor: `${statusColor}44`, borderWidth: 1 }}
           >
             <Text
-              className="text-[9px] uppercase tracking-widest font-semibold"
+              className="text-[9px] uppercase tracking-widest font-geist-semibold"
               style={{ color: statusColor }}
             >
               {status}
@@ -100,7 +100,7 @@ export function GoalItem({ goal }: GoalItemProps) {
         </View>
       ) : (
         <View className="mb-4">
-          <Text className="text-leben-text font-bold text-[20px] tracking-tight leading-tight mb-1">
+          <Text className="text-leben-text font-geist-bold text-[20px] tracking-tight leading-tight mb-1">
             {goal.title}
           </Text>
           <Text className="text-leben-text-muted text-[11px]">
@@ -112,10 +112,10 @@ export function GoalItem({ goal }: GoalItemProps) {
       {/* Progress Bar */}
       <View className="mb-5">
         <View className="flex-row justify-between mb-2">
-          <Text className="text-leben-text-muted text-[11px] font-medium">
+          <Text className="text-leben-text-muted text-[11px] font-geist-medium">
             Progress
           </Text>
-          <Text className="text-leben-text-muted text-[11px] font-medium">
+          <Text className="text-leben-text-muted text-[11px] font-geist-medium">
             {progress}%
           </Text>
         </View>
@@ -128,7 +128,7 @@ export function GoalItem({ goal }: GoalItemProps) {
       </View>
 
       {/* Milestones label */}
-      <Text className="text-leben-text-dim text-[9px] uppercase tracking-widest font-bold mb-3">
+      <Text className="text-leben-text-dim text-[9px] uppercase tracking-widest font-geist-bold mb-3">
         Milestones
       </Text>
 
@@ -167,7 +167,7 @@ export function GoalItem({ goal }: GoalItemProps) {
                   }}
                   className="px-2 py-1"
                 >
-                  <Text className="text-red-500 font-bold text-sm">✕</Text>
+                  <Text className="text-red-500 font-geist-bold text-sm">✕</Text>
                 </TouchableOpacity>
               </View>
             ))}
@@ -182,7 +182,7 @@ export function GoalItem({ goal }: GoalItemProps) {
               }
               className="mt-1 py-2"
             >
-              <Text className="text-leben-accent text-[11px] font-semibold">
+              <Text className="text-leben-accent text-[11px] font-geist-semibold">
                 + Add Milestone
               </Text>
             </TouchableOpacity>
@@ -192,7 +192,7 @@ export function GoalItem({ goal }: GoalItemProps) {
               onPress={handleSave}
               className="mt-3 bg-leben-accent rounded-lg py-3 items-center"
             >
-              <Text className="text-leben-text font-semibold text-[13px]">
+              <Text className="text-leben-text font-geist-semibold text-[13px]">
                 Save Changes
               </Text>
             </TouchableOpacity>

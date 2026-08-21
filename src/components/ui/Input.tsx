@@ -15,7 +15,7 @@ export function Input({ label, error, icon, className = '', containerClassName =
   return (
     <View className={`gap-1.5 ${containerClassName}`}>
       {label && (
-        <Text className="text-leben-text-2 text-[13px] font-medium ml-1">
+        <Text className="text-leben-text-2 text-[13px] font-geist-medium ml-1">
           {label}
         </Text>
       )}

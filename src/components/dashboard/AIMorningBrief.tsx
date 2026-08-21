@@ -1,17 +1,25 @@
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { Text } from "@/components/ui/Text";
-import type { AIBriefResponse } from "@/lib/ai/client";
 import { getAIBrief } from "@/lib/ai/client";
 import { useLebenStore } from "@/store/useStore";
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 
 export function AIMorningBrief() {
   const router = useRouter();
-  const { tasks, habits, goals, userId, morningBrief: brief, setMorningBrief: setBrief, morningBriefGeneratedAt } = useLebenStore();
+  const {
+    tasks,
+    habits,
+    goals,
+    userId,
+    morningBrief: brief,
+    setMorningBrief: setBrief,
+    clearMorningBrief,
+    morningBriefGeneratedAt,
+  } = useLebenStore();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,25 +54,37 @@ export function AIMorningBrief() {
         setLoading(false);
       }
     },
-    [userId, router],
+    [userId, router, setBrief],
   );
 
   // Caching logic
   useEffect(() => {
     if (!hasData || !userId) {
-      setBrief(null);
+      if (brief !== null || morningBriefGeneratedAt !== null) {
+        clearMorningBrief();
+      }
       return;
     }
 
     // Check if brief is stale (10 mins) or null
     const TEN_MINS = 10 * 60 * 1000;
-    const isStale = !brief || !morningBriefGeneratedAt || (Date.now() - morningBriefGeneratedAt > TEN_MINS);
+    const isStale =
+      !brief ||
+      !morningBriefGeneratedAt ||
+      Date.now() - morningBriefGeneratedAt > TEN_MINS;
 
     if (isStale) {
       const timeoutId = setTimeout(() => handleGenerate(), 1000);
       return () => clearTimeout(timeoutId);
     }
-  }, [hasData, userId, morningBriefGeneratedAt, brief, handleGenerate]);
+  }, [
+    hasData,
+    userId,
+    morningBriefGeneratedAt,
+    brief,
+    handleGenerate,
+    clearMorningBrief,
+  ]);
 
   return (
     <Card
@@ -92,8 +112,10 @@ export function AIMorningBrief() {
         <View>
           {/* Header */}
           <View className="flex-row items-center gap-2 mb-4">
-            <Text className="text-leben-accent text-lg">✦</Text>
-            <Text className="text-leben-accent text-[11px] uppercase tracking-widest font-semibold">
+            <Text className="text-leben-accent text-lg font-geist-medium">
+              ✦
+            </Text>
+            <Text className="text-leben-accent text-[11px] uppercase tracking-widest font-geist-semibold">
               AI MORNING BRIEF
             </Text>
           </View>
@@ -105,7 +127,7 @@ export function AIMorningBrief() {
               <View className="h-6 bg-leben-text-dim rounded-full w-3/4 animate-pulse" />
             </View>
           ) : (
-            <Text className="text-leben-text text-2xl font-extrabold tracking-tight mb-4 leading-tight">
+            <Text className="text-leben-text text-2xl font-geist-black tracking-tight mb-4 leading-tight">
               {hasData ? (
                 brief ? (
                   brief.summary
@@ -113,8 +135,11 @@ export function AIMorningBrief() {
                   "Ready to plan your day?"
                 )
               ) : (
-                <Text>
-                  Welcome to <Text className="text-leben-accent">Leben.</Text>
+                <Text className="font-geist-extrabold">
+                  Welcome to{" "}
+                  <Text className="text-leben-accent font-geist-extrabold">
+                    Leben.
+                  </Text>
                 </Text>
               )}
             </Text>
@@ -131,12 +156,14 @@ export function AIMorningBrief() {
               )}
 
               {error && !loading && !unavailable && (
-                <Text className="text-leben-error text-[12px]">{error}</Text>
+                <Text className="text-leben-error text-[12px] font-geist-medium">
+                  {error}
+                </Text>
               )}
 
               {unavailable && !loading && (
                 <View className="bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.2)] p-3 rounded-xl">
-                  <Text className="text-prio-medium text-[13px] leading-snug">
+                  <Text className="text-prio-medium text-[13px] leading-snug font-geist-medium">
                     ⏳ The AI is experiencing high demand right now. This is
                     temporary — try again in a moment.
                   </Text>
@@ -157,14 +184,14 @@ export function AIMorningBrief() {
               )}
 
               {!brief && !loading && !error && (
-                <Text className="text-leben-text-muted text-[13px] leading-relaxed">
+                <Text className="text-leben-text-muted text-[13px] leading-relaxed font-geist-medium">
                   Your AI morning brief will appear here. Hit the button below
                   to generate it.
                 </Text>
               )}
             </View>
           ) : (
-            <Text className="text-leben-text-muted text-[13px] leading-relaxed">
+            <Text className="text-leben-text-muted text-[13px] leading-relaxed font-geist-medium">
               Your AI morning brief will appear here once you've added tasks,
               habits, and goals. Start by creating your first task.
             </Text>
@@ -185,7 +212,7 @@ export function AIMorningBrief() {
                     <ActivityIndicator color="#fff" size="small" />
                   ) : (
                     <>
-                      <Text className="text-white font-semibold text-[14px]">
+                      <Text className="text-white font-geist-semibold text-[14px]">
                         Retry Brief
                       </Text>
                     </>
@@ -221,10 +248,10 @@ export function AIMorningBrief() {
                     </Svg>
                   </View>
                   <View className="flex-row items-center justify-center gap-2 px-5 py-3">
-                    <Text className="text-white font-semibold text-[14px]">
+                    <Text className="text-white font-geist-semibold text-[14px]">
                       Plan My Day
                     </Text>
-                    <Text className="text-white">›</Text>
+                    <Text className="text-white font-geist-medium">›</Text>
                   </View>
                 </TouchableOpacity>
               )}
@@ -234,7 +261,7 @@ export function AIMorningBrief() {
                   onPress={() => handleGenerate(true)}
                   className="px-4 py-3 rounded-xl border border-leben-border-text active:opacity-70"
                 >
-                  <Text className="text-leben-text-muted font-medium text-[13px]">
+                  <Text className="text-leben-text-muted font-geist-medium text-[13px]">
                     Regenerate
                   </Text>
                 </TouchableOpacity>
@@ -250,10 +277,10 @@ export function AIMorningBrief() {
                     <ActivityIndicator color="#fff" size="small" />
                   ) : (
                     <>
-                      <Text className="text-white font-semibold text-[14px]">
+                      <Text className="text-white font-geist-semibold text-[14px]">
                         Generate Brief
                       </Text>
-                      <Text className="text-white">✦</Text>
+                      <Text className="text-white font-geist-medium">✦</Text>
                     </>
                   )}
                 </TouchableOpacity>
@@ -265,16 +292,16 @@ export function AIMorningBrief() {
                 onPress={() => router.push("/(tabs)/tasks" as any)}
                 className="flex-row items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-leben-bg-element border border-leben-border active:opacity-80"
               >
-                <Text className="text-leben-text font-medium text-[13px]">
+                <Text className="text-leben-text font-geist-medium text-[13px]">
                   Create first task
                 </Text>
-                <Text className="text-leben-text">›</Text>
+                <Text className="text-leben-text font-geist-medium">›</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push("/(tabs)/habits" as any)}
                 className="px-4 py-2.5 rounded-lg border border-leben-border active:opacity-70"
               >
-                <Text className="text-leben-text-dim font-medium text-[13px]">
+                <Text className="text-leben-text-dim font-geist-medium text-[13px]">
                   Set up habits
                 </Text>
               </TouchableOpacity>

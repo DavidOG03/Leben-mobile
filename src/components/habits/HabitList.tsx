@@ -29,7 +29,7 @@ export function HabitList() {
         {/* Empty state */}
         <View className="items-center justify-center py-8 gap-2 border-t border-leben-border">
           <Text className="text-[28px]">🌱</Text>
-          <Text className="text-[13px] text-leben-text-muted font-medium">
+          <Text className="text-[13px] text-leben-text-muted font-geist-medium">
             No habits yet
           </Text>
           <Text className="text-[12px] text-leben-text-dim text-center leading-[20px]">

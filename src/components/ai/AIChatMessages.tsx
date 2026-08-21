@@ -27,7 +27,7 @@ function renderInlineFormatting(text: string) {
     parts.push(
       <Text
         key={`bold-${match.index}-${keyIndex++}`}
-        className="font-semibold text-leben-text-2"
+        className="font-geist-semibold text-leben-text-2"
       >
         {match[1]}
       </Text>,
@@ -138,7 +138,7 @@ export default function AIChatMessages({
                       }`}
                     >
                       <Text
-                        className={`text-[11px] font-semibold ${
+                        className={`text-[11px] font-geist-semibold ${
                           isImported
                             ? "text-leben-text-muted"
                             : "text-leben-text"
@@ -154,7 +154,7 @@ export default function AIChatMessages({
                   <Text className="text-leben-text text-[14px] leading-relaxed">
                     {msg.content}
                   </Text>
-                  <Text className="text-[10px] text-leben-text-2 mt-2 font-semibold text-right">
+                  <Text className="text-[10px] text-leben-text-2 mt-2 font-geist-semibold text-right">
                     YOU | {msg.time}
                   </Text>
                 </View>
@@ -176,7 +176,7 @@ export default function AIChatMessages({
             <ActivityIndicator size="small" color="#555" />
           </View>
           <View className="rounded-2xl px-5 py-4 justify-center bg-leben-bg-card border border-leben-border">
-            <Text className="text-[12px] text-leben-text-2 font-medium italic">
+            <Text className="text-[12px] text-leben-text-2 font-geist-medium italic">
               Neural engine processing...
             </Text>
           </View>

@@ -36,7 +36,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
     <View className="mb-6">
       <View className="flex-row items-center justify-between mb-4 flex-wrap">
         <View>
-          <Text className="font-bold text-leben-text text-3xl ">
+          <Text className="font-geist-bold text-leben-text text-3xl ">
             Reading Tracker
           </Text>
           <Text className="text-xs text-leben-text-muted my-2">
@@ -47,7 +47,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           onPress={() => onShowAddBook(true)}
           className="flex-row items-center gap-1.5 px-3 py-2 rounded-lg bg-leben-bg-element border border-leben-border-subtle"
         >
-          <Text className="text-leben-text-2 text-[12px] font-bold">
+          <Text className="text-leben-text-2 text-[12px] font-geist-bold">
             + Add Book
           </Text>
         </TouchableOpacity>
@@ -62,7 +62,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           </View>
           <View className="flex-col items-center justify-center py-8 gap-3 border-t border-leben-border">
             <Text className="text-[28px]">📚</Text>
-            <Text className="font-medium text-[13px] text-leben-text-muted">
+            <Text className="font-geist-medium text-[13px] text-leben-text-muted">
               No books tracked yet
             </Text>
             <Text className="text-[12px] text-leben-text-dim text-center leading-[18px]">

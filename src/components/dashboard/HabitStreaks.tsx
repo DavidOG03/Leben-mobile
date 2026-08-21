@@ -42,12 +42,12 @@ export function HabitStreaks() {
   return (
     <Card className="min-h-[200px] p-6 bg-leben-bg-card border border-leben-border-subtle">
       <View className="flex-row items-center justify-between mb-5">
-        <Text className="text-leben-text font-semibold text-[15px]">
+        <Text className="text-leben-text font-geist-semibold text-[15px]">
           Habit Streaks
         </Text>
         {!loading && habits.length > 0 && (
           <TouchableOpacity onPress={() => router.push('/(tabs)/habits' as any)}>
-            <Text className="text-leben-accent text-[11px] font-semibold">
+            <Text className="text-leben-accent text-[11px] font-geist-semibold">
               Go to Habits
             </Text>
           </TouchableOpacity>
@@ -68,15 +68,15 @@ export function HabitStreaks() {
         </View>
       ) : habits.length === 0 ? (
         <View className="flex-1 items-center justify-center py-4 gap-3">
-          <Text className="text-leben-text-dim text-2xl">十</Text>
-          <Text className="text-leben-text-dim text-[11px]">
+          <Text className="text-leben-text-dim text-2xl font-geist-medium">十</Text>
+          <Text className="text-leben-text-dim text-[11px] font-geist-medium">
             No habits tracked yet
           </Text>
           <TouchableOpacity
             onPress={() => router.push('/(tabs)/habits' as any)}
             className="px-4 py-1.5 rounded-lg border border-leben-border active:opacity-70"
           >
-            <Text className="text-leben-text-dim text-[11px]">Set up habits</Text>
+            <Text className="text-leben-text-dim text-[11px] font-geist-medium">Set up habits</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -95,11 +95,11 @@ export function HabitStreaks() {
                   <View 
                     className="w-9 h-9 rounded-lg items-center justify-center border border-leben-border-subtle bg-leben-bg-secondary"
                   >
-                    <Text style={{ color: h.color, fontSize: 18 }}>{h.icon}</Text>
+                    <Text style={{ color: h.color, fontSize: 18 }} className="font-geist-medium">{h.icon}</Text>
                   </View>
                   <View className="gap-1">
-                    <Text className="text-leben-text font-medium text-[13px]">{h.label}</Text>
-                    <Text className="text-leben-text-dim text-[11px]">🔥 {h.streak} day streak</Text>
+                    <Text className="text-leben-text font-geist-medium text-[13px]">{h.label}</Text>
+                    <Text className="text-leben-text-dim text-[11px] font-geist-medium">🔥 {h.streak} day streak</Text>
                   </View>
                 </View>
 
@@ -140,7 +140,7 @@ export function HabitStreaks() {
           )})}
           {habits.length > 3 && (
             <TouchableOpacity onPress={() => router.push('/(tabs)/habits' as any)} className="mt-auto pt-2 items-center">
-              <Text className="text-leben-text-dim text-[11px]">
+              <Text className="text-leben-text-dim text-[11px] font-geist-medium">
                 See all {habits.length} habits
               </Text>
             </TouchableOpacity>

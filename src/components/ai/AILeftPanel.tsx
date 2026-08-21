@@ -38,7 +38,7 @@ export default function AILeftPanel({
       <View className="flex-row items-center gap-3 px-5 mb-6">
         <View>
           <Text
-            className="font-bold text-leben-text"
+            className="font-geist-bold text-leben-text"
             style={{ fontSize: 14, letterSpacing: -0.1 }}
           >
             Leben AI
@@ -61,7 +61,7 @@ export default function AILeftPanel({
             <View style={{ opacity: item.active ? 1 : 0.6 }}>{item.icon}</View>
             <Text
               className={`text-[13px] ${
-                item.active ? "text-leben-text font-medium" : "text-leben-text-muted font-normal"
+                item.active ? "text-leben-text font-geist-medium" : "text-leben-text-muted font-normal"
               }`}
             >
               {item.label}
@@ -88,7 +88,7 @@ export default function AILeftPanel({
               className="rounded-xl px-4 py-3 border border-leben-border bg-leben-bg-card"
             >
               <Text
-                className="font-medium text-leben-text"
+                className="font-geist-medium text-leben-text"
                 style={{ fontSize: 13 }}
               >
                 {p.title}

@@ -85,7 +85,7 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
               </View>
               {/* Text */}
               <View className="flex-1">
-                <Text className="text-leben-text font-bold text-[16px] mb-1">
+                <Text className="text-leben-text font-geist-bold text-[16px] mb-1">
                   {link.label}
                 </Text>
                 <Text className="text-leben-text-muted text-[13px]">

@@ -93,7 +93,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
       {/* Header */}
       <View className="mb-6 flex-row items-center justify-between">
         <Text
-          className="font-black text-leben-text text-[20px]"
+          className="font-geist-ultrablack text-leben-text text-[20px]"
           style={{ letterSpacing: -0.4 }}
         >
           New Habit
@@ -197,7 +197,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
                 onPress={onClose}
                 className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-bg-secondary border border-leben-border-subtle"
               >
-                <Text className="text-leben-text-muted text-[13px] font-semibold">
+                <Text className="text-leben-text-muted text-[13px] font-geist-semibold">
                   Cancel
                 </Text>
               </TouchableOpacity>
@@ -210,7 +210,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
                 }`}
               >
                 <Text
-                  className={`text-[14px] font-semibold ${
+                  className={`text-[14px] font-geist-semibold ${
                     label.trim() ? "text-leben-bg" : "text-leben-text-muted"
                   }`}
                 >

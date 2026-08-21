@@ -67,12 +67,12 @@ export function EnergyDistribution() {
     <View className="rounded-2xl p-6 flex-col gap-6 bg-leben-bg-card border border-leben-border">
       <View className="flex-row items-center justify-between">
         <Text
-          className="text-leben-text-2 font-semibold pb-4"
+          className="text-leben-text-2 font-geist-semibold pb-4"
           style={{ fontSize: 14 }}
         >
           Energy Distribution
         </Text>
-        <Text className="text-leben-accent text-[10px] font-semibold">
+        <Text className="text-leben-accent text-[10px] font-geist-semibold">
           Peak: 10:00 AM
         </Text>
       </View>
@@ -88,7 +88,7 @@ export function EnergyDistribution() {
               style={{ height: `${lvl.value}%` }}
             />
             <Text
-              className={`text-[9px] font-bold tracking-[1px] ${lvl.peak ? "text-leben-accent" : "text-leben-text-muted"}`}
+              className={`text-[9px] font-geist-bold tracking-[1px] ${lvl.peak ? "text-leben-accent" : "text-leben-text-muted"}`}
             >
               {lvl.label}
             </Text>

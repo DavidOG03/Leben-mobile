@@ -20,13 +20,13 @@ export default function HabitsScreen() {
   return (
     <ScreenLayout scrollable>
       <DashboardHeader />
-      <WeeklyProgress habits={habits} />
-      <View className="flex-1 px-4 py-6">
+      <View className="flex flex-col flex-1 px-4 py-6 gap-4">
+        <WeeklyProgress habits={habits} />
         {/* Daily Rituals section */}
         <View className="flex-row flex-wrap items-center justify-between mb-4">
           <View>
             <Text
-              className="text-leben-text font-bold text-3xl"
+              className="text-leben-text font-geist-bold text-3xl"
               style={{ letterSpacing: -0.2 }}
             >
               Daily Rituals
@@ -40,7 +40,7 @@ export default function HabitsScreen() {
             onPress={() => setShowAddSheet(true)}
             className="flex-row items-center gap-1.5 px-3 py-2 rounded-lg active:opacity-80 bg-leben-bg-element border border-leben-border-subtle"
           >
-            <Text className="text-leben-text-2 text-[12px] font-medium">
+            <Text className="text-leben-text-2 text-[12px] font-geist-medium">
               ＋ Add Habit
             </Text>
           </TouchableOpacity>

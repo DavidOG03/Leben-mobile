@@ -57,7 +57,7 @@ export default function ReminderPicker({
     >
       <View className="flex-row items-center gap-2 mb-4">
         <SparkleIcon />
-        <Text className="text-leben-text font-bold text-[14px]">Set Reminder</Text>
+        <Text className="text-leben-text font-geist-bold text-[14px]">Set Reminder</Text>
       </View>
 
       <View className="gap-3 mb-4">
@@ -140,7 +140,7 @@ export default function ReminderPicker({
               shadowOffset: { width: 0, height: 4 },
             }}
           >
-            <Text className="text-white font-bold text-[12px]">
+            <Text className="text-white font-geist-bold text-[12px]">
               Save Reminder
             </Text>
           </TouchableOpacity>

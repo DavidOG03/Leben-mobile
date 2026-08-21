@@ -60,7 +60,7 @@ export default function WeeklyActivityChart({ data, hasData }: WeeklyActivityCha
     <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border">
       <View className="flex-row items-center justify-between mb-5">
         <View>
-          <Text className="font-semibold text-leben-text-2 text-[14px]">
+          <Text className="font-geist-semibold text-leben-text-2 text-[14px]">
             Weekly Activity
           </Text>
           <Text className="text-[11px] text-leben-text-muted mt-0.5">
@@ -70,7 +70,7 @@ export default function WeeklyActivityChart({ data, hasData }: WeeklyActivityCha
         {hasData && (
           <View className="flex-row items-center gap-1 px-2.5 py-1 rounded-lg bg-leben-success/10 border border-leben-success/20">
             <Ionicons name="trending-up" size={10} color="#4caf7d" />
-            <Text className="text-[10px] text-leben-success font-medium">
+            <Text className="text-[10px] text-leben-success font-geist-medium">
               this week
             </Text>
           </View>

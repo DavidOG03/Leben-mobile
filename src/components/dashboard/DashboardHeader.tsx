@@ -59,10 +59,10 @@ export function DashboardHeader() {
       <View className="flex-row items-center justify-between px-5 py-4 border-b border-leben-border-subtle">
         {/* Left: Greeting */}
         <View>
-          <Text className="text-leben-text font-semibold text-lg leading-snug">
+          <Text className="text-leben-text font-geist-semibold text-lg leading-snug">
             {greeting}, {firstName}
           </Text>
-          <Text className="text-leben-text-muted text-[10px] tracking-widest font-medium uppercase mt-0.5">
+          <Text className="text-leben-text-muted text-[10px] tracking-widest font-geist-medium uppercase mt-0.5">
             {currentDate}
           </Text>
         </View>

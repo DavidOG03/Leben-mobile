@@ -13,8 +13,11 @@ import {
 import { Text } from "@/components/ui/Text";
 import { GoogleIcon } from "@/constants/Icons";
 import { Feather } from "@expo/vector-icons";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 import { Image } from "react-native";
-import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
@@ -92,7 +95,9 @@ export default function SignInScreen() {
       } else if (err.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
       } else if (err.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        showErrorToast("Google Play Services are not available on this device.");
+        showErrorToast(
+          "Google Play Services are not available on this device.",
+        );
       } else {
         showErrorToast(
           err.message ||
@@ -123,7 +128,7 @@ export default function SignInScreen() {
             }}
           >
             <View className="w-1 h-full bg-red-500 rounded-full mr-3" />
-            <Text className="text-leben-text text-sm font-medium flex-1">
+            <Text className="text-leben-text text-sm font-geist-medium flex-1">
               {errorMessage}
             </Text>
           </View>
@@ -131,17 +136,17 @@ export default function SignInScreen() {
 
         {/* Logo */}
         <View className="items-center mb-10">
-          <View className="w-14 h-14 rounded-2xl bg-leben-bg-card border border-leben-border items-center justify-center mb-4">
-            <Image 
+          <View className="w-14 h-14 rounded-2xl bg-black border border-leben-border items-center justify-center mb-4">
+            <Image
               source={require("../../../assets/images/notification-icon.png")}
               style={{ width: 24, height: 24 }}
-              resizeMode="contain"
+              resizeMode="cover"
             />
           </View>
-          <Text className="text-3xl font-bold text-leben-text tracking-tight">
+          <Text className="text-3xl font-geist-bold text-leben-text tracking-tight">
             Leben
           </Text>
-          <Text className="text-leben-text-2 text-sm mt-1">
+          <Text className="text-leben-text-2 font-geist-medium text-sm mt-1">
             Your productivity OS
           </Text>
         </View>
@@ -149,7 +154,7 @@ export default function SignInScreen() {
         {/* Form */}
         <View className="gap-3">
           <TextInput
-            className="bg-leben-bg-card border border-leben-border text-leben-text px-4 py-3.5 rounded-input text-[15px]"
+            className="bg-leben-bg-card border border-leben-border-subtle text-leben-text px-4 py-3.5 rounded-input text-[15px]"
             placeholder="Email"
             placeholderTextColor="#555"
             keyboardType="email-address"
@@ -161,7 +166,7 @@ export default function SignInScreen() {
 
           <View className="relative justify-center z-10">
             <TextInput
-              className="bg-leben-bg-card border border-leben-border text-leben-text px-4 py-3.5 pr-12 rounded-input text-[15px]"
+              className="bg-leben-bg-card border border-leben-border-subtle text-leben-text px-4 py-3.5 pr-12 rounded-input text-[15px]"
               placeholder="Password"
               placeholderTextColor="#555"
               secureTextEntry={!showPassword}
@@ -189,7 +194,7 @@ export default function SignInScreen() {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text className="text-white font-semibold text-[15px]">
+              <Text className="text-white font-geist-semibold text-[15px]">
                 Sign In
               </Text>
             )}
@@ -205,7 +210,7 @@ export default function SignInScreen() {
 
         {/* Google OAuth */}
         <TouchableOpacity
-          className="bg-leben-bg-card border border-leben-border rounded-btn py-3.5 items-center flex-row justify-center gap-2"
+          className="bg-leben-bg-card border border-leben-border-subtle rounded-btn py-3.5 items-center flex-row justify-center gap-2"
           onPress={handleGoogleSignIn}
           disabled={loading}
         >
@@ -215,7 +220,7 @@ export default function SignInScreen() {
             <>
               <GoogleIcon size={20} />
 
-              <Text className="text-leben-text font-medium text-[15px]">
+              <Text className="text-leben-text font-geist-medium text-[15px]">
                 Continue with Google
               </Text>
             </>
@@ -230,7 +235,9 @@ export default function SignInScreen() {
         >
           <Text className="text-leben-text-2 text-sm">
             Don't have an account?{" "}
-            <Text className="text-leben-accent font-semibold">Sign up</Text>
+            <Text className="text-leben-accent font-geist-semibold">
+              Sign up
+            </Text>
           </Text>
         </TouchableOpacity>
       </View>

@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import { View, Text } from "react-native";
-import Svg, { Path, Defs, LinearGradient, Rect, Stop } from "react-native-svg";
-import { useLebenStore } from "@/store/useStore";
 import { Card } from "@/components/ui/Card";
+import { useLebenStore } from "@/store/useStore";
+import { useMemo } from "react";
+import { Text, View } from "react-native";
+import Svg, { Defs, LinearGradient, Path, Rect, Stop } from "react-native-svg";
 
 const DAY_LABELS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
@@ -53,12 +53,14 @@ export function WeeklyProductivity() {
   return (
     <Card
       variant="none"
-      className="rounded-xl p-5 mt-6"
-      style={{ backgroundColor: "#131313", borderColor: "#1e1e1e", borderWidth: 1 }}
+      className="rounded-xl p-5 mt-6 bg-leben-bg-card border border-leben-border-subtle"
     >
       {/* ── Header ──────────────────────────────────────────── */}
       <View className="flex-row items-center justify-between mb-1">
-        <Text className="text-white font-semibold" style={{ fontSize: 13 }}>
+        <Text
+          className="text-leben-text font-geist-semibold"
+          style={{ fontSize: 13 }}
+        >
           Weekly Productivity
         </Text>
         <Svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -102,7 +104,7 @@ export function WeeklyProductivity() {
           } else {
             barColor = "#5a4fd4";
           }
-          
+
           const isGrad = barColor === "today";
 
           return (
@@ -125,9 +127,19 @@ export function WeeklyProductivity() {
                 }}
               >
                 {isGrad && (
-                  <Svg width="100%" height="100%" style={{ position: "absolute" }}>
+                  <Svg
+                    width="100%"
+                    height="100%"
+                    style={{ position: "absolute" }}
+                  >
                     <Defs>
-                      <LinearGradient id="todayGrad" x1="0" y1="0" x2="0" y2="1">
+                      <LinearGradient
+                        id="todayGrad"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
                         <Stop offset="0" stopColor="#9d8ff5" />
                         <Stop offset="1" stopColor="#7c6af0" />
                       </LinearGradient>
@@ -164,7 +176,7 @@ export function WeeklyProductivity() {
             <Text
               style={{
                 fontSize: 9,
-                color: d.isToday ? "#7c6af0" : "#333333",
+                color: d.isToday ? "#7c6af0" : "#444",
                 letterSpacing: 0.6,
                 fontWeight: d.isToday ? "700" : "400",
               }}
@@ -176,17 +188,12 @@ export function WeeklyProductivity() {
       </View>
 
       {/* ── Summary stats ───────────────────────────────────── */}
-      <View
-        className="flex-row items-center justify-between mt-4 pt-3"
-        style={{ borderTopWidth: 1, borderTopColor: "#1a1a1a" }}
-      >
+      <View className="flex-row items-center justify-between mt-4 pt-3 border-t border-t-leben-border-subtle">
         <View className="items-center">
           <Text style={{ fontSize: 16, color: "#f0f0f0", fontWeight: "700" }}>
             {totalWeek}
           </Text>
-          <Text
-            style={{ fontSize: 9, color: "#444", letterSpacing: 0.5 }}
-          >
+          <Text style={{ fontSize: 9, color: "#444", letterSpacing: 0.5 }}>
             TOTAL
           </Text>
         </View>
@@ -194,9 +201,7 @@ export function WeeklyProductivity() {
           <Text style={{ fontSize: 16, color: "#f0f0f0", fontWeight: "700" }}>
             {bestDay.completed}
           </Text>
-          <Text
-            style={{ fontSize: 9, color: "#444", letterSpacing: 0.5 }}
-          >
+          <Text style={{ fontSize: 9, color: "#444", letterSpacing: 0.5 }}>
             BEST DAY
           </Text>
         </View>
@@ -215,9 +220,7 @@ export function WeeklyProductivity() {
           >
             {weeklyData.filter((d) => d.completed > 0).length}/7
           </Text>
-          <Text
-            style={{ fontSize: 9, color: "#444", letterSpacing: 0.5 }}
-          >
+          <Text style={{ fontSize: 9, color: "#444", letterSpacing: 0.5 }}>
             ACTIVE DAYS
           </Text>
         </View>

@@ -156,7 +156,7 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
               🔔
             </Text>
             <Text
-              className={`text-[10px] font-medium ${task.reminderAt ? "text-leben-accent" : "text-leben-text-muted"}`}
+              className={`text-[10px] font-geist-medium ${task.reminderAt ? "text-leben-accent" : "text-leben-text-muted"}`}
             >
               Reminder
             </Text>
@@ -171,7 +171,7 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
             className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-leben-border-subtle bg-transparent"
           >
             <Text className="text-leben-text-muted text-[10px]">✎</Text>
-            <Text className="text-[10px] font-medium text-leben-text-muted">
+            <Text className="text-[10px] font-geist-medium text-leben-text-muted">
               Edit
             </Text>
           </TouchableOpacity>
@@ -190,7 +190,7 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
             className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-500/30 bg-red-500/10"
           >
             <Text className="text-red-400 text-[10px]">🗑</Text>
-            <Text className="text-[10px] font-medium text-red-400">Delete</Text>
+            <Text className="text-[10px] font-geist-medium text-red-400">Delete</Text>
           </TouchableOpacity>
 
           <View className="flex-1" />
@@ -198,13 +198,13 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
           <View
             className={`rounded px-2 py-1 border ${
               isWork
-                ? "bg-leben-accent/10 border-leben-accent/20"
-                : "bg-green-500/10 border-green-500/20"
+                ? "bg-tag-work-bg border-tag-work-border"
+                : "bg-tag-personal-bg border-tag-personal-border"
             }`}
           >
             <Text
-              className={`text-[10px] font-semibold ${
-                isWork ? "text-leben-accent" : "text-green-500"
+              className={`text-[10px] font-geist-semibold ${
+                isWork ? "text-tag-work-text" : "text-tag-personal-text"
               }`}
             >
               {task.tag}

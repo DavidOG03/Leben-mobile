@@ -38,7 +38,7 @@ function PushPermissionBanner() {
         }}
         className="bg-[rgba(124,106,240,0.15)] border border-[rgba(124,106,240,0.3)] rounded-md px-3 py-1.5"
       >
-        <Text className="text-leben-accent font-bold text-[11px]">Enable</Text>
+        <Text className="text-leben-accent font-geist-bold text-[11px]">Enable</Text>
       </TouchableOpacity>
     </View>
   );
@@ -82,13 +82,13 @@ export default function NotificationDropdown() {
       >
         {/* Header */}
         <View className="px-5 py-4 border-b border-leben-border-subtle flex-row items-center justify-between bg-[rgba(255,255,255,0.02)]">
-          <Text className="text-leben-text font-semibold text-[14px]">
+          <Text className="text-leben-text font-geist-semibold text-[14px]">
             Notifications
           </Text>
           <View>
             {notifications.some((n: any) => !n.read) && (
               <TouchableOpacity onPress={() => markAllRead()}>
-                <Text className="text-leben-accent font-semibold text-[11px]">
+                <Text className="text-leben-accent font-geist-semibold text-[11px]">
                   Mark all read
                 </Text>
               </TouchableOpacity>
@@ -120,7 +120,7 @@ export default function NotificationDropdown() {
               >
                 <View className="flex-row items-start justify-between gap-3">
                   <View className="flex-1">
-                    <Text className="text-leben-accent font-bold text-[10px] uppercase tracking-wider mb-1">
+                    <Text className="text-leben-accent font-geist-bold text-[10px] uppercase tracking-wider mb-1">
                       {n.title}
                     </Text>
                     <Text

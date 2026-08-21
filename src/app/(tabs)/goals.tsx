@@ -15,7 +15,7 @@ export default function GoalsScreen() {
       <View className="flex-1 px-4 py-6">
         <View className="flex-row items-center justify-between mb-4">
           <View>
-            <Text className="text-leben-text font-bold text-3xl tracking-tight leading-tight mb-1">
+            <Text className="text-leben-text font-geist-bold text-3xl tracking-tight leading-tight mb-1">
               Goals
             </Text>
             <Text className="text-leben-text-muted text-[13px]">
@@ -26,7 +26,7 @@ export default function GoalsScreen() {
             onPress={() => setShowAddSheet(true)}
             className="flex flex-row items-center justify-center gap-2 rounded-full bg-leben-accent active:opacity-80 px-4 py-2"
           >
-            <Text className="text-white text-sm leading-none font-light">
+            <Text className="text-white text-sm leading-none font-geist-light">
               + Add Goal
             </Text>
           </TouchableOpacity>

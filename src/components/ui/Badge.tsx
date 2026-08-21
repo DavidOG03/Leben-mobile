@@ -46,7 +46,7 @@ export function Badge({
         <Text className={`text-xs mr-1 ${textClasses[variant]}`}>{icon}</Text>
       )}
       <Text
-        className={`text-[11px] font-medium uppercase tracking-wider ${textClasses[variant]}`}
+        className={`text-[11px] font-geist-medium uppercase tracking-wider ${textClasses[variant]}`}
         numberOfLines={numberOfLines === 0 ? undefined : numberOfLines}
       >
         {label}
