@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import { useLebenStore } from '@/store/useStore';
 import { Card } from '@/components/ui/Card';
 import { deriveGoalStats } from '@/utils/goals.types';
@@ -8,7 +8,6 @@ import { Text } from '@/components/ui/Text';
 
 
 export function GoalProgress() {
-  const router = useRouter();
   const goals = useLebenStore((s) => s.goals);
   const toggleMilestone = useLebenStore((s) => s.toggleMilestone);
 
@@ -137,3 +136,4 @@ export function GoalProgress() {
     </Card>
   );
 }
+

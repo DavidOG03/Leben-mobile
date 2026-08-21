@@ -211,7 +211,7 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
               >
                 <Text
                   className={`text-[14px] font-geist-semibold ${
-                    label.trim() ? "text-leben-bg" : "text-leben-text-muted"
+                    label.trim() ? "text-white" : "text-white"
                   }`}
                 >
                   Add Habit

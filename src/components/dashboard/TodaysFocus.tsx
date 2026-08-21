@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/Card";
 import { Text } from "@/components/ui/Text";
 import { cancelReminder, scheduleReminder } from "@/hooks/useNotifications";
 import { useLebenStore } from "@/store/useStore";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useState } from "react";
 import { Alert, TouchableOpacity, View } from "react-native";
 
@@ -15,7 +15,6 @@ import { Alert, TouchableOpacity, View } from "react-native";
 // }
 
 export function TodaysFocus() {
-  const router = useRouter();
   const tasks = useLebenStore((s) => s.tasks);
   const toggleTask = useLebenStore((s) => s.toggleTask);
   const deleteTask = useLebenStore((s) => s.removeTask); // NOTE: mapped to removeTask in zustand
@@ -204,3 +203,4 @@ export function TodaysFocus() {
     </Card>
   );
 }
+

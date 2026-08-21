@@ -130,11 +130,13 @@ export function WeeklyProductivity() {
                   <Svg
                     width="100%"
                     height="100%"
-                    style={{ position: "absolute" }}
+                    viewBox="0 0 1 1"
+                    preserveAspectRatio="none"
+                    style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
                   >
                     <Defs>
                       <LinearGradient
-                        id="todayGrad"
+                        id={`todayGrad-prod-${d.date}`}
                         x1="0"
                         y1="0"
                         x2="0"
@@ -144,7 +146,7 @@ export function WeeklyProductivity() {
                         <Stop offset="1" stopColor="#7c6af0" />
                       </LinearGradient>
                     </Defs>
-                    <Rect width="100%" height="100%" fill="url(#todayGrad)" />
+                    <Rect width="1" height="1" fill={`url(#todayGrad-prod-${d.date})`} />
                   </Svg>
                 )}
               </View>

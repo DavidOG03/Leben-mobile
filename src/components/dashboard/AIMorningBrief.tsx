@@ -3,13 +3,12 @@ import { Card } from "@/components/ui/Card";
 import { Text } from "@/components/ui/Text";
 import { getAIBrief } from "@/lib/ai/client";
 import { useLebenStore } from "@/store/useStore";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 
 export function AIMorningBrief() {
-  const router = useRouter();
   const {
     tasks,
     habits,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import { useLebenStore } from '@/store/useStore';
 import { Card } from '@/components/ui/Card';
 import { scheduleReminder, cancelReminder } from '@/hooks/useNotifications';
@@ -9,7 +9,6 @@ import ReminderPicker from '@/components/shared/ReminderPicker';
 
 
 export function HabitStreaks() {
-  const router = useRouter();
   const habits = useLebenStore((s) => s.habits);
   const toggleHabit = useLebenStore((s) => s.toggleHabit);
   const updateHabit = useLebenStore((s) => s.editHabit); // Mapped to editHabit in store
@@ -150,3 +149,4 @@ export function HabitStreaks() {
     </Card>
   );
 }
+

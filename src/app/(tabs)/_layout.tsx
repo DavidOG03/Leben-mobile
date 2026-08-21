@@ -9,7 +9,7 @@ import {
   MoreIcon,
   TaskIcon,
 } from "@/constants/Icons";
-import { Tabs, usePathname, useRouter } from "expo-router";
+import { Tabs, usePathname, router } from "expo-router";
 import { useCallback, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -111,7 +111,6 @@ function TabButton({
   active: boolean;
   onPress: () => void;
 }) {
-  const router = useRouter();
   const Icon = tab.icon;
 
   return (

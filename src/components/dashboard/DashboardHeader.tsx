@@ -1,12 +1,11 @@
 import { Text } from "@/components/ui/Text";
 import { BellIcon, ProfileIcon } from "@/constants/Icons";
 import { useLebenStore } from "@/store/useStore";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 
 export function DashboardHeader() {
-  const router = useRouter();
   const userId = useLebenStore((s) => s.userId);
   const userFullName = useLebenStore((s: any) => s.userFullName);
   const userEmail = useLebenStore((s: any) => s.userEmail);

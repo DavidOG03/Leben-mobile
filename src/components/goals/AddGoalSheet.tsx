@@ -233,7 +233,7 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
                 onPress={handleSubmit}
                 className="flex-1 py-3 rounded-xl items-center justify-center bg-leben-accent"
               >
-                <Text className="text-leben-bg font-geist-semibold text-[13px]">
+                <Text className="text-white font-geist-semibold text-[13px]">
                   Create Goal
                 </Text>
               </TouchableOpacity>

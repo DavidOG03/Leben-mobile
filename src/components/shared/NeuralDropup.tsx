@@ -8,7 +8,7 @@ import {
   CalIcon,
   SettingsIcon,
 } from "@/constants/Icons";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useColorScheme } from "nativewind";
 import { Pressable, View } from "react-native";
 
@@ -57,7 +57,6 @@ interface NeuralDropupProps {
 }
 
 export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
-  const router = useRouter();
   const { colorScheme } = useColorScheme();
   const bgColor = colorScheme === "dark" ? "#141419" : "#ffffff";
 

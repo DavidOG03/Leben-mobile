@@ -48,13 +48,10 @@ export function GoalItem({ goal }: GoalItemProps) {
   };
 
   return (
-    <Card className="p-5 mb-4 bg-leben-bg-card border border-leben-border-subtle">
+    <Card className="p-5 mb-4 bg-leben-bg-card border border-leben-border">
       {/* Header Row */}
       <View className="flex-row items-start justify-between mb-4">
-        <View
-          className="w-12 h-12 rounded-xl items-center justify-center border border-[#252535]"
-          style={{ backgroundColor: "#141428" }}
-        >
+        <View className="w-12 h-12 rounded-xl items-center justify-center border border-leben-border">
           <Text className="text-[22px]">{goal.icon}</Text>
         </View>
 
@@ -85,7 +82,7 @@ export function GoalItem({ goal }: GoalItemProps) {
           <TextInput
             value={editTitle}
             onChangeText={setEditTitle}
-            className="bg-leben-bg-secondary border border-leben-border text-leben-text px-3 py-2 rounded-lg text-[14px]"
+            className="bg-leben-bg-secondary border border-leben-border-subtle text-leben-text px-3 py-2 rounded-lg text-[14px]"
             placeholder="Goal Title"
             placeholderTextColor="#666"
             autoFocus
@@ -93,7 +90,7 @@ export function GoalItem({ goal }: GoalItemProps) {
           <TextInput
             value={editDeadline}
             onChangeText={setEditDeadline}
-            className="bg-leben-bg-secondary border border-leben-border text-leben-text px-3 py-2 rounded-lg text-[11px]"
+            className="bg-leben-bg-secondary border border-leben-border-subtle text-leben-text px-3 py-2 rounded-lg text-[11px]"
             placeholder="Deadline (e.g. Dec 2025)"
             placeholderTextColor="#666"
           />
@@ -138,14 +135,14 @@ export function GoalItem({ goal }: GoalItemProps) {
             {editMilestones.map((m, index) => (
               <View
                 key={m.id}
-                className="flex-row items-center gap-2 mb-2 pb-2 border-b border-leben-border"
+                className="flex-row items-center gap-2 mb-2 pb-2 border-b border-leben-border-subtle"
               >
                 {/* Done indicator (non-interactive in edit mode) */}
                 <View
                   className={`w-4 h-4 rounded-full border ${
                     m.done
                       ? "bg-leben-accent/20 border-leben-accent"
-                      : "bg-transparent border-leben-border-subtle"
+                      : "bg-transparent border-leben-border"
                   }`}
                 />
                 <TextInput
@@ -155,7 +152,7 @@ export function GoalItem({ goal }: GoalItemProps) {
                     newM[index] = { ...newM[index], label: text };
                     setEditMilestones(newM);
                   }}
-                  className="flex-1 bg-leben-bg-secondary text-[#eee] text-[12px] px-2 py-1.5 rounded border border-leben-border"
+                  className="flex-1 bg-leben-bg-secondary text-leben-text text-[12px] px-2 py-1.5 rounded border border-leben-border-subtle"
                   placeholder="Milestone label"
                   placeholderTextColor="#555"
                 />
@@ -167,7 +164,9 @@ export function GoalItem({ goal }: GoalItemProps) {
                   }}
                   className="px-2 py-1"
                 >
-                  <Text className="text-red-500 font-geist-bold text-sm">✕</Text>
+                  <Text className="text-red-500 font-geist-bold text-sm">
+                    ✕
+                  </Text>
                 </TouchableOpacity>
               </View>
             ))}
@@ -192,7 +191,7 @@ export function GoalItem({ goal }: GoalItemProps) {
               onPress={handleSave}
               className="mt-3 bg-leben-accent rounded-lg py-3 items-center"
             >
-              <Text className="text-leben-text font-geist-semibold text-[13px]">
+              <Text className="text-white font-geist-semibold text-[13px]">
                 Save Changes
               </Text>
             </TouchableOpacity>
@@ -210,7 +209,7 @@ export function GoalItem({ goal }: GoalItemProps) {
                 className={`w-4 h-4 rounded-full items-center justify-center shrink-0 border ${
                   m.done
                     ? "bg-leben-accent/20 border-leben-accent"
-                    : "bg-transparent border-leben-border-subtle"
+                    : "bg-transparent border-leben-border"
                 }`}
               >
                 {m.done && (

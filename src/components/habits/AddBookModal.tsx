@@ -152,9 +152,7 @@ export default function AddBookModal({
               >
                 <Text
                   className={`text-[14px] font-geist-semibold ${
-                    title.trim() && totalPages
-                      ? "text-leben-bg"
-                      : "text-leben-text-muted"
+                    title.trim() && totalPages ? "text-white" : "text-white/50"
                   }`}
                 >
                   Add Book

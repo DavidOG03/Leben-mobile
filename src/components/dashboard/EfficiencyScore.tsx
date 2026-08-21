@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/Card";
 import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useColorScheme } from "nativewind";
 import { useEffect, useMemo, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
@@ -16,7 +16,6 @@ import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export function EfficiencyScore() {
-  const router = useRouter();
   const userId = useLebenStore((s) => s.userId);
   const tasks = useLebenStore((s) => s.tasks);
   const habits = useLebenStore((s) => s.habits);

@@ -49,7 +49,10 @@ export function HabitItem({ habit }: HabitItemProps) {
 
   return (
     <View
-      className={`rounded-2xl p-5 border bg-leben-bg-card ${isCheckedToday ? `border-[#${habit.color}55]` : "border-leben-border-subtle"} `}
+      className={`rounded-2xl p-5 border bg-leben-bg-card`}
+      style={{
+        borderColor: isCheckedToday ? habit.color : "#33333335",
+      }}
     >
       {/* Top row: icon + actions */}
       <View
@@ -123,7 +126,9 @@ export function HabitItem({ habit }: HabitItemProps) {
               marginTop: 4,
             }}
           >
-            <Text className="text-white font-geist-semibold text-[12px]">Save</Text>
+            <Text className="text-white font-geist-semibold text-[12px]">
+              Save
+            </Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -166,7 +171,7 @@ export function HabitItem({ habit }: HabitItemProps) {
             backgroundColor: isCheckedToday
               ? `${habit.color}22`
               : "transparent",
-            borderColor: isCheckedToday ? habit.color : undefined,
+            borderColor: isCheckedToday ? habit.color : "#33333335",
           }}
           activeOpacity={0.7}
         >

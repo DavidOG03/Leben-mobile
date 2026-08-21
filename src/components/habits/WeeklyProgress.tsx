@@ -85,9 +85,12 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
   return (
     <Card
       variant="none"
-      className="rounded-2xl p-5 bg-leben-bg border border-leben-border-subtle"
+      className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border-subtle"
     >
-      <Text className="font-geist-semibold text-white mb-1" style={{ fontSize: 14 }}>
+      <Text
+        className="font-geist-semibold text-leben-text mb-1"
+        style={{ fontSize: 14 }}
+      >
         Weekly Progress
       </Text>
       <Text
@@ -107,7 +110,7 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
             {[0.3, 0.45, 0.4, 0.55, 0.35, 0.25, 0.2].map((h, i) => (
               <View
                 key={i}
-                className="flex-1 bg-leben-bg-card"
+                className="flex-1 bg-leben-border"
                 style={{
                   height: `${h * 100}%`,
                   borderTopLeftRadius: 3,
@@ -171,11 +174,19 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
                       <Svg
                         width="100%"
                         height="100%"
-                        style={{ position: "absolute" }}
+                        viewBox="0 0 1 1"
+                        preserveAspectRatio="none"
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                        }}
                       >
                         <Defs>
                           <LinearGradient
-                            id="todayGrad"
+                            id={`todayGrad-${i}`}
                             x1="0"
                             y1="0"
                             x2="0"
@@ -186,9 +197,9 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
                           </LinearGradient>
                         </Defs>
                         <Rect
-                          width="100%"
-                          height="100%"
-                          fill="url(#todayGrad)"
+                          width="1"
+                          height="1"
+                          fill={`url(#todayGrad-${i})`}
                         />
                       </Svg>
                     )}
@@ -199,17 +210,13 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
           </View>
 
           {/* ── Day labels ───────────────────────────────── */}
-          <View className="flex-row justify-between mb-4">
+          <View className={`flex-row justify-between mb-4 `}>
             {weeklyAnalytics.days.map((d, i) => (
               <Text
+                className={`font-geist-light ${d.isToday ? "text-leben-accent font-geist-bold" : d.isSkipped ? "text-leben-text-muted" : "text-leben-text"}`}
                 key={i}
                 style={{
                   fontSize: 9,
-                  color: d.isToday
-                    ? "var(--accent-blue)"
-                    : d.isSkipped
-                      ? "var(--text-muted)"
-                      : "var(--text-primary)",
                   fontWeight: d.isToday ? "700" : "400",
                   flex: 1,
                   textAlign: "center",
@@ -221,11 +228,8 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
           </View>
 
           {/* ── Stats ───────────────────────────────────── */}
-          <View
-            className="pt-3"
-            style={{ borderTopWidth: 1, borderTopColor: "var(--border-subtle)", gap: 8 }}
-          >
-            <View className="flex-row items-center justify-between">
+          <View className="pt-3 border-t border-t-leben-border-subtle gap-3">
+            {/* <View className="flex-row items-center justify-between">
               <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>
                 Current Streak
               </Text>
@@ -233,28 +237,34 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
                 style={{
                   fontSize: 12,
                   color:
-                    weeklyAnalytics.currentStreak > 0 ? "var(--success-green)" : "#f87171",
+                    weeklyAnalytics.currentStreak > 0
+                      ? "var(--success-green)"
+                      : "#f87171",
                   fontWeight: "600",
                 }}
               >
                 {weeklyAnalytics.currentStreak} days
               </Text>
-            </View>
+            </View> */}
 
             <View className="flex-row items-center justify-between">
-              <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>
+              <Text className="text-leben-text" style={{ fontSize: 12 }}>
                 Longest Streak
               </Text>
-              <Text
-                style={{ fontSize: 12, color: "var(--accent-blue)", fontWeight: "600" }}
-              >
+              <Text className="font-geist-semibold text-leben-accent text-sm">
                 {weeklyAnalytics.longestStreak} days
               </Text>
             </View>
 
             {weeklyAnalytics.currentStreak === 0 &&
               weeklyAnalytics.longestStreak > 0 && (
-                <Text style={{ fontSize: 10, color: "var(--text-dim)", marginTop: 6 }}>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    color: "var(--text-dim)",
+                    marginTop: 6,
+                  }}
+                >
                   Streak reset — best was {weeklyAnalytics.longestStreak} days.
                   Start fresh today!
                 </Text>

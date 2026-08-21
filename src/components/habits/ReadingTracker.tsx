@@ -11,7 +11,7 @@ interface ReadingTrackerProps {
 
 const GhostBookCard = ({ opacity }: { opacity: number }) => (
   <View
-    className="rounded-xl flex-1 mr-4 bg-leben-bg-card border border-leben-border"
+    className="rounded-xl flex-1 mr-4 bg-leben-bg-card border border-leben-border-subtle"
     style={{
       opacity,
       height: 140,
@@ -39,7 +39,7 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           <Text className="font-geist-bold text-leben-text text-3xl ">
             Reading Tracker
           </Text>
-          <Text className="text-xs text-leben-text-muted my-2">
+          <Text className="text-sm font-geist-medium text-leben-text-muted my-2">
             Track every book you're working through.
           </Text>
         </View>
@@ -47,20 +47,20 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           onPress={() => onShowAddBook(true)}
           className="flex-row items-center gap-1.5 px-3 py-2 rounded-lg bg-leben-bg-element border border-leben-border-subtle"
         >
-          <Text className="text-leben-text-2 text-[12px] font-geist-bold">
+          <Text className="text-leben-text-2 text-[12px] font-geist-medium">
             + Add Book
           </Text>
         </TouchableOpacity>
       </View>
 
       {books.length === 0 ? (
-        <View className="rounded-2xl overflow-hidden border border-leben-border bg-leben-bg-secondary">
+        <View className="rounded-2xl overflow-hidden border border-leben-border-subtle bg-leben-bg-secondary">
           <View className="p-4 flex-row">
             {[1, 0.65].map((op, i) => (
               <GhostBookCard key={i} opacity={op} />
             ))}
           </View>
-          <View className="flex-col items-center justify-center py-8 gap-3 border-t border-leben-border">
+          <View className="flex-col items-center justify-center py-8 gap-3 border-t border-leben-border-subtle">
             <Text className="text-[28px]">📚</Text>
             <Text className="font-geist-medium text-[13px] text-leben-text-muted">
               No books tracked yet

@@ -1,10 +1,9 @@
 import { Text } from "@/components/ui/Text";
 import { AIIcon, PlusIcon } from "@/constants/Icons";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
 
 export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
-  const router = useRouter();
   const remaining = 2 - taskCount;
 
   return (
