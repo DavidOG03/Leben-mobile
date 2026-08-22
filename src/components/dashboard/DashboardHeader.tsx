@@ -19,6 +19,10 @@ export function DashboardHeader() {
     firstName = userEmail.split("@")[0];
   }
 
+  if (firstName.length > 15) {
+    firstName = firstName.substring(0, 12) + "...";
+  }
+
   const getGreeting = (date: Date) => {
     const hour = date.getHours();
     if (hour < 12) return "Good morning";
