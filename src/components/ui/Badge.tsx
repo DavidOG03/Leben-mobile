@@ -25,7 +25,7 @@ export function Badge({
     warning:
       "bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.2)] text-prio-medium",
     primary:
-      "bg-leben-accent-dim border border-[rgba(124,106,240,0.5)] text-leben-accent",
+      "bg-leben-accent-dim border border-[rgba(104,106,240,0.5)] text-leben-accent",
     outline: "bg-transparent border border-leben-border text-leben-text-2",
   };
 
@@ -34,7 +34,7 @@ export function Badge({
     success: "text-leben-success",
     error: "text-leben-error",
     warning: "text-prio-medium",
-    primary: "text-leben-text-2",
+    primary: "text-[rgba(104,106,240,1)]",
     outline: "text-leben-text-2",
   };
 

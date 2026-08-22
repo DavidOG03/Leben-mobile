@@ -2,6 +2,7 @@ import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
 import React from "react";
 import { View } from "react-native";
+import { ProfileIcon } from "@/constants/Icons";
 
 export function Profile() {
   const userId = useLebenStore((s) => s.userId);
@@ -18,9 +19,8 @@ export function Profile() {
         {/* Avatar */}
         <View className="relative">
           <View className="rounded-2xl overflow-hidden items-center justify-center w-[88px] h-[88px] bg-leben-bg-element border border-leben-border-subtle">
-            {/* Web uses a gradient + SVG. We'll simulate it with a View and Emoji */}
             <View className="w-full h-full items-center justify-center bg-leben-bg-secondary">
-              <Text className="text-[40px]">👤</Text>
+              <ProfileIcon size={40} color="#6b7fff" />
             </View>
           </View>
         </View>

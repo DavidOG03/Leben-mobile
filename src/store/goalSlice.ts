@@ -80,7 +80,7 @@ export function createGoalSlice(
       }
 
       set((s) => ({ goals: [newGoal, ...s.goals] }));
-      get().clearMorningBrief?.();
+
       await insertGoal(newGoal);
     },
 
@@ -90,7 +90,7 @@ export function createGoalSlice(
           g.id === id ? { ...g, ...updates } : g,
         ),
       }));
-      get().clearMorningBrief?.();
+
       await updateGoal(id, updates);
     },
 
@@ -101,13 +101,13 @@ export function createGoalSlice(
           g.id === id ? { ...g, ...updates } : g,
         ),
       }));
-      get().clearMorningBrief?.();
+
       await updateGoal(id, updates);
     },
 
     removeGoal: async (id) => {
       set((s) => ({ goals: s.goals.filter((g: Goal) => g.id !== id) }));
-      get().clearMorningBrief?.();
+
       await deleteGoal(id);
     },
 
@@ -140,7 +140,7 @@ export function createGoalSlice(
         }),
       }));
       if (updatedMilestones.length > 0) {
-        get().clearMorningBrief?.();
+  
         await updateGoal(goalId, { milestones: updatedMilestones });
       }
     },
@@ -157,7 +157,7 @@ export function createGoalSlice(
         }),
       }));
       if (updatedMilestones.length > 0) {
-        get().clearMorningBrief?.();
+  
         await updateGoal(goalId, { milestones: updatedMilestones });
       }
     },

@@ -83,7 +83,7 @@ function CustomTabBar() {
         >
           <MoreIcon
             size={22}
-            color={isNeuralActive || dropupOpen ? "#7c6af0" : "#888888"}
+            color={isNeuralActive || dropupOpen ? "#6b7fff" : "#888888"}
           />
           <Text
             className={`text-[10px] mt-1.5 font-geist-medium ${
@@ -122,7 +122,7 @@ function TabButton({
       }}
       activeOpacity={0.7}
     >
-      <Icon size={22} color={active ? "#7c6af0" : "#888888"} />
+      <Icon size={22} color={active ? "#6b7fff" : "#888888"} />
       <Text
         className={`text-[10px] mt-1.5 font-geist-medium ${
           active ? "text-leben-accent" : "text-leben-text-dim"

@@ -84,7 +84,7 @@ export function DashboardHeader() {
             onPress={() => router.push("/(tabs)/settings" as any)}
             className="w-9 h-9 rounded-full items-center justify-center border-[1.5px] border-leben-border bg-leben-accent-dim"
           >
-            <ProfileIcon size={18} color="#7c6af0" />
+            <ProfileIcon size={18} color="#6b7fff" />
           </TouchableOpacity>
         </View>
       </View>

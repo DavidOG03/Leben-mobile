@@ -81,10 +81,10 @@ export default function LogoutScreen() {
             />
           </View>
           <Text className="text-3xl font-geist-bold text-leben-text tracking-tight mb-2">
-            You're Signed Out
+            See you soon
           </Text>
           <Text className="text-leben-text-muted text-[15px] text-center px-4 leading-[22px]">
-            You have successfully logged out. Your data is now saved locally in Guest Mode.
+            You've been signed out safely. Your progress is saved — come back whenever you're ready.
           </Text>
         </View>
 

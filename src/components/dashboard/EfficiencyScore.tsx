@@ -164,7 +164,7 @@ export function EfficiencyScore() {
   const { colorScheme } = useColorScheme();
   const strokeBorder = colorScheme === "dark" ? "#1e1e1e" : "#e5e5ea";
   const strokeSubtle = colorScheme === "dark" ? "#1a1a1a" : "#f4f4f5";
-  const strokeAccent = "#7c6af0";
+  const strokeAccent = "#6b7fff";
 
   return (
     <Card className="min-h-[260px] items-center justify-center p-7 bg-leben-bg-card border border-leben-border-subtle">
@@ -277,8 +277,8 @@ export function EfficiencyScore() {
             <Svg width="140" height="140" viewBox="0 0 140 140">
               <Defs>
                 <LinearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
-                  <Stop offset="0" stopColor="#7c6af0" stopOpacity="1" />
-                  <Stop offset="1" stopColor="#9d8ff5" stopOpacity="1" />
+                  <Stop offset="0" stopColor="#6b7fff" stopOpacity="1" />
+                  <Stop offset="1" stopColor="#5a6bff" stopOpacity="1" />
                 </LinearGradient>
               </Defs>
               <Circle

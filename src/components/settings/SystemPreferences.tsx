@@ -43,6 +43,17 @@ export function SystemPreferences() {
     }
   };
 
+  const [isDark, setIsDark] = React.useState(colorScheme === "dark");
+
+  const handleDarkModeToggle = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    // Defer the heavy global CSS repaint so the toggle animation is smooth
+    setTimeout(() => {
+      setColorScheme(nextDark ? "dark" : "light");
+    }, 50);
+  };
+
   return (
     <>
       <SectionLabel text="System Preferences" />
@@ -172,10 +183,8 @@ export function SystemPreferences() {
           <View className="flex-row items-center justify-between pt-2 border-t border-leben-border">
             <Text className="text-leben-text-2 text-[14px]">Dark Mode</Text>
             <Toggle
-              on={colorScheme === "dark"}
-              onChange={() =>
-                setColorScheme(colorScheme === "dark" ? "light" : "dark")
-              }
+              on={isDark}
+              onChange={handleDarkModeToggle}
             />
           </View>
         </View>

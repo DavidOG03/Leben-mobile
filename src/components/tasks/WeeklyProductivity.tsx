@@ -14,9 +14,9 @@ export function WeeklyProductivity() {
     const today = new Date();
     const history = historyStore || {};
     return Array.from({ length: 7 }, (_, idx) => {
-      const date = new Date(today);
+      const date = new Date(today.getTime());
       date.setDate(today.getDate() - (6 - idx));
-      const dateStr = date.toISOString().split("T")[0];
+      const dateStr = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split("T")[0];
 
       // Only count tasks that were actually completed on this date
       const completedOnThisDay = tasks.filter(
@@ -66,7 +66,7 @@ export function WeeklyProductivity() {
         <Svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <Path
             d="M1 10L4.5 6l3 3L12 3"
-            stroke="#7c6af0"
+            stroke="#6b7fff"
             strokeWidth="1.4"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -142,8 +142,8 @@ export function WeeklyProductivity() {
                         x2="0"
                         y2="1"
                       >
-                        <Stop offset="0" stopColor="#9d8ff5" />
-                        <Stop offset="1" stopColor="#7c6af0" />
+                        <Stop offset="0" stopColor="#5a6bff" />
+                        <Stop offset="1" stopColor="#6b7fff" />
                       </LinearGradient>
                     </Defs>
                     <Rect width="1" height="1" fill={`url(#todayGrad-prod-${d.date})`} />
@@ -178,7 +178,7 @@ export function WeeklyProductivity() {
             <Text
               style={{
                 fontSize: 9,
-                color: d.isToday ? "#7c6af0" : "#444",
+                color: d.isToday ? "#6b7fff" : "#444",
                 letterSpacing: 0.6,
                 fontWeight: d.isToday ? "700" : "400",
               }}

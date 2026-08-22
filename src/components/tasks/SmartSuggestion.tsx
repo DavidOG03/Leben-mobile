@@ -152,10 +152,16 @@ export function SmartSuggestion() {
             activeOpacity={0.8}
             className={`flex-row items-center justify-center gap-1.5 rounded-xl py-3 ${
               canAnalyze
-                ? "bg-leben-accent shadow-lg shadow-leben-accent/35"
+                ? "bg-leben-accent"
                 : "bg-white/5"
             }`}
-            style={{ elevation: canAnalyze ? 4 : 0 }}
+            style={canAnalyze ? { 
+              elevation: 4, 
+              shadowColor: '#7c6af0', 
+              shadowOffset: { width: 0, height: 4 }, 
+              shadowOpacity: 0.35, 
+              shadowRadius: 6 
+            } : {}}
           >
             {loading ? (
               <ActivityIndicator color="#fff" size="small" />

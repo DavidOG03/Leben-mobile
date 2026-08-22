@@ -1,10 +1,8 @@
-import React from 'react';
-import { View, } from 'react-native';
-import { AIInsight } from '@/utils/analytics.utils';
-import EmptyState from './EmptyState';
-import { Ionicons } from '@expo/vector-icons';
-import { Text } from '@/components/ui/Text';
-
+import { Text } from "@/components/ui/Text";
+import { AIInsight } from "@/utils/analytics.utils";
+import { Ionicons } from "@expo/vector-icons";
+import { View } from "react-native";
+import EmptyState from "./EmptyState";
 
 interface AIInsightsProps {
   insights: AIInsight[];
@@ -13,7 +11,7 @@ interface AIInsightsProps {
 
 export default function AIInsights({ insights, hasData }: AIInsightsProps) {
   return (
-    <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border">
+    <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border-subtle">
       <View className="flex-row items-center gap-2 mb-4">
         <View
           className="items-center justify-center rounded-lg bg-leben-accent-dim border border-leben-accent/20"
@@ -31,7 +29,7 @@ export default function AIInsights({ insights, hasData }: AIInsightsProps) {
           {insights.map((insight, i) => (
             <View
               key={i}
-              className="flex-row gap-2.5 rounded-xl p-3 bg-leben-bg-card border border-leben-border"
+              className="flex-row gap-2.5 rounded-xl p-3 bg-leben-bg-card border border-leben-border-subtle"
             >
               <Text className="text-[14px] mt-0.5">{insight.icon}</Text>
               <Text className="text-[11px] text-leben-text-muted leading-[16.5px] shrink">
@@ -44,7 +42,7 @@ export default function AIInsights({ insights, hasData }: AIInsightsProps) {
         <EmptyState
           icon={<Ionicons name="sparkles-outline" size={24} color="#555" />}
           message="No insights yet"
-          hint="Interact with tasks, habits, and goals to surface patterns"
+          hint="Use tasks, habits, and goals for a bit — we'll start spotting patterns for you"
         />
       )}
     </View>

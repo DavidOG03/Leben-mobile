@@ -94,7 +94,7 @@ async function generateAIResponse(
           parts: [{ text: m.content }],
         }));
 
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${geminiKey}`;
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -130,7 +130,7 @@ async function generateAIResponse(
             Authorization: `Bearer ${groqKey}`,
           },
           body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
+            model: "llama-3.1-70b-versatile",
             messages,
             response_format: expectJson ? { type: "json_object" } : undefined,
           }),
@@ -179,6 +179,10 @@ async function generateAIResponse(
 // ── State Fetcher ──────────────────────────────────────────────────────────────
 function getUserStateSummary() {
   const { tasks, habits, goals } = useLebenStore.getState();
+  
+  const now = new Date();
+  const todayStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+
   return JSON.stringify({
     tasks: tasks.map((t) => ({
       title: t.title,
@@ -188,7 +192,7 @@ function getUserStateSummary() {
     habits: habits.map((h) => ({
       name: h.name,
       streak: h.streak,
-      checked: h.checked,
+      completedToday: (h.completedDates ?? []).includes(todayStr),
     })),
     goals: goals.map((g) => ({
       title: g.title,
@@ -204,13 +208,24 @@ export async function getAIBrief(opts?: {
   forceRefresh?: boolean;
 }): Promise<AIBriefResponse> {
   const state = getUserStateSummary();
-  const systemPrompt = `You are Leben, an elite personal operating system.
-Your job is to provide a concise, hard-hitting morning brief based on the user's tasks, habits, and goals.
-Return ONLY valid JSON in this format:
+  const systemPrompt = `You are an AI productivity assistant for an app called Leben.
+
+Given the user's current tasks, habits, and goals, write a short morning brief.
+
+Respond ONLY with valid JSON. No markdown, no backticks, no explanation.
+
 {
-  "summary": "A punchy, 1-2 sentence motivating headline.",
-  "insights": ["Insight 1", "Insight 2", "Insight 3"]
-}`;
+  "summary": "One sentence describing the day ahead based on their actual tasks",
+  "insights": [
+    "Insight 1 - specific to their data, max 12 words",
+    "Insight 2 - specific to their data, max 12 words"
+  ]
+}
+  User data:
+ ${JSON.stringify(state)}
+
+
+`;
 
   const textResponse = await generateAIResponse(
     [

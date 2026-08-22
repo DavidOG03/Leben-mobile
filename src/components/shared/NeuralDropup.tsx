@@ -80,7 +80,7 @@ export function NeuralDropup({ visible, onClose }: NeuralDropupProps) {
             >
               {/* Icon bubble */}
               <View className="w-12 h-12 rounded-xl bg-leben-accent-dim border border-[rgba(124,106,240,0.2)] items-center justify-center">
-                <Icon size={22} color="#7c6af0" />
+                <Icon size={22} color="#6b7fff" />
               </View>
               {/* Text */}
               <View className="flex-1">

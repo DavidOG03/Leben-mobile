@@ -274,7 +274,7 @@ export const useLebenStore = create<LebenStore>()(
 
       addTask: async (task) => {
         set((s) => ({ tasks: [task, ...s.tasks] }));
-        get().clearMorningBrief();
+
         const now = new Date();
         const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
         get().updateHistoryDelta(task.date || localDate, 0, 1);
@@ -294,7 +294,7 @@ export const useLebenStore = create<LebenStore>()(
         set((s) => ({
           tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
         }));
-        get().clearMorningBrief();
+
         get().updateHistoryDelta(localDate, task.completed ? -1 : 1, 0);
         
         await updateTask(id, updates);
@@ -307,7 +307,7 @@ export const useLebenStore = create<LebenStore>()(
         set((s) => ({
           tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
         }));
-        get().clearMorningBrief();
+
 
         if (task && updates.completed !== undefined && updates.completed !== task.completed) {
           const now = new Date();
@@ -323,7 +323,7 @@ export const useLebenStore = create<LebenStore>()(
 
       removeTask: async (id) => {
         set((s) => ({ tasks: s.tasks.filter((t) => t.id !== id) }));
-        get().clearMorningBrief();
+
         await deleteTask(id);
       },
 
@@ -340,7 +340,7 @@ export const useLebenStore = create<LebenStore>()(
 
       addHabit: async (habit) => {
         set((s) => ({ habits: [habit, ...s.habits] }));
-        get().clearMorningBrief();
+
         await insertHabit(habit);
       },
 
@@ -366,7 +366,7 @@ export const useLebenStore = create<LebenStore>()(
             h.id === id ? { ...h, ...updates } : h,
           ),
         }));
-        get().clearMorningBrief();
+
         await updateHabit(id, updates);
       },
 
@@ -374,13 +374,13 @@ export const useLebenStore = create<LebenStore>()(
         set((s) => ({
           habits: s.habits.map((h) => (h.id === id ? { ...h, ...updates } : h)),
         }));
-        get().clearMorningBrief();
+
         await updateHabit(id, updates);
       },
 
       deleteHabit: async (id) => {
         set((s) => ({ habits: s.habits.filter((h) => h.id !== id) }));
-        get().clearMorningBrief();
+
         await removeHabit(id);
       },
 

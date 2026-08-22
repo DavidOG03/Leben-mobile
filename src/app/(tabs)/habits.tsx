@@ -3,7 +3,7 @@ import AddBookModal from "@/components/habits/AddBookModal";
 import { AddHabitSheet } from "@/components/habits/AddHabitSheet";
 import { HabitList } from "@/components/habits/HabitList";
 import ReadingTracker from "@/components/habits/ReadingTracker";
-import WeeklyProgress from "@/components/habits/WeeklyProgress";
+// import WeeklyProgress from "@/components/habits/WeeklyProgress";
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
@@ -21,7 +21,6 @@ export default function HabitsScreen() {
     <ScreenLayout scrollable>
       <DashboardHeader />
       <View className="flex flex-col flex-1 px-4 py-6 gap-4">
-        <WeeklyProgress habits={habits} />
         {/* Daily Rituals section */}
         <View className="flex-row flex-wrap items-center justify-between mb-4">
           <View>

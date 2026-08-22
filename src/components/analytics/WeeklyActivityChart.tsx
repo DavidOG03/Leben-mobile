@@ -1,10 +1,8 @@
-import React from 'react';
-import { View, } from 'react-native';
-import { DayActivity } from '@/utils/analytics.utils';
-import EmptyState from './EmptyState';
-import { Ionicons } from '@expo/vector-icons';
-import { Text } from '@/components/ui/Text';
-
+import { Text } from "@/components/ui/Text";
+import { DayActivity } from "@/utils/analytics.utils";
+import { Ionicons } from "@expo/vector-icons";
+import { View } from "react-native";
+import EmptyState from "./EmptyState";
 
 interface WeeklyActivityChartProps {
   data: DayActivity[];
@@ -55,9 +53,12 @@ function BarChart({ data }: { data: DayActivity[] }) {
   );
 }
 
-export default function WeeklyActivityChart({ data, hasData }: WeeklyActivityChartProps) {
+export default function WeeklyActivityChart({
+  data,
+  hasData,
+}: WeeklyActivityChartProps) {
   return (
-    <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border">
+    <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border-subtle">
       <View className="flex-row items-center justify-between mb-5">
         <View>
           <Text className="font-geist-semibold text-leben-text-2 text-[14px]">
@@ -82,8 +83,8 @@ export default function WeeklyActivityChart({ data, hasData }: WeeklyActivityCha
       ) : (
         <EmptyState
           icon={<Ionicons name="bar-chart-outline" size={24} color="#555" />}
-          message="No activity yet"
-          hint="Complete tasks this week to see your activity chart"
+          message="Nothing here yet"
+          hint="Tick off some tasks this week and your activity will show up here"
         />
       )}
     </View>

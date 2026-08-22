@@ -147,7 +147,7 @@ export default function SignInScreen() {
             Leben
           </Text>
           <Text className="text-leben-text-2 font-geist-medium text-sm mt-1">
-            Your productivity OS
+            Good to see you again
           </Text>
         </View>
 

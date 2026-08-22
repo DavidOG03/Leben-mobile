@@ -14,7 +14,7 @@ export default function StatCards({ cards }: StatCardsProps) {
         {[1, 2, 3, 4].map((i) => (
           <View
             key={i}
-            className="rounded-2xl p-5 w-[160px] bg-leben-bg-card border border-leben-border"
+            className="rounded-2xl p-5 w-[160px] bg-leben-bg-card border border-leben-border-subtle"
           >
             <View className="w-16 h-3 rounded bg-white/5 mb-3" />
             <View className="w-20 h-8 rounded bg-white/5 mb-3" />
@@ -35,7 +35,7 @@ export default function StatCards({ cards }: StatCardsProps) {
       {cards.map((s) => (
         <View
           key={s.label}
-          className="rounded-2xl p-5 w-[160px] bg-leben-bg-card border border-leben-border"
+          className="rounded-2xl p-5 w-[160px] bg-leben-bg-card border border-leben-border-subtle"
         >
           <Text className="text-[11px] text-leben-text-muted mb-2">
             {s.label}

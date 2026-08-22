@@ -14,7 +14,7 @@ const daysLabels = ["S", "M", "T", "W", "T", "F", "S"];
 function dayColor(ratio: number, isToday: boolean): string {
   if (ratio <= 0) return "var(--bg-card)"; // skipped — no colour
   if (isToday) return "today"; // flag for svg gradient
-  if (ratio <= 0.33) return "rgba(124, 106, 240, 0.35)"; // leben-accent-90
+  if (ratio <= 0.33) return "rgba(107, 127, 255, 0.35)"; // leben-accent-90
   if (ratio <= 0.66) return "var(--accent-blue-light)"; // leben-accent-light
   return "var(--accent-blue)"; // leben-accent
 }
@@ -26,9 +26,13 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
     let totalCompletedThisWeek = 0;
 
     for (let i = 6; i >= 0; i--) {
-      const date = new Date(today);
+      const date = new Date(today.getTime());
       date.setDate(today.getDate() - i);
-      const dateStr = date.toISOString().split("T")[0];
+      const dateStr = new Date(
+        date.getTime() - date.getTimezoneOffset() * 60000,
+      )
+        .toISOString()
+        .split("T")[0];
       const dayLabel = daysLabels[date.getDay()];
       const isToday = i === 0;
 
@@ -85,7 +89,7 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
   return (
     <Card
       variant="none"
-      className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border-subtle"
+      className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border-subtle mb-5"
     >
       <Text
         className="font-geist-semibold text-leben-text mb-1"
@@ -192,8 +196,8 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
                             x2="0"
                             y2="1"
                           >
-                            <Stop offset="0" stopColor="#9d8ff5" />
-                            <Stop offset="1" stopColor="#7c6af0" />
+                            <Stop offset="0" stopColor="#5a6bff" />
+                            <Stop offset="1" stopColor="#6b7fff" />
                           </LinearGradient>
                         </Defs>
                         <Rect

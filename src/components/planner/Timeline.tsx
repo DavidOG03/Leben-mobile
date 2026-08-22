@@ -36,10 +36,10 @@ export function Timeline() {
         {schedule.length === 0 ? (
           <View className="py-20 items-center justify-center">
             <Text
-              className="text-leben-text-muted italic"
+              className="text-leben-text-muted italic text-center"
               style={{ fontSize: 14 }}
             >
-              No tasks scheduled for today. Regenerate plan to start.
+              Nothing planned yet. Add a couple of tasks and hit Regenerate — we'll build your day from there.
             </Text>
           </View>
         ) : (

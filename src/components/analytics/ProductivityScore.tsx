@@ -1,23 +1,21 @@
-import React from 'react';
-import { View, } from 'react-native';
-import Svg, { Polyline } from 'react-native-svg';
-import { ProductivityData } from '@/utils/analytics.utils';
-import { Text } from '@/components/ui/Text';
-
+import { Text } from "@/components/ui/Text";
+import { ProductivityData } from "@/utils/analytics.utils";
+import { View } from "react-native";
+import Svg, { Polyline } from "react-native-svg";
 
 export function TrendLine({ data }: { data: number[] }) {
   const max = Math.max(...data, 1);
   const min = Math.min(...data);
   const norm = (v: number) => ((v - min) / (max - min || 1)) * 40 + 5;
   const w = 120;
-  
+
   // Guard against empty array
   if (data.length === 0) {
     return <Svg width={w} height={55} viewBox={`0 0 ${w} 55`} fill="none" />;
   }
-  
+
   const step = w / (data.length - 1);
-  const points = data.map((v, i) => `${i * step},${50 - norm(v)}`).join(' ');
+  const points = data.map((v, i) => `${i * step},${50 - norm(v)}`).join(" ");
 
   return (
     <Svg width={w} height={55} viewBox={`0 0 ${w} 55`} fill="none">
@@ -45,7 +43,7 @@ interface Props {
 
 export function ProductivityScore({ data, hasData }: Props) {
   return (
-    <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border">
+    <View className="rounded-2xl p-5 mb-5 bg-leben-bg-card border border-leben-border-subtle">
       <Text className="font-geist-semibold text-leben-text-2 mb-1 text-[14px]">
         Productivity Score
       </Text>

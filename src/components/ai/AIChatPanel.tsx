@@ -13,9 +13,9 @@ import { SendIcon } from "../../constants/Icons";
 import AIChatMessages from "./AIChatMessages";
 
 const suggestions = [
-  { label: "Analyze my productivity" },
-  { label: "Generate task list" },
-  { label: "Optimize my schedule" },
+  { label: "How am I doing this week?" },
+  { label: "Help me plan my tasks" },
+  { label: "What should I focus on today?" },
 ];
 
 export default function AIChatPanel() {
@@ -73,7 +73,7 @@ export default function AIChatPanel() {
           <TextInput
             value={input}
             onChangeText={setInput}
-            placeholder="Ask neural engine..."
+            placeholder="Ask me anything..."
             placeholderTextColor="#555"
             multiline
             className="flex-1 text-leben-text-2 text-[14px] max-h-32 py-2"

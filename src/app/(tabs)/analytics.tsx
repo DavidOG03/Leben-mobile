@@ -5,6 +5,7 @@ import { ProductivityScore } from "@/components/analytics/ProductivityScore";
 import StatCards from "@/components/analytics/StatCards";
 import WeeklyActivityChart from "@/components/analytics/WeeklyActivityChart";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import WeeklyProgress from "@/components/habits/WeeklyProgress";
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
 import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
@@ -80,7 +81,10 @@ export default function AnalyticsScreen() {
               onPress={() => router.push("/(auth)/sign-in" as any)} // Navigate to your auth screen
               className="flex-row items-center gap-3 px-7 py-3.5 rounded-xl mb-8 bg-leben-accent"
             >
-              <Text className="text-white font-geist-bold" style={{ fontSize: 14 }}>
+              <Text
+                className="text-white font-geist-bold"
+                style={{ fontSize: 14 }}
+              >
                 Sign In to View Analytics
               </Text>
               <Ionicons name="arrow-forward" size={16} color="white" />
@@ -127,6 +131,7 @@ export default function AnalyticsScreen() {
               data={analytics.weekActivity}
               hasData={analytics.hasTaskData}
             />
+            <WeeklyProgress habits={habits} />
 
             <ProductivityScore
               data={analytics.productivity}

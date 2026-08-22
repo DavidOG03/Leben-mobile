@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
-import { useLebenStore } from '@/store/useStore';
-import { Card } from '@/components/ui/Card';
-import { deriveGoalStats } from '@/utils/goals.types';
-import { Text } from '@/components/ui/Text';
-
+import { Card } from "@/components/ui/Card";
+import { Text } from "@/components/ui/Text";
+import { useLebenStore } from "@/store/useStore";
+import { deriveGoalStats } from "@/utils/goals.types";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { TouchableOpacity, View } from "react-native";
 
 export function GoalProgress() {
   const goals = useLebenStore((s) => s.goals);
@@ -19,13 +18,13 @@ export function GoalProgress() {
   }, []);
 
   return (
-    <Card className="min-h-[260px] p-6 bg-leben-bg-card border border-leben-border-subtle">
-      <View className="flex-row items-center justify-between mb-5">
+    <Card className="min-h-[200px] p-0 bg-leben-bg-card border border-leben-border-subtle">
+      <View className="flex-row items-center justify-between px-6 pt-6 pb-4 mb-2">
         <Text className="text-leben-text font-geist-semibold text-[15px]">
           Goal Progress
         </Text>
         {!loading && goals.length > 0 && (
-          <TouchableOpacity onPress={() => router.push('/(tabs)/goals' as any)}>
+          <TouchableOpacity onPress={() => router.push("/(tabs)/goals" as any)}>
             <Text className="text-leben-accent text-[11px] font-geist-semibold">
               Go to Goals
             </Text>
@@ -34,7 +33,7 @@ export function GoalProgress() {
       </View>
 
       {loading ? (
-        <View className="flex-1 gap-6 opacity-50">
+        <View className="flex-1 px-6 pb-6 gap-6 opacity-50">
           {[1, 2].map((i) => (
             <View key={i}>
               <View className="flex-row items-center justify-between mb-3">
@@ -53,20 +52,24 @@ export function GoalProgress() {
           ))}
         </View>
       ) : goals.length === 0 ? (
-        <View className="flex-1 items-center justify-center py-4 gap-3">
-          <Text className="text-leben-text-dim text-2xl font-geist-medium">十</Text>
+        <View className="flex-1 px-6 pb-6 items-center justify-center py-4 gap-3">
+          <Text className="text-leben-text-dim text-2xl font-geist-medium">
+            十
+          </Text>
           <Text className="text-leben-text-dim text-[11px] font-geist-medium">
             No goals added yet
           </Text>
           <TouchableOpacity
-            onPress={() => router.push('/(tabs)/goals' as any)}
+            onPress={() => router.push("/(tabs)/goals" as any)}
             className="px-4 py-1.5 rounded-lg border border-leben-border active:opacity-70"
           >
-            <Text className="text-leben-text-dim text-[11px] font-geist-medium">Create a goal</Text>
+            <Text className="text-leben-text-dim text-[11px] font-geist-medium">
+              Create a goal
+            </Text>
           </TouchableOpacity>
         </View>
       ) : (
-        <View className="flex-1 gap-6">
+        <View className="gap-6 px-6 pb-6">
           {goals.slice(0, 2).map((g) => {
             const safeGoal = { ...g, milestones: g.milestones ?? [] };
             const { progress } = deriveGoalStats(safeGoal);
@@ -74,8 +77,13 @@ export function GoalProgress() {
               <View key={g.id}>
                 <View className="flex-row items-center justify-between mb-2">
                   <View className="flex-row items-center gap-2 max-w-[70%]">
-                    <Text className="text-[14px] font-geist-medium">{g.icon}</Text>
-                    <Text className="text-leben-text font-geist-medium text-[13px]" numberOfLines={1}>
+                    <Text className="text-[14px] font-geist-medium">
+                      {g.icon}
+                    </Text>
+                    <Text
+                      className="text-leben-text font-geist-medium text-[13px]"
+                      numberOfLines={1}
+                    >
                       {g.title}
                     </Text>
                   </View>
@@ -83,9 +91,9 @@ export function GoalProgress() {
                     {progress}%
                   </Text>
                 </View>
-                
+
                 <View className="h-[3px] rounded-full bg-leben-border overflow-hidden mb-3">
-                  <View 
+                  <View
                     className="h-full rounded-full bg-leben-accent"
                     style={{ width: `${progress}%` }}
                   />
@@ -98,15 +106,21 @@ export function GoalProgress() {
                       onPress={() => toggleMilestone(g.id, m.id)}
                       className="flex-row items-center gap-2"
                     >
-                      <View 
+                      <View
                         className={`w-[14px] h-[14px] rounded-full items-center justify-center border ${
-                          m.done ? 'bg-leben-accent/20 border-leben-accent' : 'bg-transparent border-leben-border-subtle'
+                          m.done
+                            ? "bg-leben-accent/20 border-leben-accent"
+                            : "bg-transparent border-leben-border-subtle"
                         }`}
                       >
-                        {m.done && <Text className="text-leben-accent text-[8px] font-geist-medium">✓</Text>}
+                        {m.done && (
+                          <Text className="text-leben-accent text-[8px] font-geist-medium">
+                            ✓
+                          </Text>
+                        )}
                       </View>
-                      <Text 
-                        className={`flex-1 text-[11px] ${m.done ? 'text-leben-text-muted' : 'text-leben-text-dim'}`}
+                      <Text
+                        className={`flex-1 text-[11px] ${m.done ? "text-leben-text-muted" : "text-leben-text-dim"}`}
                         numberOfLines={1}
                       >
                         {m.label}
@@ -114,7 +128,9 @@ export function GoalProgress() {
                     </TouchableOpacity>
                   ))}
                   {safeGoal.milestones.length > 3 && (
-                    <TouchableOpacity onPress={() => router.push('/(tabs)/goals' as any)}>
+                    <TouchableOpacity
+                      onPress={() => router.push("/(tabs)/goals" as any)}
+                    >
                       <Text className="text-leben-text-dim text-[11px] font-geist-medium">
                         +{g.milestones.length - 3} more
                       </Text>
@@ -125,7 +141,10 @@ export function GoalProgress() {
             );
           })}
           {goals.length > 2 && (
-            <TouchableOpacity onPress={() => router.push('/(tabs)/goals' as any)} className="mt-2 items-center">
+            <TouchableOpacity
+              onPress={() => router.push("/(tabs)/goals" as any)}
+              className="mt-2 items-center"
+            >
               <Text className="text-leben-text-dim text-[11px] font-geist-medium">
                 See all {goals.length} goals
               </Text>
@@ -136,4 +155,3 @@ export function GoalProgress() {
     </Card>
   );
 }
-

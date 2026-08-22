@@ -65,12 +65,12 @@ export function AIMorningBrief() {
       return;
     }
 
-    // Check if brief is stale (10 mins) or null
-    const TEN_MINS = 10 * 60 * 1000;
+    // Check if brief is stale (12 hours) or null
+    const TWELVE_HOURS = 12 * 60 * 60 * 1000;
     const isStale =
       !brief ||
       !morningBriefGeneratedAt ||
-      Date.now() - morningBriefGeneratedAt > TEN_MINS;
+      Date.now() - morningBriefGeneratedAt > TWELVE_HOURS;
 
     if (isStale) {
       const timeoutId = setTimeout(() => handleGenerate(), 1000);
@@ -88,11 +88,11 @@ export function AIMorningBrief() {
   return (
     <Card
       variant="none"
-      className="justify-between overflow-hidden p-0 bg-leben-accent-75"
+      className="justify-between p-0 bg-leben-accent-75"
       style={{
         minHeight: 260,
         borderWidth: 1,
-        borderColor: "rgba(124, 106, 240, 0.5)",
+        borderColor: "rgba(107, 127, 255,0.15)",
       }}
     >
       {/* Background Gradient
@@ -235,10 +235,14 @@ export function AIMorningBrief() {
                           x2="1"
                           y2="0"
                         >
-                          <Stop offset="0" stopColor="706af1" stopOpacity="1" />
+                          <Stop
+                            offset="0"
+                            stopColor="#607fff"
+                            stopOpacity="1"
+                          />
                           <Stop
                             offset="1"
-                            stopColor="#7c6af0"
+                            stopColor="#6b7fff"
                             stopOpacity="1"
                           />
                         </LinearGradient>

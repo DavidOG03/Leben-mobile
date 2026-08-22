@@ -176,10 +176,10 @@ export default function SignUpScreen() {
             />
           </View>
           <Text className="text-3xl font-geist-bold text-leben-text tracking-tight">
-            Create Account
+            Welcome to Leben
           </Text>
           <Text className="text-leben-text-2 font-geist-medium text-sm mt-1">
-            Start your productive journey
+            It only takes a moment. Let's get you set up.
           </Text>
         </View>
 

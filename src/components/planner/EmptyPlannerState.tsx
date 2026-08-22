@@ -25,18 +25,17 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
         className="text-leben-text-2 font-geist-bold mb-3 text-center"
         style={{ fontSize: 20, letterSpacing: -0.5 }}
       >
-        System Idle
+        Let's plan your day
       </Text>
       <Text
         className="text-leben-text-dim mb-10 text-center"
         style={{ fontSize: 14, lineHeight: 22, maxWidth: 300 }}
       >
-        The AI Planner requires more contextual input to generate an optimized
-        daily plan. Add{" "}
+        Add{" "}
         <Text className="text-leben-accent font-geist-bold">
           {remaining} more {remaining === 1 ? "task" : "tasks"}
         </Text>{" "}
-        to activate high-performance scheduling.
+        and your AI-powered daily plan will be ready to go.
       </Text>
 
       <View className="flex-col gap-4 w-full" style={{ maxWidth: 240 }}>
