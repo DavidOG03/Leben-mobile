@@ -88,7 +88,7 @@ export function AIMorningBrief() {
   return (
     <Card
       variant="none"
-      className="justify-between p-0 bg-leben-accent-75"
+      className="justify-between p-0 bg-leben-accent-75 overflow-hidden"
       style={{
         minHeight: 260,
         borderWidth: 1,
@@ -107,7 +107,7 @@ export function AIMorningBrief() {
           <Rect width="100%" height="100%" fill="url(#cardGrad)" />
         </Svg>
       </View> */}
-      <View className="relative z-10 flex-1 justify-between p-5">
+      <View className="relative z-10 justify-between p-5" style={{ minHeight: 260 }}>
         <View>
           {/* Header */}
           <View className="flex-row items-center gap-2 mb-4">
