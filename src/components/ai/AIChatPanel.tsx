@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useColorScheme } from "nativewind";
 import { SendIcon } from "../../constants/Icons";
 import AIChatMessages from "./AIChatMessages";
 
@@ -19,6 +20,7 @@ const suggestions = [
 ];
 
 export default function AIChatPanel() {
+  const { colorScheme } = useColorScheme();
   const {
     messages,
     input,
@@ -33,8 +35,8 @@ export default function AIChatPanel() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "padding"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 65}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 110 : 90}
       style={{ flex: 1 }}
       className="border-r border-leben-border-subtle"
     >
@@ -74,7 +76,7 @@ export default function AIChatPanel() {
             value={input}
             onChangeText={setInput}
             placeholder="Ask me anything..."
-            placeholderTextColor="#555"
+            placeholderTextColor={colorScheme === "dark" ? "#888899" : "#888899"}
             multiline
             className="flex-1 text-leben-text-2 text-[14px] max-h-32 py-2"
           />
@@ -91,7 +93,14 @@ export default function AIChatPanel() {
             }}
           >
             <Text className="text-leben-text text-lg leading-none mt-[-2px]">
-              <SendIcon color="currentColor" size={16} />
+              <SendIcon 
+                color={
+                  input.trim() 
+                    ? "#6b7fff" 
+                    : colorScheme === "dark" ? "#a0a0b0" : "#707080"
+                } 
+                size={16} 
+              />
             </Text>
           </TouchableOpacity>
         </View>

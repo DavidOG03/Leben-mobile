@@ -48,7 +48,7 @@ export function ProductivityScore({ data, hasData }: Props) {
         Productivity Score
       </Text>
       <Text className="text-[11px] text-leben-text-muted mb-4">
-        7-day efficiency trend
+        31-day efficiency trend
       </Text>
 
       <View className="flex-row items-end justify-between gap-2">

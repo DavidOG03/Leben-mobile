@@ -9,14 +9,13 @@ import * as Notifications      from 'expo-notifications';
 import * as Device             from 'expo-device';
 
 Notifications.setNotificationHandler({
-  handleNotification: async (notification) => {
-    return {
-      shouldPlaySound:  true,
-      shouldSetBadge:   false,
-      shouldShowBanner: true,
-      shouldShowList:   true,
-    };
-  },
+  handleNotification: async () => ({
+    shouldPlaySound:  true,
+    shouldSetBadge:   true,
+    shouldShowBanner: true,
+    shouldShowList:   true,
+    priority:         Notifications.AndroidNotificationPriority.MAX,
+  }),
 });
 
 export function useNotifications() {
@@ -127,13 +126,35 @@ async function registerForPushNotifications() {
     console.log('[Notifications] Must use physical device for Push Notifications. Local notifications will still work.');
   }
 
-  // Android channel setup (required)
+  // Android requires notification channels (Android 8+).
+  // We create two channels:
+  //   • 'leben-critical'  — system nudges that must break through (max importance, bypass DnD)
+  //   • 'leben-reminders' — task/habit reminders (high importance, standard behaviour)
   if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('default', {
-      name:         'Leben Reminders',
-      importance:   Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor:   '#7c6af0', // Match Leben accent
+    await Notifications.setNotificationChannelAsync('leben-critical', {
+      name:             'Leben Daily Nudges',
+      description:      'Time-sensitive nudges: morning brief, midday, streak savers, evening wrap-up.',
+      importance:       Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 400, 200, 400, 200, 400], // persistent triple-buzz
+      enableVibrate:    true,
+      enableLights:     true,
+      lightColor:       '#6b7fff',
+      bypassDnd:        true,  // fires even when phone is on Do Not Disturb
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+      showBadge:        true,
+    });
+
+    await Notifications.setNotificationChannelAsync('leben-reminders', {
+      name:             'Leben Reminders',
+      description:      'Task and habit reminders you set manually.',
+      importance:       Notifications.AndroidImportance.HIGH,
+      vibrationPattern: [0, 250, 150, 250],
+      enableVibrate:    true,
+      enableLights:     true,
+      lightColor:       '#6b7fff',
+      bypassDnd:        false,
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+      showBadge:        true,
     });
   }
 }
@@ -190,8 +211,19 @@ export async function scheduleReminder(opts: {
         body:  opts.body ?? 'Reminder from Leben',
         data:  { itemId: opts.id, screen: opts.screen },
         sound: true,
-        // Required on Android 8+ — must match a registered notification channel
-        ...(Platform.OS === 'android' && { android: { channelId: 'default' } }),
+        // iOS: 'timeSensitive' breaks through Focus modes (but not Critical — requires Apple entitlement)
+        ...(Platform.OS === 'ios' && {
+          interruptionLevel: 'timeSensitive' as any,
+        }),
+        // Android: route through the high-priority reminders channel
+        ...(Platform.OS === 'android' && {
+          android: {
+            channelId:    'leben-reminders',
+            priority:     'max',
+            vibrate:      [0, 250, 150, 250],
+            sticky:       false,
+          },
+        }),
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
@@ -232,27 +264,47 @@ export async function syncDailyReminders(): Promise<void> {
   await cancelReminder('sys_evening_wrapup');
   await cancelReminder('sys_streak_saver');
 
+  // ── Shared high-priority overrides ──────────────────────────────────────────
+  // Android: use the 'leben-critical' channel (MAX importance, bypassDnd: true)
+  // iOS: 'timeSensitive' breaks through Focus modes without needing Apple's
+  //      Critical entitlement. Users can still silence it in Focus settings.
+  const criticalAndroid = Platform.OS === 'android'
+    ? {
+        android: {
+          channelId:    'leben-critical',
+          priority:     'max',
+          vibrate:      [0, 400, 200, 400, 200, 400],
+          sticky:       false,
+        },
+      }
+    : {};
+
+  const criticalIOS = Platform.OS === 'ios'
+    ? { interruptionLevel: 'timeSensitive' as any }
+    : {};
+
+  // ── Morning Briefing ─────────────────────────────────────────────────────────
   if (prefs.morningBriefing) {
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "Good Morning! ☀️",
-        body: "Check out your day's plan and focus.",
-        data: { itemId: 'sys_morning_briefing', screen: 'tasks' },
+        body:  "Check out your day's plan and focus.",
+        data:  { itemId: 'sys_morning_briefing', screen: 'tasks' },
         sound: true,
-        ...(Platform.OS === 'android' && { android: { channelId: 'default' } }),
+        ...criticalIOS,
+        ...criticalAndroid,
       },
       trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.DAILY,
-        hour: 8,
+        type:   Notifications.SchedulableTriggerInputTypes.DAILY,
+        hour:   8,
         minute: 0,
       },
     });
   }
 
+  // ── Midday Nudge ─────────────────────────────────────────────────────────────
+  // Only fires if the user hasn't started anything yet today.
   if (prefs.middayNudge) {
-    // ── Midday nudge — only fires if user hasn't done anything yet ──────────
-    // Snapshot today's progress at schedule-time (debounced with other syncs)
-    // so the notification only fires when there is genuinely nothing done.
     const nudgeState   = useLebenStore.getState();
     const nudgeDateStr = new Date().toISOString().split('T')[0];
 
@@ -294,7 +346,8 @@ export async function syncDailyReminders(): Promise<void> {
           body:  `Your ${listStr} are waiting. Make today count — let's go! 💪`,
           data:  { itemId: 'sys_midday_nudge', screen: 'tasks' },
           sound: true,
-          ...(Platform.OS === 'android' && { android: { channelId: 'default' } }),
+          ...criticalIOS,
+          ...criticalAndroid,
         },
         trigger: {
           type:   Notifications.SchedulableTriggerInputTypes.DAILY,
@@ -303,26 +356,22 @@ export async function syncDailyReminders(): Promise<void> {
         },
       });
     }
-    // ───────────────────────────────────────────────────────────────────────
   }
 
+  // ── Evening Wrap-up ──────────────────────────────────────────────────────────
+  // Message is personalised based on today's actual progress at schedule-time.
   if (prefs.eveningWrapUp) {
-    // ── Dynamic evening message ─────────────────────────────────────────────
-    // Compute today's progress at the time of scheduling so the content
-    // reflects the user's actual day. The notification is rescheduled every
-    // time tasks or habits change (debounced), so by 8 PM it will hold the
-    // most recent snapshot of the day's work.
-    const storeState   = useLebenStore.getState();
-    const todayStr     = new Date().toISOString().split('T')[0];
-    const todayTasks   = storeState.tasks.filter(
+    const storeState  = useLebenStore.getState();
+    const todayStr    = new Date().toISOString().split('T')[0];
+    const todayTasks  = storeState.tasks.filter(
       (t) => !t.date || t.date === todayStr,
     );
-    const completedCount  = todayTasks.filter((t) => t.completed).length;
-    const totalCount      = todayTasks.length;
-    const habitsToday     = storeState.habits.filter(
+    const completedCount = todayTasks.filter((t) => t.completed).length;
+    const totalCount     = todayTasks.length;
+    const habitsToday    = storeState.habits.filter(
       (h) => (h.completedDates ?? []).includes(todayStr),
     );
-    const habitsCount     = habitsToday.length;
+    const habitsCount = habitsToday.length;
 
     const hasDoneAnything = completedCount > 0 || habitsCount > 0;
 
@@ -330,7 +379,6 @@ export async function syncDailyReminders(): Promise<void> {
     let eveningBody: string;
 
     if (hasDoneAnything) {
-      // Build the achievement summary
       const parts: string[] = [];
       if (completedCount > 0) {
         parts.push(
@@ -340,14 +388,9 @@ export async function syncDailyReminders(): Promise<void> {
         );
       }
       if (habitsCount > 0) {
-        const names = habitsToday
-          .slice(0, 2)
-          .map((h) => h.label)
-          .join(' & ');
+        const names = habitsToday.slice(0, 2).map((h) => h.label).join(' & ');
         parts.push(
-          habitsCount === 1
-            ? `your ${names} habit kept`
-            : `${habitsCount} habits tracked`,
+          habitsCount === 1 ? `your ${names} habit kept` : `${habitsCount} habits tracked`,
         );
       }
 
@@ -355,18 +398,17 @@ export async function syncDailyReminders(): Promise<void> {
         'You crushed it today!',
         "What a day — you showed up and delivered!",
         'Absolutely brilliant work today!',
-        'Keep that energy going — you\'re on fire!',
+        "Keep that energy going — you're on fire!",
         'Proud of you — another solid day in the books!',
-        'You\'re building something great, one day at a time!',
+        "You're building something great, one day at a time!",
       ];
       const accolade = ACCOLADES[Math.floor(Math.random() * ACCOLADES.length)];
 
-      eveningTitle  = 'Evening Wrap-up 🌙✨';
-      eveningBody   = `${accolade} ${parts.join(' & ')}. Rest up and do it again tomorrow 🔥`;
+      eveningTitle = 'Evening Wrap-up 🌙✨';
+      eveningBody  = `${accolade} ${parts.join(' & ')}. Rest up and do it again tomorrow 🔥`;
     } else {
       eveningBody = "Time to log your progress and plan tomorrow.";
     }
-    // ───────────────────────────────────────────────────────────────────────
 
     await Notifications.scheduleNotificationAsync({
       content: {
@@ -374,33 +416,35 @@ export async function syncDailyReminders(): Promise<void> {
         body:  eveningBody,
         data:  { itemId: 'sys_evening_wrapup', screen: 'tasks' },
         sound: true,
-        ...(Platform.OS === 'android' && { android: { channelId: 'default' } }),
+        ...criticalIOS,
+        ...criticalAndroid,
       },
       trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.DAILY,
-        hour: 20,
+        type:   Notifications.SchedulableTriggerInputTypes.DAILY,
+        hour:   20,
         minute: 0,
       },
     });
   }
 
-  const today = new Date().toISOString().split('T')[0];
-  const habits = useLebenStore.getState().habits;
+  // ── Streak Saver ─────────────────────────────────────────────────────────────
+  const today         = new Date().toISOString().split('T')[0];
+  const habits        = useLebenStore.getState().habits;
   const allHabitsDone = habits.length > 0 && habits.every(h => h.completedDates.includes(today));
 
-  // Only schedule if they haven't finished all habits today
   if (prefs.streakSavers && !allHabitsDone) {
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "Don't break your streak! 🔥",
-        body: "You haven't completed your daily habits yet. Clock in now!",
-        data: { itemId: 'sys_streak_saver', screen: 'habits' },
+        body:  "You haven't completed your daily habits yet. Clock in now!",
+        data:  { itemId: 'sys_streak_saver', screen: 'habits' },
         sound: true,
-        ...(Platform.OS === 'android' && { android: { channelId: 'default' } }),
+        ...criticalIOS,
+        ...criticalAndroid,
       },
       trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.DAILY,
-        hour: 18,
+        type:   Notifications.SchedulableTriggerInputTypes.DAILY,
+        hour:   18,
         minute: 0,
       },
     });

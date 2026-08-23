@@ -7,13 +7,59 @@ import {
   parseStructuredListItems,
 } from "@/utils/aiChatImportUtils";
 import type { ChatMessage, ImportKind } from "@/utils/aiChatTypes";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   ActivityIndicator,
+  Animated,
   ScrollView,
   TouchableOpacity,
   View,
 } from "react-native";
+
+/** Pulsing sparkle shown inside the AI "thinking" bubble */
+function PulsingSparkle() {
+  const opacity = useRef(new Animated.Value(1)).current;
+  const scale = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.parallel([
+          Animated.timing(opacity, {
+            toValue: 0.75,
+            duration: 700,
+            useNativeDriver: true,
+          }),
+          Animated.timing(scale, {
+            toValue: 0.75,
+            duration: 700,
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.parallel([
+          Animated.timing(opacity, {
+            toValue: 1,
+            duration: 700,
+            useNativeDriver: true,
+          }),
+          Animated.timing(scale, {
+            toValue: 1,
+            duration: 700,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]),
+    );
+    pulse.start();
+    return () => pulse.stop();
+  }, [opacity, scale]);
+
+  return (
+    <Animated.View style={{ opacity, transform: [{ scale }] }}>
+      <SparkleIcon color="#6b7fff" size={16} />
+    </Animated.View>
+  );
+}
 
 function renderInlineFormatting(text: string) {
   const parts: Array<string | React.JSX.Element> = [];
@@ -39,19 +85,79 @@ function renderInlineFormatting(text: string) {
 }
 
 function renderAssistantMessage(message: string) {
-  return parseAssistantContent(message).map((block, index) =>
-    block.type === "list" ? (
-      <View key={`list-${index}`} className="ml-4 space-y-1 mt-2">
-        {block.content.map((item: string, itemIndex: number) => (
-          <View key={`item-${index}-${itemIndex}`} className="flex-row">
-            <Text className="text-leben-text-2 text-[14px] mr-2">•</Text>
-            <Text className="text-leben-text-2 text-[14px] leading-relaxed flex-1">
-              {renderInlineFormatting(item)}
-            </Text>
-          </View>
-        ))}
-      </View>
-    ) : (
+  return parseAssistantContent(message).map((block, index) => {
+    // ── Heading ───────────────────────────────────────────────────────────────
+    if (block.type === "heading") {
+      const fontSize =
+        block.headingLevel === 1 ? 22 :
+        block.headingLevel === 2 ? 20 : 18;
+      return (
+        <Text
+          key={`heading-${index}`}
+          className="font-geist-bold text-leben-text mt-3 mb-0.5"
+          style={{ fontSize }}
+        >
+          {renderInlineFormatting(block.content)}
+        </Text>
+      );
+    }
+
+    // ── List (tasks, habits, goals, books) ────────────────────────────────────
+    if (block.type === "list") {
+      return (
+        <View key={`list-${index}`} className="gap-1.5 mt-2">
+          {block.items.map((item, itemIndex) => {
+            // Each kind gets a distinct bullet glyph and accent colour
+            const config =
+              item.kind === "task"  ? { bullet: "—", color: "#6b7fff" } :
+              item.kind === "habit" ? { bullet: "+", color: "#4caf7d" } :
+              item.kind === "goal"  ? { bullet: "›", color: "#e8a855" } :
+              item.kind === "book"  ? { bullet: "~", color: "#a78bfa" } :
+                                     { bullet: "•", color: "#888"    };
+
+            return (
+              <View key={`item-${index}-${itemIndex}`}>
+                <View className="flex-row items-start">
+                  <Text
+                    style={{
+                      color: config.color,
+                      fontSize: 14,
+                      marginRight: 8,
+                      fontWeight: "700",
+                      marginTop: 1,
+                      minWidth: 12,
+                    }}
+                  >
+                    {config.bullet}
+                  </Text>
+                  <View className="flex-1">
+                    <Text className="text-leben-text-2 text-[14px] leading-relaxed">
+                      {renderInlineFormatting(item.text)}
+                    </Text>
+                    {/* Milestone sub-items for goals */}
+                    {item.milestones && item.milestones.length > 0 && (
+                      <View className="mt-1 ml-1 gap-0.5">
+                        {item.milestones.map((ms, mi) => (
+                          <Text
+                            key={`ms-${index}-${itemIndex}-${mi}`}
+                            className="text-leben-text-muted text-[11px] leading-snug"
+                          >
+                            ◦ {ms}
+                          </Text>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+      );
+    }
+
+    // ── Paragraph ─────────────────────────────────────────────────────────────
+    return (
       <Text
         key={`para-${index}`}
         className="text-leben-text-2 text-[14px] leading-relaxed mt-2"
@@ -62,8 +168,8 @@ function renderAssistantMessage(message: string) {
           </React.Fragment>
         ))}
       </Text>
-    ),
-  );
+    );
+  });
 }
 
 type Props = {
@@ -110,7 +216,7 @@ export default function AIChatMessages({
           >
             {msg.role === "assistant" && (
               <View
-                className="items-center justify-center rounded-xl mt-1 flex-shrink-0 bg-leben-border border border-leben-border"
+                className="items-center justify-center rounded-xl mt-1 flex-shrink-0 bg-leben-accent border border-leben-accent-75"
                 style={{
                   width: 32,
                   height: 32,
@@ -155,7 +261,7 @@ export default function AIChatMessages({
                     {msg.content}
                   </Text>
                   <Text className="text-[10px] text-leben-text-2 mt-2 font-geist-semibold text-right">
-                    YOU | {msg.time}
+                    {msg.time}
                   </Text>
                 </View>
               )}
@@ -176,9 +282,7 @@ export default function AIChatMessages({
             <ActivityIndicator size="small" color="#555" />
           </View>
           <View className="rounded-2xl px-5 py-4 justify-center bg-leben-bg-card border border-leben-border">
-            <Text className="text-[12px] text-leben-text-2 font-geist-medium italic">
-              Neural engine processing...
-            </Text>
+            <PulsingSparkle />
           </View>
         </View>
       )}

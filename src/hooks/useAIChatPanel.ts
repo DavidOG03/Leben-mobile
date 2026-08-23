@@ -5,6 +5,7 @@ import { useLebenStore } from "@/store/useStore";
 import {
   buildGoalDraft,
   buildHabitDraft,
+  buildBookDraft,
   cleanupImportedText,
   detectRequestedKinds,
   getImportStateKey,
@@ -29,6 +30,7 @@ export function useAIChatPanel() {
   const habits = useLebenStore((s) => s.habits);
   const goals = useLebenStore((s) => s.goals);
   const schedule = useLebenStore((s) => s.schedule);
+  const books = useLebenStore((s) => s.books);
   const addTask = useLebenStore((s) => s.addTask);
   const deleteTask = useLebenStore((s) => s.removeTask);
   const addHabit = useLebenStore((s) => s.addHabit);
@@ -36,6 +38,8 @@ export function useAIChatPanel() {
   const addGoal = useLebenStore((s) => s.addGoal);
   const removeGoal = useLebenStore((s) => s.removeGoal);
   const setSchedule = useLebenStore((s) => s.setSchedule);
+  const addBook = useLebenStore((s) => s.addBook);
+  const removeBook = useLebenStore((s) => s.removeBook);
 
   const [input, setInput] = useState("");
   const [importedMessageIds, setImportedMessageIds] = useState<
@@ -46,6 +50,7 @@ export function useAIChatPanel() {
     habitIds: [],
     goalTitles: [],
     plannerIds: [],
+    bookTitles: [],
   });
 
   const postAssistantMessage = (content: string) =>
@@ -102,6 +107,13 @@ export function useAIChatPanel() {
       );
       tracker.plannerIds = [];
     }
+    if (kinds.has("book")) {
+      tracker.bookTitles.forEach((title) => {
+        const book = books.find((item) => item.title === title);
+        if (book) removeBook(book.id);
+      });
+      tracker.bookTitles = [];
+    }
   };
 
   const createHabit = (text: string): Habit => {
@@ -147,6 +159,7 @@ export function useAIChatPanel() {
     const createdTaskIds: string[] = [];
     const createdHabitIds: string[] = [];
     const createdGoalTitles: string[] = [];
+    const createdBookTitles: string[] = [];
     const plannerItems: ScheduleItem[] = [];
     const now = new Date().toISOString();
 
@@ -161,9 +174,13 @@ export function useAIChatPanel() {
         addHabit(habit);
         createdHabitIds.push(habit.id);
       } else if (item.kind === "goal") {
-        const goal = buildGoalDraft(item.text);
+        const goal = buildGoalDraft(item.text, item.milestones);
         addGoal(goal);
         createdGoalTitles.push(goal.title);
+      } else if (item.kind === "book") {
+        const bookDraft = buildBookDraft(item.text);
+        addBook(bookDraft);
+        createdBookTitles.push(bookDraft.title);
       } else {
         const id = Math.random().toString();
         addTask({
@@ -200,8 +217,11 @@ export function useAIChatPanel() {
         ? createdGoalTitles
         : importedTrackerRef.current.goalTitles,
       plannerIds: kinds.has("planner")
-        ? plannerItems.map((item) => item.id)
+        ? plannerItems.map((i) => i.id)
         : importedTrackerRef.current.plannerIds,
+      bookTitles: kinds.has("book")
+        ? createdBookTitles
+        : importedTrackerRef.current.bookTitles,
     };
 
     if (messageId) {

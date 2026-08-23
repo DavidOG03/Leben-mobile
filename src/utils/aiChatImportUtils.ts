@@ -5,9 +5,22 @@ import type {
   StructuredListItem,
 } from "./aiChatTypes";
 
-const LIST_ITEM_REGEX = /^(([*+-])|(\d+\.))\s+(.*)$/;
+// ── Format prefixes (each is exclusive to one import kind) ───────────────────
+// - text       → task
+// + text       → habit
+// > text | m1, m2  → goal (milestones after pipe, comma-separated)
+// ~ text       → book recommendation
+// ### text     → section heading (rendered large, NOT importable)
+const TASK_REGEX    = /^-\s+(.+)$/;
+const HABIT_REGEX   = /^\+\s+(.+)$/;
+const GOAL_REGEX    = /^>\s+(.+)$/;
+const BOOK_REGEX    = /^~\s+(.+)$/;
+const HEADING_REGEX = /^(#{1,6})\s+(.+)$/;
+
+// Legacy planner regex kept for parsePlannerLine only
 const MONTH_PATTERN =
   "(jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december)";
+
 const SECTION_KIND_KEYWORDS: Record<ImportKind, string[]> = {
   task: [
     "task",
@@ -21,6 +34,7 @@ const SECTION_KIND_KEYWORDS: Record<ImportKind, string[]> = {
   ],
   habit: ["habit", "habits", "routine", "routines", "ritual", "rituals"],
   goal: ["goal", "goals", "objective", "objectives", "target", "targets"],
+  book: ["book", "books", "reading", "read", "recommend"],
   planner: [
     "planner",
     "schedule",
@@ -104,32 +118,7 @@ export const shortenImportedText = (
   return shortened.trim();
 };
 
-const isStructuredSectionHeading = (line: string) => {
-  const trimmed = line.trim();
-  return !!trimmed && !LIST_ITEM_REGEX.test(trimmed) && /:\s*$/.test(trimmed);
-};
 
-const getSectionHint = (line: string) =>
-  isStructuredSectionHeading(line) ? line.trim().replace(/:\s*$/, "") : null;
-
-const isListGroupHeading = (text: string) => {
-  const trimmed = text.trim();
-  return (
-    !!trimmed &&
-    (/:\s*$/.test(trimmed) ||
-      /^(weekdays?|weekends?|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i.test(
-        trimmed,
-      ) ||
-      /^(morning|afternoon|evening|night)\b/i.test(trimmed) ||
-      /\be\.g\./i.test(trimmed))
-  );
-};
-
-const sectionImpliesKind = (section: string | null, kind: ImportKind) =>
-  !!section &&
-  SECTION_KIND_KEYWORDS[kind].some((keyword) =>
-    normalizeText(section).includes(keyword),
-  );
 
 const parseTimeValue = (value: string) => {
   const match = value
@@ -172,88 +161,48 @@ export const parsePlannerLine = (text: string) => {
   };
 };
 
-const inferItemKind = (text: string, section: string | null): ImportKind => {
-  if (sectionImpliesKind(section, "planner") || parsePlannerLine(text))
-    return "planner";
-  if (sectionImpliesKind(section, "habit")) return "habit";
-  if (sectionImpliesKind(section, "goal")) return "goal";
-  if (sectionImpliesKind(section, "task")) return "task";
-  if (
-    /\b(daily|every day|every morning|every evening|every night|weekly|each day|habit|routine)\b/.test(
-      normalizeText(text),
-    )
-  ) {
-    return "habit";
-  }
-  if (
-    new RegExp(
-      `\\b(by|before|within)\\b.*\\b${MONTH_PATTERN}|\\b\\d{4}\\b`,
-      "i",
-    ).test(text) ||
-    /\b(goal|objective|target|milestone)\b/i.test(text)
-  ) {
-    return "goal";
-  }
-  return "task";
-};
+
 
 export const parseStructuredListItems = (
   content: string,
 ): StructuredListItem[] => {
   const items: StructuredListItem[] = [];
-  let currentSection: string | null = null;
 
   for (const line of content.split("\n")) {
     const trimmed = line.trim();
     if (!trimmed) continue;
 
-    const section = getSectionHint(trimmed);
-    if (section) {
-      currentSection = section;
+    // Task: - text
+    const taskMatch = trimmed.match(TASK_REGEX);
+    if (taskMatch) {
+      items.push({ raw: trimmed, text: taskMatch[1].trim(), section: null, kind: "task" });
       continue;
     }
 
-    const prefixedMatch = trimmed.match(
-      /^(tasks?|habits?|goals?|planner|schedule|timeline)\s*:\s+(.+)$/i,
-    );
-    if (prefixedMatch) {
-      const label = prefixedMatch[1].toLowerCase();
-      const text = prefixedMatch[2].trim();
-      const kind: ImportKind = label.startsWith("task")
-        ? "task"
-        : label.startsWith("habit")
-          ? "habit"
-          : label.startsWith("goal")
-            ? "goal"
-            : "planner";
-
-      if (text) {
-        items.push({
-          raw: trimmed,
-          text,
-          section: currentSection,
-          kind,
-        });
-      }
+    // Habit: + text
+    const habitMatch = trimmed.match(HABIT_REGEX);
+    if (habitMatch) {
+      items.push({ raw: trimmed, text: habitMatch[1].trim(), section: null, kind: "habit" });
       continue;
     }
 
-    const listMatch = trimmed.match(LIST_ITEM_REGEX);
-    if (!listMatch) continue;
-
-    const text = listMatch[4].trim();
-    if (!text) continue;
-    if (isListGroupHeading(text)) {
-      currentSection = text.replace(/:\s*$/, "");
+    // Goal: > text | milestone1, milestone2
+    const goalMatch = trimmed.match(GOAL_REGEX);
+    if (goalMatch) {
+      const [goalTitle, milestonePart] = goalMatch[1].split("|").map((s) => s.trim());
+      const milestones = milestonePart
+        ? milestonePart.split(",").map((m) => m.trim()).filter(Boolean)
+        : [];
+      items.push({ raw: trimmed, text: goalTitle, section: null, kind: "goal", milestones });
       continue;
     }
 
-    items.push({
-      raw: trimmed,
-      text,
-      section: currentSection,
-      kind: inferItemKind(text, currentSection),
-    });
+    // Book: ~ Title by Author
+    const bookMatch = trimmed.match(BOOK_REGEX);
+    if (bookMatch) {
+      items.push({ raw: trimmed, text: bookMatch[1].trim(), section: null, kind: "book" });
+      continue;
+    }
   }
 
   return items;
@@ -261,31 +210,82 @@ export const parseStructuredListItems = (
 
 export const parseAssistantContent = (content: string): MessageBlock[] => {
   const blocks: MessageBlock[] = [];
-  let currentList: string[] = [];
+  let currentItems: Array<{ text: string; kind: ImportKind; milestones?: string[] }> = [];
+
   const flushList = () => {
-    if (currentList.length > 0)
-      blocks.push({ type: "list", content: currentList });
-    currentList = [];
+    if (currentItems.length > 0) {
+      blocks.push({ type: "list", items: [...currentItems] });
+      currentItems = [];
+    }
   };
 
   for (const line of content.split("\n")) {
     const trimmed = line.trim();
-    if (isStructuredSectionHeading(trimmed)) {
+
+    // Heading: ### text
+    const headingMatch = trimmed.match(HEADING_REGEX);
+    if (headingMatch) {
       flushList();
-      blocks.push({ type: "paragraph", content: [trimmed] });
+      blocks.push({
+        type: "heading",
+        content: headingMatch[2].trim(),
+        headingLevel: headingMatch[1].length,
+      });
+      continue;
+    }
+
+    // Task: - text
+    const taskMatch = trimmed.match(TASK_REGEX);
+    if (taskMatch) {
+      currentItems.push({ text: taskMatch[1].trim(), kind: "task" });
+      continue;
+    }
+
+    // Habit: + text
+    const habitMatch = trimmed.match(HABIT_REGEX);
+    if (habitMatch) {
+      currentItems.push({ text: habitMatch[1].trim(), kind: "habit" });
+      continue;
+    }
+
+    // Goal: > text | milestone1, milestone2
+    const goalMatch = trimmed.match(GOAL_REGEX);
+    if (goalMatch) {
+      const [goalTitle, milestonePart] = goalMatch[1].split("|").map((s) => s.trim());
+      const milestones = milestonePart
+        ? milestonePart.split(",").map((m) => m.trim()).filter(Boolean)
+        : [];
+      currentItems.push({ text: goalTitle, kind: "goal", milestones });
+      continue;
+    }
+
+    // Book: ~ title
+    const bookMatch = trimmed.match(BOOK_REGEX);
+    if (bookMatch) {
+      currentItems.push({ text: bookMatch[1].trim(), kind: "book" });
+      continue;
+    }
+
+    // Empty line — flush
+    if (trimmed === "") {
+      flushList();
+      continue;
+    }
+
+    // Plain prose — flush then add/merge paragraph
+    flushList();
+    const lastBlock = blocks[blocks.length - 1];
+    if (lastBlock && lastBlock.type === "paragraph") {
+      (lastBlock as { type: "paragraph"; content: string[] }).content.push(trimmed);
     } else {
-      const listMatch = trimmed.match(LIST_ITEM_REGEX);
-      if (listMatch) currentList.push(listMatch[4].trim());
-      else if (trimmed === "") flushList();
-      else {
-        flushList();
-        blocks.push({ type: "paragraph", content: [trimmed] });
-      }
+      blocks.push({ type: "paragraph", content: [trimmed] });
     }
   }
+
   flushList();
   return blocks;
 };
+
 
 export const detectRequestedKinds = (text: string) => {
   const normalized = text.toLowerCase().replace(/[^\w\s]/g, " ");
@@ -387,16 +387,26 @@ export const buildHabitDraft = (text: string) => {
   return { label, sub: "Daily Habit" };
 }
 
-export const buildGoalDraft = (text: string): GoalFormData => {
+export const buildGoalDraft = (text: string, milestones?: string[]): GoalFormData => {
   const title = shortenImportedText(text, { maxChars: 44, maxWords: 6 }) || text;
-  return { title, targetValue: 10, currentValue: 0, deadline: "", icon: "🎯", color: "#4a90d9", milestones: [] };
-}
+  return { title, targetValue: 10, currentValue: 0, deadline: "", icon: "🎯", color: "#4a90d9", milestones: milestones ?? [] };
+};
+
+export const buildBookDraft = (text: string) => {
+  // Expected format: "Title by Author" or just "Title"
+  const byMatch = text.match(/^(.+?)\s+by\s+(.+)$/i);
+  if (byMatch) {
+    return { title: byMatch[1].trim(), author: byMatch[2].trim(), totalPages: 300, coverColor: "#a78bfa" };
+  }
+  return { title: text, author: "", totalPages: 300, coverColor: "#a78bfa" };
+};
 
 export const summarizeCounts = (counts: Partial<Record<ImportKind, number>>) => {
   const parts: string[] = [];
-  if (counts.task) parts.push(`${counts.task} task${counts.task > 1 ? 's' : ''}`);
-  if (counts.habit) parts.push(`${counts.habit} habit${counts.habit > 1 ? 's' : ''}`);
-  if (counts.goal) parts.push(`${counts.goal} goal${counts.goal > 1 ? 's' : ''}`);
+  if (counts.task)    parts.push(`${counts.task} task${counts.task > 1 ? 's' : ''}`);
+  if (counts.habit)   parts.push(`${counts.habit} habit${counts.habit > 1 ? 's' : ''}`);
+  if (counts.goal)    parts.push(`${counts.goal} goal${counts.goal > 1 ? 's' : ''}`);
+  if (counts.book)    parts.push(`${counts.book} book${counts.book > 1 ? 's' : ''}`);
   if (counts.planner) parts.push(`${counts.planner} planner item${counts.planner > 1 ? 's' : ''}`);
   return parts.join(', ');
 };

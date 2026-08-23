@@ -1,4 +1,4 @@
-export type ImportKind = 'task' | 'habit' | 'goal' | 'planner';
+export type ImportKind = 'task' | 'habit' | 'goal' | 'planner' | 'book';
 
 export interface ChatMessage {
   id: string;
@@ -12,16 +12,19 @@ export interface StructuredListItem {
   text: string;
   section: string | null;
   kind: ImportKind;
+  milestones?: string[]; // only populated for goals
 }
 
-export interface MessageBlock {
-  type: 'list' | 'paragraph';
-  content: string[];
-}
+export type MessageBlock =
+  | { type: 'paragraph'; content: string[] }
+  | { type: 'heading';   content: string; headingLevel: number }
+  | { type: 'list';      items: Array<{ text: string; kind: ImportKind; milestones?: string[] }> };
 
 export interface ImportedEntityTracker {
-  taskIds: string[];
-  habitIds: string[];
+  taskIds:    string[];
+  habitIds:   string[];
   goalTitles: string[];
   plannerIds: string[];
+  bookTitles: string[];
 }
+

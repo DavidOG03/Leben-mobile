@@ -260,7 +260,7 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
               </Text>
             </View>
 
-            {weeklyAnalytics.currentStreak === 0 &&
+            {/* {weeklyAnalytics.currentStreak === 0 &&
               weeklyAnalytics.longestStreak > 0 && (
                 <Text
                   style={{
@@ -272,7 +272,7 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
                   Streak reset — best was {weeklyAnalytics.longestStreak} days.
                   Start fresh today!
                 </Text>
-              )}
+              )} */}
           </View>
         </>
       )}
