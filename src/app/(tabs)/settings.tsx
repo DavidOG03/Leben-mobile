@@ -38,16 +38,11 @@ export default function SettingsScreen() {
     <ScreenLayout scrollable>
       <ScrollView className="flex-1 bg-leben-bg px-4 md:px-10 py-6 md:py-8">
         <Profile />
-        
-        <SystemPreferences />
-        
-        <DangerZone />
-
         {/* Sign Out / Sign In conditionally */}
         {userId ? (
           <TouchableOpacity
             onPress={handleSignOut}
-            className="rounded-xl p-4 mt-4 items-center justify-center flex-row gap-2 active:opacity-80 bg-leben-bg-card border border-leben-border"
+            className="rounded-xl p-4 my-4 items-center justify-center flex-row gap-2 active:opacity-80 bg-leben-bg-card border border-leben-border"
           >
             <Text className="text-leben-text-2 text-[14px] font-geist-semibold">
               Sign Out
@@ -63,6 +58,10 @@ export default function SettingsScreen() {
             </Text>
           </TouchableOpacity>
         )}
+
+        <SystemPreferences />
+
+        <DangerZone />
       </ScrollView>
     </ScreenLayout>
   );
