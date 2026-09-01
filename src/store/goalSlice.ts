@@ -81,7 +81,7 @@ export function createGoalSlice(
 
       set((s) => ({ goals: [newGoal, ...s.goals] }));
 
-      await insertGoal(newGoal);
+      try { await insertGoal(newGoal); } catch(e) { get().addOfflineMutation('insertGoal', [newGoal]); }
     },
 
     editGoal: async (id, updates) => {
@@ -91,7 +91,7 @@ export function createGoalSlice(
         ),
       }));
 
-      await updateGoal(id, updates);
+      try { await updateGoal(id, updates); } catch(e) { get().addOfflineMutation('updateGoal', [id, updates]); }
     },
 
     // Alias kept for back-compat
@@ -102,13 +102,13 @@ export function createGoalSlice(
         ),
       }));
 
-      await updateGoal(id, updates);
+      try { await updateGoal(id, updates); } catch(e) { get().addOfflineMutation('updateGoal', [id, updates]); }
     },
 
     removeGoal: async (id) => {
       set((s) => ({ goals: s.goals.filter((g: Goal) => g.id !== id) }));
 
-      await deleteGoal(id);
+      try { await deleteGoal(id); } catch(e) { get().addOfflineMutation('deleteGoal', [id]); }
     },
 
     updateGoalProgress: async (id, currentValue) => {
@@ -117,7 +117,7 @@ export function createGoalSlice(
           g.id === id ? { ...g, currentValue } : g,
         ),
       }));
-      await updateGoal(id, { currentValue });
+      try { await updateGoal(id, { currentValue }); } catch(e) { get().addOfflineMutation('updateGoal', [id, { currentValue }]); }
     },
 
     toggleMilestone: async (goalId, milestoneId) => {
@@ -140,8 +140,7 @@ export function createGoalSlice(
         }),
       }));
       if (updatedMilestones.length > 0) {
-  
-        await updateGoal(goalId, { milestones: updatedMilestones });
+        try { await updateGoal(goalId, { milestones: updatedMilestones }); } catch(e) { get().addOfflineMutation('updateGoal', [goalId, { milestones: updatedMilestones }]); }
       }
     },
 
@@ -157,8 +156,7 @@ export function createGoalSlice(
         }),
       }));
       if (updatedMilestones.length > 0) {
-  
-        await updateGoal(goalId, { milestones: updatedMilestones });
+        try { await updateGoal(goalId, { milestones: updatedMilestones }); } catch(e) { get().addOfflineMutation('updateGoal', [goalId, { milestones: updatedMilestones }]); }
       }
     },
   };

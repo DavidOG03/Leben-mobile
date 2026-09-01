@@ -1,25 +1,27 @@
 import { Card } from "@/components/ui/Card";
 import { calcLongestStreak, calcStreak } from "@/utils/habits";
 import { WeeklyProgressProps } from "@/utils/habits.types";
-import React, { useMemo } from "react";
-import { Text, View } from "react-native";
+import React, { useMemo, useState } from "react";
+import { Text, View, Pressable } from "react-native";
 import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 
 const daysLabels = ["S", "M", "T", "W", "T", "F", "S"];
 
 /**
- * Maps a completion ratio (0–1) to an intensity colour.
- * 0 = skipped (no colour), >0 = increasingly bright purple.
+ * Maps a completion ratio (0–1) to a Tailwind class.
+ * 0 = skipped, >0 = increasingly bright purple.
  */
-function dayColor(ratio: number, isToday: boolean): string {
-  if (ratio <= 0) return "var(--bg-card)"; // skipped — no colour
+function dayColorClass(ratio: number, isToday: boolean): string {
+  if (ratio <= 0) return "bg-leben-border-subtle"; // skipped
   if (isToday) return "today"; // flag for svg gradient
-  if (ratio <= 0.33) return "rgba(107, 127, 255, 0.35)"; // leben-accent-90
-  if (ratio <= 0.66) return "var(--accent-blue-light)"; // leben-accent-light
-  return "var(--accent-blue)"; // leben-accent
+  if (ratio <= 0.33) return "bg-leben-accent-90"; 
+  if (ratio <= 0.66) return "bg-leben-accent-light"; 
+  return "bg-leben-accent"; 
 }
 
 const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
+  const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
+
   const weeklyAnalytics = useMemo(() => {
     const today = new Date();
     const data = [];
@@ -40,8 +42,6 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
         h.completedDates?.includes(dateStr),
       ).length;
 
-      // A day is "active" if at least one habit was tracked, OR books were updated.
-      // We infer book updates from the habit data available; treat completedOnDay > 0 as active.
       const isSkipped = completedOnDay === 0;
       const ratio = habits.length > 0 ? completedOnDay / habits.length : 0;
 
@@ -58,12 +58,6 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
       totalCompletedThisWeek += completedOnDay;
     }
 
-    // Compute current streak and longest streak across all habits
-    // using the existing calcStreak/calcLongestStreak helpers.
-    const allDates = habits.flatMap((h) => h.completedDates ?? []);
-
-    // Streak resets when a day is skipped — calcStreak already handles this
-    // by walking backwards from today/yesterday and stopping at the first miss.
     const currentStreak =
       habits.length > 0
         ? Math.min(...habits.map((h) => calcStreak(h.completedDates ?? [])))
@@ -86,22 +80,28 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
     };
   }, [habits]);
 
+  const selectedData = selectedDayIndex !== null ? weeklyAnalytics.days[selectedDayIndex] : null;
+
   return (
     <Card
       variant="none"
       className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border-subtle mb-5"
     >
-      <Text
-        className="font-geist-semibold text-leben-text mb-1"
-        style={{ fontSize: 14 }}
-      >
-        Weekly Progress
-      </Text>
+      <View className="flex-row justify-between items-center mb-1">
+        <Text
+          className="font-geist-semibold text-leben-text"
+          style={{ fontSize: 14 }}
+        >
+          Weekly Progress
+        </Text>
+      </View>
       <Text
         className="text-leben-text-2"
         style={{ fontSize: 10, marginBottom: 14 }}
       >
-        Coloured days = habits tracked · Grey = skipped
+        {selectedData 
+          ? `${selectedData.count} habit${selectedData.count === 1 ? '' : 's'} tracked on ${selectedData.date}`
+          : "Coloured days = habits tracked · Grey = skipped"}
       </Text>
 
       {!weeklyAnalytics.hasData ? (
@@ -129,9 +129,9 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
             {daysLabels.map((l, i) => (
               <Text
                 key={i}
+                className="text-leben-text-muted"
                 style={{
                   fontSize: 9,
-                  color: "var(--text-muted)",
                   flex: 1,
                   textAlign: "center",
                 }}
@@ -140,7 +140,7 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
               </Text>
             ))}
           </View>
-          <Text style={{ fontSize: 12, color: "var(--text-dim)" }}>
+          <Text className="text-leben-text" style={{ fontSize: 12 }}>
             No data this week — start checking off habits
           </Text>
         </>
@@ -152,26 +152,27 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
             style={{ height: 70 }}
           >
             {weeklyAnalytics.days.map((d, i) => {
-              const color = dayColor(d.ratio, d.isToday);
+              const colorClass = dayColorClass(d.ratio, d.isToday);
               const heightPct = d.isSkipped ? 6 : Math.max(d.pct, 10);
-              const isGrad = color === "today";
+              const isGrad = colorClass === "today";
+              const isSelected = selectedDayIndex === i;
 
               return (
-                <View
+                <Pressable
                   key={i}
-                  className="flex-1 items-center justify-end relative"
+                  className={`flex-1 items-center justify-end relative rounded-t-[3px] rounded-b-[2px] ${isSelected ? 'bg-leben-border-subtle/30' : ''}`}
                   style={{ height: "100%" }}
+                  onPress={() => setSelectedDayIndex(isSelected ? null : i)}
                 >
                   <View
-                    className="w-full absolute bottom-0 overflow-hidden"
+                    className={`w-full absolute bottom-0 overflow-hidden ${isGrad ? "bg-transparent" : colorClass}`}
                     style={{
                       height: `${heightPct}%`,
-                      backgroundColor: isGrad ? "transparent" : color,
                       borderTopLeftRadius: 3,
                       borderTopRightRadius: 3,
                       borderBottomLeftRadius: 2,
                       borderBottomRightRadius: 2,
-                      opacity: d.isSkipped ? 0.4 : 1,
+                      opacity: d.isSkipped ? 0.4 : (isSelected ? 0.8 : 1),
                     }}
                   >
                     {isGrad && (
@@ -208,7 +209,7 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
                       </Svg>
                     )}
                   </View>
-                </View>
+                </Pressable>
               );
             })}
           </View>
@@ -233,24 +234,6 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
 
           {/* ── Stats ───────────────────────────────────── */}
           <View className="pt-3 border-t border-t-leben-border-subtle gap-3">
-            {/* <View className="flex-row items-center justify-between">
-              <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>
-                Current Streak
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  color:
-                    weeklyAnalytics.currentStreak > 0
-                      ? "var(--success-green)"
-                      : "#f87171",
-                  fontWeight: "600",
-                }}
-              >
-                {weeklyAnalytics.currentStreak} days
-              </Text>
-            </View> */}
-
             <View className="flex-row items-center justify-between">
               <Text className="text-leben-text" style={{ fontSize: 12 }}>
                 Longest Streak
@@ -259,20 +242,6 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
                 {weeklyAnalytics.longestStreak} days
               </Text>
             </View>
-
-            {/* {weeklyAnalytics.currentStreak === 0 &&
-              weeklyAnalytics.longestStreak > 0 && (
-                <Text
-                  style={{
-                    fontSize: 10,
-                    color: "var(--text-dim)",
-                    marginTop: 6,
-                  }}
-                >
-                  Streak reset — best was {weeklyAnalytics.longestStreak} days.
-                  Start fresh today!
-                </Text>
-              )} */}
           </View>
         </>
       )}
@@ -281,3 +250,4 @@ const WeeklyProgress: React.FC<WeeklyProgressProps> = ({ habits }) => {
 };
 
 export default WeeklyProgress;
+

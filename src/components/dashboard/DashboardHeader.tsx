@@ -11,6 +11,8 @@ export function DashboardHeader() {
   const userEmail = useLebenStore((s: any) => s.userEmail);
   const setNotificationOpen = useLebenStore((s: any) => s.setNotificationOpen);
   const notifications = useLebenStore((s: any) => s.notifications || []);
+  const offlineQueue = useLebenStore((s: any) => s.offlineQueue || []);
+  const processOfflineQueue = useLebenStore((s: any) => s.processOfflineQueue);
 
   let firstName = "Guest";
   if (userFullName) {
@@ -72,6 +74,17 @@ export function DashboardHeader() {
 
         {/* Right: Actions */}
         <View className="flex-row items-center gap-4">
+          {/* Offline Sync Button */}
+          {offlineQueue.length > 0 && (
+            <TouchableOpacity
+              className="items-center justify-center relative w-8 h-8 rounded-full bg-leben-border-subtle"
+              onPress={() => processOfflineQueue()}
+            >
+              <Text className="text-[10px]" style={{ fontSize: 16 }}>☁️</Text>
+              <View className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-orange-500 border-2 border-leben-bg" />
+            </TouchableOpacity>
+          )}
+
           {/* Notification Bell */}
           <TouchableOpacity
             className="items-center justify-center relative w-8 h-8"

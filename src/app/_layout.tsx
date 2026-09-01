@@ -55,6 +55,7 @@ function AuthGuard() {
 import NotificationDropdown from "@/components/shared/NotificationDropdown";
 import NotificationManager from "@/components/shared/NotificationManager";
 import OverlayPermissionModal from "@/components/shared/OverlayPermissionModal";
+import OfflineSyncManager from "@/components/OfflineSyncManager";
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
@@ -81,6 +82,12 @@ export default function RootLayout() {
   useLoadUserData();
   useNotifications();
 
+  useEffect(() => {
+    import("@/lib/backgroundTasks").then(({ registerBackgroundFetchAsync }) => {
+      registerBackgroundFetchAsync();
+    });
+  }, []);
+
   if (!fontsLoaded && !fontError) {
     return null;
   }
@@ -97,6 +104,7 @@ export default function RootLayout() {
         <NotificationManager />
         <NotificationDropdown />
         <OverlayPermissionModal />
+        <OfflineSyncManager />
       </View>
     </ThemeProvider>
   );

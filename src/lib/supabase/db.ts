@@ -163,7 +163,7 @@ export async function insertTask(task: Task): Promise<void> {
   const { error } = await supabase
     .from("tasks")
     .insert({ ...dbRow, user_id: user.id });
-  if (error) console.error("insertTask:", error.message);
+  if (error) throw error;
 }
 
 export async function updateTask(
@@ -172,12 +172,12 @@ export async function updateTask(
 ): Promise<void> {
   const dbRow = mapTaskToDB(updates);
   const { error } = await supabase.from("tasks").update(dbRow).eq("id", id);
-  if (error) console.error("updateTask:", error.message);
+  if (error) throw error;
 }
 
 export async function deleteTask(id: string): Promise<void> {
   const { error } = await supabase.from("tasks").delete().eq("id", id);
-  if (error) console.error("deleteTask:", error.message);
+  if (error) throw error;
 }
 
 // ── Habits ─────────────────────────────────────────────────────────────────────
@@ -200,7 +200,7 @@ export async function insertHabit(habit: Habit): Promise<void> {
   const { error } = await supabase
     .from("habits")
     .insert({ ...dbRow, user_id: user.id });
-  if (error) console.error("insertHabit:", error.message);
+  if (error) throw error;
 }
 
 export async function updateHabit(
@@ -209,12 +209,12 @@ export async function updateHabit(
 ): Promise<void> {
   const dbRow = mapHabitToDB(updates);
   const { error } = await supabase.from("habits").update(dbRow).eq("id", id);
-  if (error) console.error("updateHabit:", error.message);
+  if (error) throw error;
 }
 
 export async function removeHabit(id: string): Promise<void> {
   const { error } = await supabase.from("habits").delete().eq("id", id);
-  if (error) console.error("removeHabit:", error.message);
+  if (error) throw error;
 }
 
 // ── Goals ──────────────────────────────────────────────────────────────────────
@@ -240,7 +240,7 @@ export async function insertGoal(goal: Goal): Promise<void> {
   const { error } = await supabase
     .from("goals")
     .insert({ ...dbRow, user_id: user.id });
-  if (error) console.error("insertGoal:", error.message);
+  if (error) throw error;
 }
 
 export async function updateGoal(
@@ -249,12 +249,12 @@ export async function updateGoal(
 ): Promise<void> {
   const dbRow = mapGoalToDB(updates);
   const { error } = await supabase.from("goals").update(dbRow).eq("id", id);
-  if (error) console.error("updateGoal:", error.message);
+  if (error) throw error;
 }
 
 export async function deleteGoal(id: string): Promise<void> {
   const { error } = await supabase.from("goals").delete().eq("id", id);
-  if (error) console.error("deleteGoal:", error.message);
+  if (error) throw error;
 }
 
 // ── Books ──────────────────────────────────────────────────────────────────────
@@ -280,7 +280,7 @@ export async function insertBook(book: Book): Promise<void> {
   const { error } = await supabase
     .from("books")
     .insert({ ...dbRow, user_id: user.id });
-  if (error) console.error("insertBook:", error.message);
+  if (error) throw error;
 }
 
 export async function updateBook(
@@ -289,12 +289,12 @@ export async function updateBook(
 ): Promise<void> {
   const dbRow = mapBookToDB(updates);
   const { error } = await supabase.from("books").update(dbRow).eq("id", id);
-  if (error) console.error("updateBook:", error.message);
+  if (error) throw error;
 }
 
 export async function deleteBook(id: string): Promise<void> {
   const { error } = await supabase.from("books").delete().eq("id", id);
-  if (error) console.error("deleteBook:", error.message);
+  if (error) throw error;
 }
 
 // ── Productivity History ───────────────────────────────────────────────────────
@@ -331,7 +331,7 @@ export async function upsertProductivityHistory(
       { user_id: user.id, date, completed, total },
       { onConflict: "user_id, date" },
     );
-  if (error) console.error("upsertProductivityHistory:", error.message);
+  if (error) throw error;
 }
 
 // ── Push Tokens (mobile — replaces web push_subscriptions) ───────────────────
@@ -347,7 +347,7 @@ export async function savePushToken(
   const { error } = await supabase
     .from("push_tokens")
     .upsert({ user_id: user.id, token, platform }, { onConflict: "user_id" });
-  if (error) console.error("savePushToken:", error.message);
+  if (error) throw error;
 }
 
 // ── Notification Preferences ───────────────────────────────────────────────────
@@ -373,7 +373,7 @@ export async function upsertNotificationPrefs(
       }, 
       { onConflict: "user_id" }
     );
-  if (error) console.error("upsertNotificationPrefs:", error.message);
+  if (error) throw error;
 }
 
 // ── System ─────────────────────────────────────────────────────────────────────

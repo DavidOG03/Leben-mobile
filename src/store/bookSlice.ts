@@ -90,7 +90,7 @@ export function createBookSlice(
         reminderAt: data.reminderAt,
       };
       set((state: any) => ({ books: [...state.books, newBook] }));
-      await insertBook(newBook);
+      try { await insertBook(newBook); } catch(e) { get().addOfflineMutation('insertBook', [newBook]); }
     },
 
     updateBook: async (id: string, updates: Partial<Book>) => {
@@ -110,13 +110,13 @@ export function createBookSlice(
         }),
       }));
       if (updatedBook) {
-        await updateBookDb(id, updates);
+        try { await updateBookDb(id, updates); } catch(e) { get().addOfflineMutation('updateBook', [id, updates]); }
       }
     },
 
     removeBook: async (id: string) => {
       set((state: any) => ({ books: state.books.filter((b: Book) => b.id !== id) }));
-      await deleteBook(id);
+      try { await deleteBook(id); } catch(e) { get().addOfflineMutation('deleteBook', [id]); }
     },
 
     setBooks: (books: Book[]) => set(() => ({ books })),

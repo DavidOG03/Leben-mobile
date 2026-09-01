@@ -103,12 +103,41 @@ export interface NotificationPrefs {
   goalUpdates:     boolean;
 }
 
+export type OfflineMutationAction = 
+  | 'insertTask' | 'updateTask' | 'deleteTask'
+  | 'insertHabit' | 'updateHabit' | 'removeHabit'
+  | 'insertGoal' | 'updateGoal' | 'deleteGoal'
+  | 'insertBook' | 'updateBook' | 'deleteBook'
+  | 'upsertProductivityHistory';
+
+export interface OfflineMutation {
+  id: string;
+  action: OfflineMutationAction;
+  args: any[];
+}
+
+export interface ToastMessage {
+  id: string;
+  message: string;
+  type: 'info' | 'syncing' | 'success' | 'error';
+  icon?: string; // We'll pass the svg string or name if needed, but UI can infer from type
+}
+
 export interface LebenStore extends GoalSlice, BookSlice {
   // ── Auth ────────────────────────────────────────────────────────────────────
   userId:       string | null;
   userEmail:    string | null;
   userFullName: string | null;
   setUser:      (id: string | null, email: string | null, fullName?: string | null) => void;
+
+  // ── Offline Queue & Toasts ─────────────────────────────────────────────────
+  offlineQueue: OfflineMutation[];
+  addOfflineMutation: (action: OfflineMutationAction, args: any[]) => void;
+  processOfflineQueue: () => Promise<void>;
+  
+  toasts: ToastMessage[];
+  addToast: (toast: Omit<ToastMessage, 'id'>) => void;
+  removeToast: (id: string) => void;
 
   // ── Tasks ───────────────────────────────────────────────────────────────────
   tasks:        Task[];
@@ -183,6 +212,8 @@ const initialState = {
   userId:       null,
   userEmail:    null,
   userFullName: null,
+  offlineQueue: [],
+  toasts:       [],
   tasks:        [],
   tasksLoaded:  false,
   habits:       [],
@@ -220,6 +251,77 @@ export const useLebenStore = create<LebenStore>()(
   persist(
     (set, get) => ({
       ...initialState,
+
+      // ── Offline Queue & Toasts ─────────────────────────────────────────────────
+      addOfflineMutation: (action, args) => {
+        set((s) => ({
+          offlineQueue: [...s.offlineQueue, { id: Math.random().toString(36).substring(7), action, args }]
+        }));
+      },
+      
+      processOfflineQueue: async () => {
+        const state = get();
+        if (state.offlineQueue.length === 0) return;
+        
+        set({ isSyncing: true });
+        
+        // Show syncing toast
+        const syncingToastId = Math.random().toString(36).substring(7);
+        get().addToast({ message: 'Syncing changes...', type: 'syncing' });
+        
+        let successCount = 0;
+        let failed = false;
+
+        // Process queue sequentially
+        for (const mutation of state.offlineQueue) {
+          try {
+            switch(mutation.action) {
+              case 'insertTask': await insertTask(mutation.args[0]); break;
+              case 'updateTask': await updateTask(mutation.args[0], mutation.args[1]); break;
+              case 'deleteTask': await deleteTask(mutation.args[0]); break;
+              case 'insertHabit': await insertHabit(mutation.args[0]); break;
+              case 'updateHabit': await updateHabit(mutation.args[0], mutation.args[1]); break;
+              case 'removeHabit': await removeHabit(mutation.args[0]); break;
+              case 'upsertProductivityHistory': await upsertProductivityHistory(mutation.args[0], mutation.args[1], mutation.args[2]); break;
+              // Goal slice and Book slice mutations (will implement their db updates below)
+              // case 'insertGoal': await insertGoal(mutation.args[0]); break; // Wait, these are in goalSlice
+              // case 'updateGoal': await updateGoal(mutation.args[0], mutation.args[1]); break;
+              // case 'deleteGoal': await deleteGoal(mutation.args[0]); break;
+            }
+            // Remove from queue on success
+            set((s) => ({ offlineQueue: s.offlineQueue.filter(m => m.id !== mutation.id) }));
+            successCount++;
+          } catch (err) {
+            console.error('Failed to process offline mutation', err);
+            failed = true;
+            break; // Stop processing to maintain chronological order
+          }
+        }
+        
+        set({ isSyncing: false });
+        
+        if (failed) {
+          get().addToast({ message: 'Network issue. Sync paused.', type: 'error' });
+        } else if (successCount > 0) {
+          get().addToast({ message: 'All changes synced!', type: 'success' });
+        }
+      },
+
+      addToast: (toast) => {
+        const id = Math.random().toString(36).substring(7);
+        set((state) => ({
+          toasts: [...state.toasts, { ...toast, id }]
+        }));
+        
+        // Auto remove info/success/error toasts after 4s
+        if (toast.type !== 'syncing') {
+          setTimeout(() => get().removeToast(id), 4000);
+        }
+      },
+
+      removeToast: (id) => {
+        set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) }));
+      },
 
       // Merge in goal and book slices
       ...createGoalSlice(set, get),
@@ -267,7 +369,7 @@ export const useLebenStore = create<LebenStore>()(
           
           // Remove them from the database
           for (const id of staleIds) {
-            await deleteTask(id);
+            try { await deleteTask(id); } catch(e) { get().addOfflineMutation('deleteTask', [id]); }
           }
         }
       },
@@ -278,7 +380,7 @@ export const useLebenStore = create<LebenStore>()(
         const now = new Date();
         const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
         get().updateHistoryDelta(task.date || localDate, 0, 1);
-        await insertTask(task);
+        try { await insertTask(task); } catch(e) { get().addOfflineMutation('insertTask', [task]); }
       },
 
       toggleTask: async (id) => {
@@ -297,7 +399,7 @@ export const useLebenStore = create<LebenStore>()(
 
         get().updateHistoryDelta(localDate, task.completed ? -1 : 1, 0);
         
-        await updateTask(id, updates);
+        try { await updateTask(id, updates); } catch(e) { get().addOfflineMutation('updateTask', [id, updates]); }
       },
 
       editTask: async (id, updates) => {
@@ -318,13 +420,13 @@ export const useLebenStore = create<LebenStore>()(
           get().updateHistoryDelta(dateStr.split('T')[0], updates.completed ? 1 : -1, 0);
         }
 
-        await updateTask(id, updates);
+        try { await updateTask(id, updates); } catch(e) { get().addOfflineMutation('updateTask', [id, updates]); }
       },
 
       removeTask: async (id) => {
         set((s) => ({ tasks: s.tasks.filter((t) => t.id !== id) }));
 
-        await deleteTask(id);
+        try { await deleteTask(id); } catch(e) { get().addOfflineMutation('deleteTask', [id]); }
       },
 
       // ── Habits ────────────────────────────────────────────────────────────────
@@ -341,7 +443,7 @@ export const useLebenStore = create<LebenStore>()(
       addHabit: async (habit) => {
         set((s) => ({ habits: [habit, ...s.habits] }));
 
-        await insertHabit(habit);
+        try { await insertHabit(habit); } catch(e) { get().addOfflineMutation('insertHabit', [habit]); }
       },
 
       toggleHabit: async (id) => {
@@ -367,7 +469,7 @@ export const useLebenStore = create<LebenStore>()(
           ),
         }));
 
-        await updateHabit(id, updates);
+        try { await updateHabit(id, updates); } catch(e) { get().addOfflineMutation('updateHabit', [id, updates]); }
       },
 
       editHabit: async (id, updates) => {
@@ -375,13 +477,13 @@ export const useLebenStore = create<LebenStore>()(
           habits: s.habits.map((h) => (h.id === id ? { ...h, ...updates } : h)),
         }));
 
-        await updateHabit(id, updates);
+        try { await updateHabit(id, updates); } catch(e) { get().addOfflineMutation('updateHabit', [id, updates]); }
       },
 
       deleteHabit: async (id) => {
         set((s) => ({ habits: s.habits.filter((h) => h.id !== id) }));
 
-        await removeHabit(id);
+        try { await removeHabit(id); } catch(e) { get().addOfflineMutation('removeHabit', [id]); }
       },
 
       // ── Planner ───────────────────────────────────────────────────────────────
@@ -462,7 +564,7 @@ export const useLebenStore = create<LebenStore>()(
             [date]: { completed, total },
           },
         }));
-        await upsertProductivityHistory(date, completed, total);
+        try { await upsertProductivityHistory(date, completed, total); } catch(e) { get().addOfflineMutation('upsertProductivityHistory', [date, completed, total]); }
       },
 
       // ── UI ────────────────────────────────────────────────────────────────────

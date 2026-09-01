@@ -8,7 +8,8 @@
     "scheme": "lebenmobile",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/images/splash-icon.png"
+      "icon": "./assets/images/splash-icon.png",
+      "bundleIdentifier": "com.david.lebenmobile"
     },
     "android": {
       "package": "com.david.lebenmobile",

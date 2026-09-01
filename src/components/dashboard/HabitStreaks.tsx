@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/Card";
 import { Text } from "@/components/ui/Text";
 import { cancelReminder, scheduleReminder } from "@/hooks/useNotifications";
 import { useLebenStore } from "@/store/useStore";
+import { calcStreak } from "@/utils/habits";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
@@ -97,6 +98,7 @@ export function HabitStreaks() {
               .toISOString()
               .slice(0, 10);
             const isCheckedToday = (h.completedDates ?? []).includes(todayStr);
+            const displayStreak = calcStreak(h.completedDates ?? []);
 
             return (
               <View key={h.id}>
@@ -115,7 +117,7 @@ export function HabitStreaks() {
                         {h.label}
                       </Text>
                       <Text className="text-leben-text-dim text-[11px] font-geist-medium">
-                        🔥 {h.streak} day streak
+                        🔥 {displayStreak} day streak
                       </Text>
                     </View>
                   </View>
