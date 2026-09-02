@@ -55,7 +55,7 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
         {/* Checkbox */}
         <TouchableOpacity
           onPress={() => toggleTask(taskId)}
-          className={`w-[18px] h-[18px] rounded-[5px] items-center justify-center border ${
+          className={`w-7 h-7 rounded-[5px] items-center justify-center border ${
             task.completed
               ? "border-leben-success bg-leben-success/20"
               : "border-leben-border bg-leben-bg-secondary"
@@ -190,7 +190,9 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
             className="flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-500/30 bg-red-500/10"
           >
             <Text className="text-red-400 text-[10px]">🗑</Text>
-            <Text className="text-[10px] font-geist-medium text-red-400">Delete</Text>
+            <Text className="text-[10px] font-geist-medium text-red-400">
+              Delete
+            </Text>
           </TouchableOpacity>
 
           <View className="flex-1" />

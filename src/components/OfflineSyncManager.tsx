@@ -42,7 +42,7 @@ export default function OfflineSyncManager() {
   if (toasts.length === 0) return null;
 
   return (
-    <View style={StyleSheet.absoluteFill} pointerEvents="box-none" className="z-50 items-center justify-start pt-14">
+    <View style={StyleSheet.absoluteFill} pointerEvents="box-none" className="z-50 items-center justify-start pt-[50px] px-4">
       {toasts.map((t) => (
         <Toast key={t.id} message={t.message} type={t.type} />
       ))}

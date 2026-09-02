@@ -1,4 +1,4 @@
-import * as BackgroundFetch from 'expo-background-fetch';
+import * as BackgroundTask from 'expo-background-task';
 import * as TaskManager from 'expo-task-manager';
 import * as Notifications from 'expo-notifications';
 
@@ -56,22 +56,21 @@ TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
       }
     }
     
-    return BackgroundFetch.BackgroundFetchResult.NewData;
+    return BackgroundTask.BackgroundTaskResult.Success;
   } catch (err) {
-    console.error('[BackgroundFetch]', err);
-    return BackgroundFetch.BackgroundFetchResult.Failed;
+    console.error('[BackgroundTask]', err);
+    return BackgroundTask.BackgroundTaskResult.Failed;
   }
 });
 
 export async function registerBackgroundFetchAsync() {
   try {
-    await BackgroundFetch.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK, {
-      minimumInterval: 15 * 60, // 15 minutes
-      stopOnTerminate: false, 
-      startOnBoot: true,      
+    await BackgroundTask.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK, {
+      minimumInterval: 15, // 15 minutes (in minutes, not seconds)
     });
-    console.log('[BackgroundFetch] Task registered successfully');
+    console.log('[BackgroundTask] Task registered successfully');
   } catch (err) {
-    console.error('[BackgroundFetch] Registration failed:', err);
+    console.error('[BackgroundTask] Registration failed:', err);
   }
 }
+

@@ -3,7 +3,7 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { Text } from "@/components/ui/Text";
 import { BOOK_COLORS } from "@/constants/habits";
 import type { BookFormData } from "@/store/bookSlice";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
 interface AddBookModalProps {
@@ -23,6 +23,9 @@ export default function AddBookModal({
   const [color, setColor] = useState(BOOK_COLORS[0]);
   const [showReminder, setShowReminder] = useState(false);
   const [reminderAt, setReminderAt] = useState<string | undefined>();
+
+  const authorRef = useRef<TextInput>(null);
+  const totalPagesRef = useRef<TextInput>(null);
 
   const handleAdd = () => {
     if (!title.trim() || !totalPages) return;
@@ -52,7 +55,10 @@ export default function AddBookModal({
 
   return (
     <BottomSheet visible={visible} onClose={handleCancel}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always"
+      >
         <View className="flex-row items-center justify-between mb-6">
           <Text
             className="font-geist-ultrablack text-leben-text text-[20px]"
@@ -88,6 +94,9 @@ export default function AddBookModal({
             onChangeText={setTitle}
             placeholder="e.g. Atomic Habits"
             placeholderTextColor="gray"
+            returnKeyType="next"
+            onSubmitEditing={() => authorRef.current?.focus()}
+            blurOnSubmit={false}
             className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-secondary border border-leben-border-subtle text-[14px]"
           />
         </View>
@@ -97,10 +106,14 @@ export default function AddBookModal({
             Author
           </Text>
           <TextInput
+            ref={authorRef}
             value={author}
             onChangeText={setAuthor}
             placeholder="e.g. James Clear"
             placeholderTextColor="gray"
+            returnKeyType="next"
+            onSubmitEditing={() => totalPagesRef.current?.focus()}
+            blurOnSubmit={false}
             className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-secondary border border-leben-border-subtle text-[14px]"
           />
         </View>
@@ -110,11 +123,14 @@ export default function AddBookModal({
             Total Pages
           </Text>
           <TextInput
+            ref={totalPagesRef}
             value={totalPages}
             onChangeText={setTotalPages}
             placeholder="e.g. 320"
             placeholderTextColor="gray"
             keyboardType="numeric"
+            returnKeyType="done"
+            onSubmitEditing={handleAdd}
             className="w-full rounded-xl px-4 py-3 text-leben-text mb-5 bg-leben-bg-secondary border border-leben-border-subtle text-[14px]"
           />
           {/* Buttons */}

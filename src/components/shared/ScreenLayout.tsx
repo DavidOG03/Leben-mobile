@@ -23,7 +23,7 @@ export function ScreenLayout({ children, scrollable = true, className = '' }: Sc
           className="flex-1"
           contentContainerStyle={{ paddingBottom: 16 }}
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
+          keyboardShouldPersistTaps="always"
         >
           {content}
         </ScrollView>

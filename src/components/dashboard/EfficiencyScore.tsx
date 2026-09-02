@@ -20,6 +20,7 @@ export function EfficiencyScore() {
   const tasks = useLebenStore((s) => s.tasks);
   const habits = useLebenStore((s) => s.habits);
   const goals = useLebenStore((s) => s.goals);
+  const books = useLebenStore((s) => s.books);
 
   const [loading, setLoading] = useState(true);
 
@@ -33,118 +34,132 @@ export function EfficiencyScore() {
 
     const today = new Date();
     const todayIso = today.toISOString().split("T")[0];
-    const weekDates = Array.from({ length: 7 }, (_, offset) => {
+
+    // Build the 30-day date window
+    const thirtyDayDates = Array.from({ length: 30 }, (_, i) => {
       const d = new Date(today);
-      d.setDate(today.getDate() - offset);
+      d.setDate(today.getDate() - i);
       return d.toISOString().split("T")[0];
     });
+    const weekDates     = thirtyDayDates.slice(0, 7);  // current period
+    const baselineDates = thirtyDayDates.slice(7);     // days 8–30
 
-    const allActivityDates = [
-      ...tasks
-        .map((t) => t.completedAt || t.date)
-        .filter(Boolean)
-        .map((value) => value!.split("T")[0]),
-      ...habits.flatMap((h) => h.completedDates ?? []),
-      ...goals.flatMap((g) =>
-        g.milestones
-          .filter((m) => m.done && m.id) // web uses m.done
-          .map((m) => todayIso),
-      ),
-    ];
+    // ── Helper: per-day score (tasks + habits only — the two daily metrics) ──
+    const getDayScore = (dateStr: string): number | null => {
+      const dayScheduled  = tasks.filter((t) => t.date === dateStr).length;
+      const dayCompleted  = tasks.filter((t) => t.completed && t.completedAt?.split("T")[0] === dateStr).length;
+      const existingHabits = habits.filter((h) => !h.createdAt || h.createdAt.split("T")[0] <= dateStr);
+      const habitsCompleted = existingHabits.filter((h) => h.completedDates?.includes(dateStr)).length;
 
-    const sortedDates = allActivityDates.sort();
-    const firstActivityDate = sortedDates[0];
-    const msPerDay = 24 * 60 * 60 * 1000;
-    const daysSinceFirstActivity = firstActivityDate
-      ? Math.floor(
-          (new Date(todayIso).getTime() -
-            new Date(firstActivityDate).getTime()) /
-            msPerDay,
-        )
-      : 0;
+      if (dayScheduled === 0 && existingHabits.length === 0) return null;
 
-    let totalScheduledTasks = 0;
-    let totalCompletedTasks = 0;
-    let totalCompletedHabits = 0;
-    let totalCompleteGoals = 0;
-    let weeklyActiveDays = 0;
+      let wSum = 0, wTotal = 0;
+      if (dayScheduled > 0)       { wSum += (dayCompleted / dayScheduled) * 0.4; wTotal += 0.4; }
+      if (existingHabits.length > 0) { wSum += (habitsCompleted / existingHabits.length) * 0.6; wTotal += 0.6; }
+      return wTotal > 0 ? (wSum / wTotal) * 100 : null;
+    };
+
+    // ── Current 7-day full score (tasks + habits + milestones + books) ──────
+    let totalScheduledTasks   = 0;
+    let totalCompletedTasks   = 0;
+    let totalPossibleHabitDays = 0;
+    let totalCompletedHabitDays = 0;
+    let weeklyActiveDays      = 0;
 
     for (const dateStr of weekDates) {
-      // Use task.date for scheduled count to avoid double-counting tasks
-      // completed on a different day than they were scheduled.
       const dayScheduled = tasks.filter((t) => t.date === dateStr).length;
-      const dayCompleted = tasks.filter(
-        (t) => t.completed && t.completedAt?.split("T")[0] === dateStr,
-      ).length;
-      const dayHabits = habits.filter((h) =>
-        h.completedDates?.includes(dateStr),
-      ).length;
+      const dayCompleted = tasks.filter((t) => t.completed && t.completedAt?.split("T")[0] === dateStr).length;
+      const existingHabits     = habits.filter((h) => !h.createdAt || h.createdAt.split("T")[0] <= dateStr);
+      const dayHabitsCompleted = existingHabits.filter((h) => h.completedDates?.includes(dateStr)).length;
+      const dayMilestones      = goals.reduce(
+        (count, g) => count + g.milestones.filter((m) => m.done && m.completedAt?.split("T")[0] === dateStr).length,
+        0,
+      );
 
-      totalScheduledTasks += dayScheduled;
-      totalCompletedTasks += dayCompleted;
-      totalCompletedHabits += dayHabits;
-
-      if (dayScheduled > 0 || dayHabits > 0) {
-        weeklyActiveDays += 1;
-      }
+      totalScheduledTasks    += dayScheduled;
+      totalCompletedTasks    += dayCompleted;
+      totalPossibleHabitDays  += existingHabits.length;
+      totalCompletedHabitDays += dayHabitsCompleted;
+      if (dayScheduled > 0 || existingHabits.length > 0 || dayMilestones > 0) weeklyActiveDays++;
     }
 
-    const totalPossibleHabits = habits.length * 7;
-    const totalMilestones = goals.reduce(
-      (acc, g) => acc + g.milestones.length,
-      0,
-    );
-    const totalCompletedMilestones = goals.reduce(
-      (acc, g) => acc + g.milestones.filter((m) => m.done).length,
-      0,
-    );
+    const totalMilestones          = goals.reduce((acc, g) => acc + g.milestones.length, 0);
+    const totalCompletedMilestones = goals.reduce((acc, g) => acc + g.milestones.filter((m) => m.done).length, 0);
+    const totalBooks    = books.length;
+    const engagedBooks  = books.filter(
+      (b) => b.status === "finished" || (b.status === "reading" && b.currentPage > 0),
+    ).length;
 
-    const taskRate =
-      totalScheduledTasks > 0 ? totalCompletedTasks / totalScheduledTasks : 0;
-    const habitRate =
-      totalPossibleHabits > 0 ? totalCompletedHabits / totalPossibleHabits : 0;
-    const goalRate =
-      totalMilestones > 0 ? totalCompletedMilestones / totalMilestones : 0;
+    const taskRate  = totalScheduledTasks    > 0 ? totalCompletedTasks    / totalScheduledTasks    : 0;
+    const habitRate = totalPossibleHabitDays  > 0 ? totalCompletedHabitDays / totalPossibleHabitDays : 0;
+    const goalRate  = totalMilestones         > 0 ? totalCompletedMilestones / totalMilestones       : 0;
+    const bookRate  = totalBooks              > 0 ? engagedBooks             / totalBooks             : 0;
 
-    const weights = { task: 0.4, habit: 0.3, goal: 0.3 };
-    let activeWeightsCount = 0;
-    if (totalScheduledTasks > 0) activeWeightsCount += weights.task;
-    if (totalPossibleHabits > 0) activeWeightsCount += weights.habit;
-    if (totalMilestones > 0) activeWeightsCount += weights.goal;
+    const weights = { task: 0.4, habit: 0.3, goal: 0.2, book: 0.1 };
+    let wSum = 0, wTotal = 0;
+    if (totalScheduledTasks    > 0) { wSum += taskRate  * weights.task;  wTotal += weights.task;  }
+    if (totalPossibleHabitDays  > 0) { wSum += habitRate * weights.habit; wTotal += weights.habit; }
+    if (totalMilestones         > 0) { wSum += goalRate  * weights.goal;  wTotal += weights.goal;  }
+    if (totalBooks              > 0) { wSum += bookRate  * weights.book;  wTotal += weights.book;  }
 
-    const finalScore =
-      activeWeightsCount > 0
-        ? (((totalScheduledTasks > 0 ? taskRate * weights.task : 0) +
-            (totalPossibleHabits > 0 ? habitRate * weights.habit : 0) +
-            (totalMilestones > 0 ? goalRate * weights.goal : 0)) /
-            activeWeightsCount) *
-          100
-        : 0;
+    const currentScore = wTotal > 0 ? (wSum / wTotal) * 100 : 0;
 
-    const hasEnoughData =
-      firstActivityDate !== undefined &&
-      daysSinceFirstActivity >= 6 &&
-      weeklyActiveDays > 0;
+    // ── 30-day personal baseline (per-day average over days 8–30) ───────────
+    const baselineScores = baselineDates
+      .map((d) => getDayScore(d))
+      .filter((s): s is number => s !== null);
+
+    const hasBaseline  = baselineScores.length >= 5;
+    const baselineAvg  = hasBaseline
+      ? baselineScores.reduce((a, b) => a + b, 0) / baselineScores.length
+      : null;
+    const delta = baselineAvg !== null ? currentScore - baselineAvg : null;
+
+    // ── Activity check (show score from day 1) ───────────────────────────────
+    const hasAnyActivity =
+      totalScheduledTasks > 0 || totalPossibleHabitDays > 0 || weeklyActiveDays > 0;
+
+    // ── Rating: relative when baseline exists, absolute as fallback ──────────
+    let rating: string;
+    if (delta !== null) {
+      if      (delta > 15)  rating = "Surging";
+      else if (delta > 5)   rating = "Improving";
+      else if (delta >= -5) rating = "Consistent";
+      else if (delta >= -15) rating = "Slipping";
+      else                  rating = "Falling";
+    } else {
+      // Absolute fallback while baseline is building
+      if      (currentScore > 80) rating = "Elite";
+      else if (currentScore > 60) rating = "Deep";
+      else if (currentScore > 40) rating = "Steady";
+      else                        rating = "Growth";
+    }
+
+    // Colour cue for the rating badge
+    const ratingColor =
+      delta !== null
+        ? delta > 5  ? "#22c55e"
+        : delta < -5 ? "#ef4444"
+        : "#6b7fff"
+        : "#6b7fff";
 
     return {
-      score: Math.round(finalScore),
-      hasEnoughData,
-      rating:
-        finalScore > 80
-          ? "Elite"
-          : finalScore > 60
-            ? "Deep"
-            : finalScore > 40
-              ? "Steady"
-              : "Growth",
+      score:        Math.round(currentScore),
+      baselineAvg:  baselineAvg !== null ? Math.round(baselineAvg) : null,
+      delta:        delta       !== null ? Math.round(delta)       : null,
+      hasBaseline,
+      hasAnyActivity,
+      rating,
+      ratingColor,
     };
-  }, [userId, tasks, habits, goals]);
+  }, [userId, tasks, habits, goals, books]);
+
 
   // Animation
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    if (analytics && analytics.hasEnoughData) {
+    if (analytics && analytics.hasAnyActivity) {
       progress.value = withTiming(analytics.score / 100, {
         duration: 1500,
         easing: Easing.out(Easing.cubic),
@@ -232,43 +247,27 @@ export function EfficiencyScore() {
             </Text>
           </TouchableOpacity>
         </View>
-      ) : !analytics || !analytics.hasEnoughData ? (
+      ) : !analytics || !analytics.hasAnyActivity ? (
         <View className="items-center justify-center w-full">
           <View className="relative items-center justify-center mb-5">
             <Svg width="140" height="140" viewBox="0 0 140 140">
+              <Circle cx="70" cy="70" r="54" fill="none" stroke={strokeBorder} strokeWidth="8" />
               <Circle
-                cx="70"
-                cy="70"
-                r="54"
-                fill="none"
-                stroke={strokeBorder}
-                strokeWidth="8"
-              />
-              <Circle
-                cx={70}
-                cy={70}
-                r={54}
-                fill="none"
-                stroke={strokeSubtle}
-                strokeWidth={8}
-                strokeLinecap="round"
-                strokeDasharray="12 8"
-                originX={70}
-                originY={70}
-                rotation={-90}
+                cx={70} cy={70} r={54} fill="none"
+                stroke={strokeSubtle} strokeWidth={8}
+                strokeLinecap="round" strokeDasharray="12 8"
+                originX={70} originY={70} rotation={-90}
               />
             </Svg>
             <View className="absolute items-center">
-              <Text className="text-leben-text-dim text-3xl font-geist-bold leading-none">
-                —
-              </Text>
+              <Text className="text-leben-text-dim text-3xl font-geist-bold leading-none">—</Text>
               <Text className="text-leben-text-dim text-[9px] uppercase tracking-widest mt-1 font-geist-medium">
                 No data
               </Text>
             </View>
           </View>
           <Text className="text-leben-text-dim text-[11px] text-center leading-relaxed font-geist-medium">
-            Score appears after{"\n"}your first active week
+            Start tracking to{"\n"}see your score.
           </Text>
         </View>
       ) : (
@@ -281,26 +280,13 @@ export function EfficiencyScore() {
                   <Stop offset="1" stopColor="#5a6bff" stopOpacity="1" />
                 </LinearGradient>
               </Defs>
-              <Circle
-                cx="70"
-                cy="70"
-                r="54"
-                fill="none"
-                stroke={strokeBorder}
-                strokeWidth="8"
-              />
+              <Circle cx="70" cy="70" r="54" fill="none" stroke={strokeBorder} strokeWidth="8" />
               <AnimatedCircle
-                cx={70}
-                cy={70}
-                r={54}
-                fill="none"
-                stroke="url(#scoreGrad)"
-                strokeWidth={8}
+                cx={70} cy={70} r={54} fill="none"
+                stroke="url(#scoreGrad)" strokeWidth={8}
                 strokeLinecap="round"
                 strokeDasharray={`${2 * Math.PI * 54}`}
-                originX={70}
-                originY={70}
-                rotation={-90}
+                originX={70} originY={70} rotation={-90}
                 animatedProps={animatedProps}
               />
             </Svg>
@@ -308,14 +294,32 @@ export function EfficiencyScore() {
               <Text className="text-leben-text text-3xl font-geist-black tracking-tight">
                 {analytics.score}%
               </Text>
-              <Text className="text-leben-accent text-[10px] uppercase tracking-widest font-geist-semibold mt-1">
+              <Text
+                style={{ color: analytics.ratingColor }}
+                className="text-[10px] uppercase tracking-widest font-geist-semibold mt-1"
+              >
                 {analytics.rating}
               </Text>
             </View>
           </View>
-          <Text className="text-leben-text-dim text-xs text-center leading-relaxed font-geist-medium">
-            Based on your activity{"\n"}over the last 7 days.
-          </Text>
+
+          {/* Delta vs personal baseline */}
+          {analytics.delta !== null ? (
+            <Text className="text-leben-text-dim text-[11px] text-center leading-relaxed font-geist-medium">
+              {analytics.delta > 5
+                ? "You're outperforming your usual pace.\n"
+                : analytics.delta < -5
+                  ? "You're falling behind your usual pace.\n"
+                  : "You're right on track with your usual pace.\n"}
+              <Text className="opacity-70 text-[10px]">
+                This week: {analytics.score}% • Your avg: {analytics.baselineAvg}%
+              </Text>
+            </Text>
+          ) : (
+            <Text className="text-leben-text-dim text-[11px] text-center leading-relaxed font-geist-medium">
+              Building your baseline…{"\n"}keep tracking daily.
+            </Text>
+          )}
         </View>
       )}
     </Card>

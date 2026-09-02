@@ -299,6 +299,7 @@ export const useLebenStore = create<LebenStore>()(
         }
         
         set({ isSyncing: false });
+        set((s) => ({ toasts: s.toasts.filter(t => t.type !== 'syncing') }));
         
         if (failed) {
           get().addToast({ message: 'Network issue. Sync paused.', type: 'error' });
@@ -555,12 +556,12 @@ export const useLebenStore = create<LebenStore>()(
       },
 
       updateHistoryDelta: async (date, completedDelta, totalDelta) => {
-        const existing = get().productivityHistory[date] || { completed: 0, total: 0 };
+        const existing = (get().productivityHistory || {})[date] || { completed: 0, total: 0 };
         const completed = Math.max(0, Number(existing.completed || 0) + Number(completedDelta || 0));
         const total = Math.max(0, Number(existing.total || 0) + Number(totalDelta || 0));
         set((s) => ({
           productivityHistory: {
-            ...s.productivityHistory,
+            ...(s.productivityHistory || {}),
             [date]: { completed, total },
           },
         }));

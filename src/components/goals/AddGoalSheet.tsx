@@ -3,7 +3,7 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
 import { GoalFormData } from "@/utils/goals.types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
 const ICON_OPTIONS = [
@@ -42,6 +42,9 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
   const [errors, setErrors] = useState<
     Partial<Record<keyof GoalFormData, string>>
   >({});
+
+  const deadlineRef = useRef<TextInput>(null);
+  const milestoneRefs = useRef<Array<TextInput | null>>([]);
 
   function validate(): boolean {
     const next: typeof errors = {};
@@ -104,7 +107,11 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
         </Text>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} className="max-h-[85%]">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always"
+        className="max-h-[85%]"
+      >
         <View className="gap-5 pb-8">
           {/* Icon picker */}
           <View>
@@ -138,6 +145,9 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               onChangeText={(text) => setForm({ ...form, title: text })}
               placeholder="e.g. Master Spanish"
               placeholderTextColor="#555"
+              returnKeyType="next"
+              onSubmitEditing={() => deadlineRef.current?.focus()}
+              blurOnSubmit={false}
               className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-secondary border ${
                 errors.title
                   ? "border-leben-error"
@@ -157,10 +167,14 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               Deadline
             </Text>
             <TextInput
+              ref={deadlineRef}
               value={form.deadline}
               onChangeText={(text) => setForm({ ...form, deadline: text })}
               placeholder="YYYY-MM (or YYYY-MM-DD)"
               placeholderTextColor="#555"
+              returnKeyType="next"
+              onSubmitEditing={() => milestoneRefs.current[0]?.focus()}
+              blurOnSubmit={false}
               className={`w-full rounded-xl px-4 py-3 text-leben-text text-[14px] bg-leben-bg-secondary border ${
                 errors.deadline
                   ? "border-leben-error"
@@ -183,10 +197,20 @@ export function AddGoalSheet({ visible, onClose }: AddGoalSheetProps) {
               {form.milestones.map((m, i) => (
                 <TextInput
                   key={i}
+                  ref={(el) => { milestoneRefs.current[i] = el; }}
                   value={m}
                   onChangeText={(text) => updateMilestone(i, text)}
                   placeholder={`Milestone ${i + 1}`}
                   placeholderTextColor="#555"
+                  returnKeyType={i === form.milestones.length - 1 ? "done" : "next"}
+                  onSubmitEditing={() => {
+                    if (i === form.milestones.length - 1) {
+                      handleSubmit();
+                    } else {
+                      milestoneRefs.current[i + 1]?.focus();
+                    }
+                  }}
+                  blurOnSubmit={i === form.milestones.length - 1}
                   className="w-full rounded-xl px-4 py-3 text-leben-text text-[13px] bg-leben-bg-secondary border border-leben-border-subtle"
                 />
               ))}

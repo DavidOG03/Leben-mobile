@@ -3,7 +3,7 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { Text } from "@/components/ui/Text";
 import { scheduleReminder } from "@/hooks/useNotifications";
 import { useLebenStore } from "@/store/useStore";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
 interface AddHabitSheetProps {
@@ -43,6 +43,8 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
   const [color, setColor] = useState(HABIT_COLORS[0]);
   const [reminderAt, setReminderAt] = useState<string | undefined>();
   const [showReminder, setShowReminder] = useState(false);
+
+  const subRef = useRef<TextInput>(null);
 
   const handleAdd = async () => {
     if (!label.trim()) return;
@@ -100,7 +102,11 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
         </Text>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} className="max-h-[85%]">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always"
+        className="max-h-[85%]"
+      >
         <View className="gap-5 pb-8">
           {/* Icon */}
           <View>
@@ -158,6 +164,9 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
               onChangeText={setLabel}
               placeholder="e.g. Cold Shower"
               placeholderTextColor="gray"
+              returnKeyType="next"
+              onSubmitEditing={() => subRef.current?.focus()}
+              blurOnSubmit={false}
               className="bg-leben-bg-secondary border border-leben-border-subtle rounded-xl px-4 py-3 text-leben-text text-[13px] mb-3"
             />
           </View>
@@ -168,10 +177,13 @@ export function AddHabitSheet({ visible, onClose }: AddHabitSheetProps) {
               Target
             </Text>
             <TextInput
+              ref={subRef}
               value={sub}
               onChangeText={setSub}
               placeholder="e.g. 5 mins every morning"
               placeholderTextColor="gray"
+              returnKeyType="done"
+              onSubmitEditing={handleAdd}
               className="bg-leben-bg-secondary border border-leben-border-subtle rounded-xl px-4 py-3 text-leben-text text-[13px] mb-3"
             />
           </View>

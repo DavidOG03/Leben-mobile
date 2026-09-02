@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/images/splash-icon.png",
-      "bundleIdentifier": "com.david.lebenmobile"
+      "bundleIdentifier": "com.david.lebenmobile",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.david.lebenmobile",
@@ -60,7 +63,8 @@
         }
       ],
       "@react-native-community/datetimepicker",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      "expo-background-task"
     ],
     "experiments": {
       "typedRoutes": true,

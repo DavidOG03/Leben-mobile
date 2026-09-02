@@ -59,7 +59,9 @@ export function TodaysFocus() {
       {/* Content */}
       {tasks.length === 0 ? (
         <View className="flex-1 items-center justify-center py-6 gap-3">
-          <Text className="text-leben-text-dim text-2xl font-geist-medium">十</Text>
+          <Text className="text-leben-text-dim text-2xl font-geist-medium">
+            十
+          </Text>
           <Text className="text-leben-text-dim text-xs text-center leading-relaxed font-geist-medium">
             No tasks yet
           </Text>
@@ -86,7 +88,7 @@ export function TodaysFocus() {
                   {/* Checkbox */}
                   <TouchableOpacity
                     onPress={() => handleToggleTask(task.id)}
-                    className={`w-[21px] h-[21px] rounded-[5px] items-center justify-center border ${
+                    className={`w-7 h-7 rounded-[5px] items-center justify-center border ${
                       task.completed
                         ? "border-leben-success bg-leben-success/20"
                         : "border-leben-border bg-leben-bg-secondary"
@@ -94,7 +96,9 @@ export function TodaysFocus() {
                     activeOpacity={0.7}
                   >
                     {task.completed && (
-                      <Text className="text-leben-success text-[10px] font-geist-medium">✓</Text>
+                      <Text className="text-leben-success text-[10px] font-geist-medium">
+                        ✓
+                      </Text>
                     )}
                   </TouchableOpacity>
 
@@ -125,7 +129,9 @@ export function TodaysFocus() {
                       >
                         <Text
                           className={`text-[9px] font-geist-medium tracking-widest ${
-                            isWork ? "text-tag-work-text" : "text-tag-personal-text"
+                            isWork
+                              ? "text-tag-work-text"
+                              : "text-tag-personal-text"
                           }`}
                         >
                           {task.tag}
@@ -167,7 +173,9 @@ export function TodaysFocus() {
                     className="w-7 h-7 rounded-md items-center justify-center ml-0.5"
                     activeOpacity={0.6}
                   >
-                    <Text className="text-red-400 text-[13px] font-geist-medium">🗑</Text>
+                    <Text className="text-red-400 text-[13px] font-geist-medium">
+                      🗑
+                    </Text>
                   </TouchableOpacity>
                 </View>
 
@@ -203,4 +211,3 @@ export function TodaysFocus() {
     </Card>
   );
 }
-
