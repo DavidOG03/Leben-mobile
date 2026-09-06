@@ -48,7 +48,7 @@ export function GoalItem({ goal }: GoalItemProps) {
   };
 
   return (
-    <Card className="p-5 mb-4 bg-leben-bg-card border border-leben-border">
+    <Card className="p-5 mb-4 bg-leben-bg-card border border-leben-border-subtle">
       {/* Header Row */}
       <View className="flex-row items-start justify-between mb-4">
         <View className="w-12 h-12 rounded-xl items-center justify-center border border-leben-border">
@@ -98,7 +98,7 @@ export function GoalItem({ goal }: GoalItemProps) {
       ) : (
         <View className="mb-4">
           <Text className="text-leben-text font-geist-bold text-[20px] tracking-tight leading-tight mb-1">
-            {goal.title}
+            {goal.title ? goal.title.charAt(0).toUpperCase() + goal.title.slice(1) : ""}
           </Text>
           <Text className="text-leben-text-muted text-[11px]">
             Deadline: {goal.deadline}
@@ -229,7 +229,7 @@ export function GoalItem({ goal }: GoalItemProps) {
                       : "text-leben-text-secondary"
                   }`}
                 >
-                  {m.label}
+                  {m.label ? m.label.charAt(0).toUpperCase() + m.label.slice(1) : ""}
                 </Text>
               </TouchableOpacity>
             </View>

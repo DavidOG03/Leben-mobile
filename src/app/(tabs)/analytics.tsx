@@ -3,10 +3,10 @@ import GoalBreakdown from "@/components/analytics/GoalBreakdown";
 import HabitBreakdown from "@/components/analytics/HabitBreakdown";
 import { ProductivityScore } from "@/components/analytics/ProductivityScore";
 import StatCards from "@/components/analytics/StatCards";
-import WeeklyActivityChart from "@/components/analytics/WeeklyActivityChart";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import WeeklyProgress from "@/components/habits/WeeklyProgress";
 import { ScreenLayout } from "@/components/shared/ScreenLayout";
+import { WeeklyProductivity } from "@/components/tasks/WeeklyProductivity";
 import { Text } from "@/components/ui/Text";
 import { useLebenStore } from "@/store/useStore";
 import { buildAnalyticsData } from "@/utils/analytics.utils";
@@ -127,10 +127,11 @@ export default function AnalyticsScreen() {
           <View>
             <StatCards cards={analytics.statCards} />
 
-            <WeeklyActivityChart
+            {/* <WeeklyActivityChart
               data={analytics.weekActivity}
               hasData={analytics.hasTaskData}
-            />
+            /> */}
+            <WeeklyProductivity />
             <WeeklyProgress habits={habits} />
 
             <ProductivityScore

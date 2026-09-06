@@ -25,6 +25,7 @@ export function useAIChatPanel() {
   const addMessage = useAIStore((s) => s.addMessage);
   const isThinking = useAIStore((s) => s.isThinking);
   const setThinking = useAIStore((s) => s.setThinking);
+  const removeMessage = useAIStore((s) => s.removeMessage);
   
   const tasks = useLebenStore((s) => s.tasks);
   const habits = useLebenStore((s) => s.habits);
@@ -42,6 +43,9 @@ export function useAIChatPanel() {
   const removeBook = useLebenStore((s) => s.removeBook);
 
   const [input, setInput] = useState("");
+  const [thinkingStatus, setThinkingStatus] = useState("Thinking...");
+  const [errorState, setErrorState] = useState<{ failedPrompt: string; errorMessage: string } | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [importedMessageIds, setImportedMessageIds] = useState<
     Record<string, boolean>
   >({});
@@ -174,7 +178,7 @@ export function useAIChatPanel() {
         addHabit(habit);
         createdHabitIds.push(habit.id);
       } else if (item.kind === "goal") {
-        const goal = buildGoalDraft(item.text, item.milestones);
+        const goal = buildGoalDraft(item.text, item.milestones, item.deadline);
         addGoal(goal);
         createdGoalTitles.push(goal.title);
       } else if (item.kind === "book") {
@@ -185,9 +189,7 @@ export function useAIChatPanel() {
         const id = Math.random().toString();
         addTask({
           id,
-          title:
-            shortenImportedText(item.text, { maxChars: 52, maxWords: 8 }) ||
-            cleanupImportedText(item.text),
+          title: cleanupImportedText(item.text) || item.text,
           completed: false,
           tag: "WORK",
           priority: "medium",
@@ -234,17 +236,42 @@ export function useAIChatPanel() {
     return counts;
   };
 
-  const importAssistantMessage = (messageId: string, content: string) =>
-    importItems(parseStructuredListItems(content), messageId);
+  const importAssistantMessage = (msgId: string, itemIndex: string | number, item: any) => {
+    const now = new Date().toISOString();
+    
+    if (item.kind === "planner") {
+      const plannerItem = createPlannerItem(item.text);
+      if (plannerItem) setSchedule([...schedule, plannerItem]);
+    } else if (item.kind === "habit") {
+      addHabit(createHabit(item.text));
+    } else if (item.kind === "goal") {
+      addGoal(buildGoalDraft(item.text, item.milestones, item.deadline));
+    } else if (item.kind === "book") {
+      addBook(buildBookDraft(item.text));
+    } else if (item.kind === "task") {
+      addTask({
+        id: Math.random().toString(),
+        title: cleanupImportedText(item.text) || item.text,
+        completed: false,
+        tag: "WORK",
+        priority: "medium",
+        date: now.slice(0, 10),
+        createdAt: now,
+      });
+    }
+
+    setImportedMessageIds(prev => ({
+      ...prev,
+      [`${msgId}-${itemIndex}`]: true
+    }));
+  };
 
   const handleDirectAdd = (kind: ImportKind, text: string) => {
     if (kind === "task") {
       const now = new Date().toISOString();
       addTask({
         id: Math.random().toString(),
-        title:
-          shortenImportedText(text, { maxChars: 52, maxWords: 8 }) ||
-          cleanupImportedText(text),
+        title: cleanupImportedText(text) || text,
         completed: false,
         tag: "WORK",
         priority: "medium",
@@ -324,12 +351,50 @@ export function useAIChatPanel() {
       );
     }
 
+    setErrorState(null);
     setThinking(true);
+
+    const lowerText = trimmedText.toLowerCase();
+    let statuses: string[] = [];
+    if (lowerText.includes("task")) {
+      statuses = ["Analyzing tasks...", "Generating items...", "Prioritizing...", "Structuring...", "Refining...", "Finalizing..."];
+    } else if (lowerText.includes("habit")) {
+      statuses = ["Reviewing habits...", "Generating items...", "Structuring routines...", "Analyzing...", "Refining...", "Finalizing..."];
+    } else if (lowerText.includes("goal")) {
+      statuses = ["Weighing goals...", "Aligning milestones...", "Analyzing...", "Structuring...", "Refining...", "Finalizing..."];
+    } else if (lowerText.includes("plan") || lowerText.includes("schedule")) {
+      statuses = ["Structuring schedule...", "Allocating time...", "Analyzing...", "Optimizing...", "Refining...", "Finalizing..."];
+    } else if (lowerText.includes("book")) {
+      statuses = ["Retrieving books...", "Searching library...", "Analyzing...", "Curating...", "Refining...", "Finalizing..."];
+    } else {
+      statuses = ["Thinking...", "Analyzing...", "Processing...", "Synthesizing...", "Refining...", "Finalizing..."];
+    }
+    
+    setThinkingStatus(statuses[0]);
+
+    const intervalId = setInterval(() => {
+      setThinkingStatus((prev) => {
+        const currentIdx = statuses.indexOf(prev);
+        const nextIdx = currentIdx === -1 ? 0 : (currentIdx + 1) % statuses.length;
+        return statuses[nextIdx];
+      });
+    }, 100);
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     try {
-      const response = await sendAIChat(
+      const responsePromise = sendAIChat(
         [{ role: 'user', content: trimmedText }],
-        { tasks, habits, goals, schedule }
+        { tasks, habits, goals, schedule },
+        controller.signal
       );
+      
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Timeout")), 120000)
+      );
+
+      const response = await Promise.race([responsePromise, timeoutPromise]) as any;
       
       if (response && response.message) {
         addMessage({
@@ -342,11 +407,43 @@ export function useAIChatPanel() {
           }),
         });
       }
-    } catch (error) {
-      console.error(error);
-      postAssistantMessage("Sorry, I encountered an error connecting to the neural engine.");
+    } catch (error: any) {
+      if (error.name === "AbortError" || error.message === "AbortError") {
+        setErrorState({
+          failedPrompt: trimmedText,
+          errorMessage: "AI process was stopped by user.",
+        });
+      } else if (error.message === "Timeout") {
+        setErrorState({
+          failedPrompt: trimmedText,
+          errorMessage: "It took too long to fetch AI message.",
+        });
+      } else {
+        console.error(error);
+        setErrorState({
+          failedPrompt: trimmedText,
+          errorMessage: "Sorry, I encountered an error connecting to the neural engine.",
+        });
+      }
     } finally {
+      if (abortControllerRef.current === controller) {
+        abortControllerRef.current = null;
+      }
+      clearInterval(intervalId);
       setThinking(false);
+    }
+  };
+
+  const abortRequest = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+  };
+
+  const retryRequest = () => {
+    if (errorState?.failedPrompt) {
+      sendMessage(errorState.failedPrompt);
     }
   };
 
@@ -355,8 +452,13 @@ export function useAIChatPanel() {
     input,
     setInput,
     isThinking,
+    thinkingStatus,
+    errorState,
     importedMessageIds,
     sendMessage,
+    removeMessage,
+    abortRequest,
+    retryRequest,
     importAssistantMessage,
   };
 }

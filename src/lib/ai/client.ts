@@ -50,6 +50,7 @@ export interface AISuggestResponse {
 async function generateAIResponse(
   messages: AIChatMessage[],
   expectJson: boolean = false,
+  signal?: AbortSignal,
 ): Promise<string> {
   const openAIKey = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
   const geminiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
@@ -70,6 +71,7 @@ async function generateAIResponse(
           messages,
           response_format: expectJson ? { type: "json_object" } : undefined,
         }),
+        signal,
       });
       if (res.ok) {
         const data = await res.json();
@@ -107,6 +109,7 @@ async function generateAIResponse(
             ? { responseMimeType: "application/json" }
             : undefined,
         }),
+        signal,
       });
       if (res.ok) {
         const data = await res.json();
@@ -134,6 +137,7 @@ async function generateAIResponse(
             messages,
             response_format: expectJson ? { type: "json_object" } : undefined,
           }),
+          signal,
         },
       );
       if (res.ok) {
@@ -160,6 +164,7 @@ async function generateAIResponse(
           messages,
           response_format: expectJson ? { type: "json_object" } : undefined,
         }),
+        signal,
       });
       if (res.ok) {
         const data = await res.json();
@@ -275,6 +280,7 @@ Return ONLY valid JSON in this format:
 export async function sendAIChat(
   messages: AIChatMessage[],
   userContext?: Record<string, unknown>,
+  signal?: AbortSignal,
 ): Promise<AIChatResponse> {
   const store = useLebenStore.getState();
   const state = getUserStateSummary();
@@ -646,9 +652,9 @@ Use STRICT format prefixes — each prefix triggers a different import type in t
     + Morning journaling for 10 minutes
     + 20-minute walk after lunch
 
-  > (angle space)  → GOAL: a goal title, optionally followed by | and comma-separated milestones. E.g.:
-    > Learn Spanish | Complete Duolingo basics, Finish first course, Hold 5-min conversation
-    > Run a 5K | Week 1 run 2km, Week 3 run 4km, Race day
+  > (angle space)  → GOAL: a goal title, optionally followed by | a reasonable YYYY-MM deadline, optionally followed by | and comma-separated milestones. E.g.:
+    > Learn Spanish | 2026-12 | Complete Duolingo basics, Finish first course, Hold 5-min conversation
+    > Run a 5K | 2026-10 | Week 1 run 2km, Week 3 run 4km, Race day
 
   ~ (tilde space)  → BOOK: a book recommendation in "Title by Author" format. E.g.:
     ~ Atomic Habits by James Clear
@@ -677,8 +683,8 @@ Based on your goals and current habits, here's a personalised plan for the week.
 + Read 20 pages before bed
 
 ### Goals
-> Build a consistent fitness routine | Week 1 walk daily, Week 3 add running, Month 2 complete 5K
-> Read 12 books this year | Finish current book, Start next on list, Monthly review
+> Build a consistent fitness routine | 2026-08 | Week 1 walk daily, Week 3 add running, Month 2 complete 5K
+> Read 12 books this year | 2026-12 | Finish current book, Start next on list, Monthly review
 
 ### Book Suggestions
 ~ Atomic Habits by James Clear
@@ -743,7 +749,7 @@ Every recommendation should be personalized using the user's actual data wheneve
     ...messages,
   ];
 
-  const responseText = await generateAIResponse(fullMessages, false);
+  const responseText = await generateAIResponse(fullMessages, false, signal);
   return { message: responseText };
 }
 

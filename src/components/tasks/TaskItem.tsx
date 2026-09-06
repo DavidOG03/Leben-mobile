@@ -97,6 +97,8 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
               onChangeText={setEditTitle}
               onBlur={handleSaveEdit}
               onSubmitEditing={handleSaveEdit}
+              multiline={true}
+              blurOnSubmit={true}
               autoFocus
               className="text-leben-text-2 text-[13px] border-b border-leben-accent py-1"
               style={{ lineHeight: 18 }}
@@ -110,7 +112,7 @@ export function TaskItem({ taskId, isLast }: TaskItemProps) {
                     : "text-leben-text-secondary"
                 }`}
               >
-                {task.title}
+                {task.title ? task.title.charAt(0).toUpperCase() + task.title.slice(1) : ""}
               </Text>
             </TouchableOpacity>
           )}

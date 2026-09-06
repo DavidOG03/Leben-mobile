@@ -7,7 +7,7 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
   const remaining = 2 - taskCount;
 
   return (
-    <View className="flex-col items-center justify-center py-20 px-6 rounded-3xl bg-leben-bg border border-leben-border border-dashed">
+    <View className="flex-col items-center justify-center py-10 px-6 rounded-3xl bg-leben-bg border border-leben-border border-dashed">
       <View className="mb-8 p-6 rounded-full items-center justify-center bg-leben-accent-dim">
         <View
           className="items-center justify-center rounded-2xl bg-leben-bg-element border border-leben-border-subtle"
@@ -49,10 +49,8 @@ export function EmptyPlannerState({ taskCount }: { taskCount: number }) {
           </Text>
         </TouchableOpacity>
 
-        <Text
-          className="text-center text-leben-text-dim text-[11px] font-geist-semibold tracking-[1px] uppercase"
-        >
-          Current tasks: {taskCount} / 3
+        <Text className="text-center text-leben-text-dim text-[11px] font-geist-semibold tracking-[1px] uppercase">
+          Current tasks: {taskCount} / 2
         </Text>
       </View>
     </View>

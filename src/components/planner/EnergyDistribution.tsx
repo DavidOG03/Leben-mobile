@@ -8,13 +8,13 @@ export function EnergyDistribution() {
   const morningTasks = schedule.filter((item) => {
     if (!item.start) return false;
     const hour = parseInt(item.start.split(":")[0]);
-    return hour >= 6 && hour < 12;
+    return hour >= 6 && hour < 10;
   });
 
   const peakTasks = schedule.filter((item) => {
     if (!item.start) return false;
     const hour = parseInt(item.start.split(":")[0]);
-    return hour >= 12 && hour < 18;
+    return hour >= 10 && hour < 18;
   });
 
   const eveningTasks = schedule.filter((item) => {
@@ -39,7 +39,7 @@ export function EnergyDistribution() {
         const pMap: any = { high: 3, medium: 2, low: 1 };
         return (pMap[b.priority] || 0) - (pMap[a.priority] || 0);
       })
-      .slice(0, 3);
+      .slice(0, 5);
   };
 
   const levels = [
@@ -64,10 +64,10 @@ export function EnergyDistribution() {
   ];
 
   return (
-    <View className="rounded-2xl p-6 flex-col gap-6 bg-leben-bg-card border border-leben-border">
-      <View className="flex-row items-center justify-between">
+    <View className="rounded-2xl p-6 flex-col gap-6 bg-leben-bg-card border border-leben-border-subtle">
+      <View className="flex-row items-start justify-between pb-4">
         <Text
-          className="text-leben-text-2 font-geist-semibold pb-4"
+          className="text-leben-text font-geist-semibold "
           style={{ fontSize: 14 }}
         >
           Energy Distribution

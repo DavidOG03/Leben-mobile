@@ -76,15 +76,14 @@ export function GoalProgress() {
             return (
               <View key={g.id}>
                 <View className="flex-row items-center justify-between mb-2">
-                  <View className="flex-row items-center gap-2 max-w-[70%]">
+                  <View className="flex-1 flex-row items-center gap-2 mr-3">
                     <Text className="text-[14px] font-geist-medium">
                       {g.icon}
                     </Text>
                     <Text
-                      className="text-leben-text font-geist-medium text-[13px]"
-                      numberOfLines={1}
+                      className="flex-1 text-leben-text font-geist-medium text-[13px]"
                     >
-                      {g.title}
+                      {g.title ? g.title.charAt(0).toUpperCase() + g.title.slice(1) : ""}
                     </Text>
                   </View>
                   <Text className="text-leben-text-muted font-geist-medium text-[11px]">
@@ -121,9 +120,8 @@ export function GoalProgress() {
                       </View>
                       <Text
                         className={`flex-1 text-[11px] ${m.done ? "text-leben-text-muted" : "text-leben-text-dim"}`}
-                        numberOfLines={1}
                       >
-                        {m.label}
+                        {m.label ? m.label.charAt(0).toUpperCase() + m.label.slice(1) : ""}
                       </Text>
                     </TouchableOpacity>
                   ))}

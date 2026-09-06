@@ -19,12 +19,12 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, TouchableOpacity, View } from "react-native";
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
   Easing,
   cancelAnimation,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
 } from "react-native-reanimated";
 
 export default function PlannerScreen() {
@@ -53,7 +53,7 @@ export default function PlannerScreen() {
       rotation.value = withRepeat(
         withTiming(360, { duration: 1000, easing: Easing.linear }),
         -1,
-        false
+        false,
       );
     } else {
       cancelAnimation(rotation);
@@ -149,7 +149,7 @@ export default function PlannerScreen() {
 
   if (!isAlive) {
     return (
-      <ScreenLayout>
+      <ScreenLayout className="grid place-content-center">
         <EmptyPlannerState taskCount={tasks.length} />
       </ScreenLayout>
     );

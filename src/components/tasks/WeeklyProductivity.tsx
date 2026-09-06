@@ -16,7 +16,11 @@ export function WeeklyProductivity() {
     return Array.from({ length: 7 }, (_, idx) => {
       const date = new Date(today.getTime());
       date.setDate(today.getDate() - (6 - idx));
-      const dateStr = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split("T")[0];
+      const dateStr = new Date(
+        date.getTime() - date.getTimezoneOffset() * 60000,
+      )
+        .toISOString()
+        .split("T")[0];
 
       // Only count tasks that were actually completed on this date
       const completedOnThisDay = tasks.filter(
@@ -73,7 +77,7 @@ export function WeeklyProductivity() {
           />
         </Svg>
       </View>
-      <Text style={{ fontSize: 10, color: "#333333", marginBottom: 16 }}>
+      <Text style={{ fontSize: 10, color: "#858585", marginBottom: 16 }}>
         Tasks completed per day — last 7 days
       </Text>
 
@@ -100,7 +104,7 @@ export function WeeklyProductivity() {
           } else if (ratio <= 0.33) {
             barColor = "#1e2a4a";
           } else if (ratio <= 0.66) {
-            barColor = "#3a3580";
+            barColor = "#3a358070";
           } else {
             barColor = "#5a4fd4";
           }
@@ -132,7 +136,13 @@ export function WeeklyProductivity() {
                     height="100%"
                     viewBox="0 0 1 1"
                     preserveAspectRatio="none"
-                    style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                    }}
                   >
                     <Defs>
                       <LinearGradient
@@ -146,7 +156,11 @@ export function WeeklyProductivity() {
                         <Stop offset="1" stopColor="#6b7fff" />
                       </LinearGradient>
                     </Defs>
-                    <Rect width="1" height="1" fill={`url(#todayGrad-prod-${d.date})`} />
+                    <Rect
+                      width="1"
+                      height="1"
+                      fill={`url(#todayGrad-prod-${d.date})`}
+                    />
                   </Svg>
                 )}
               </View>

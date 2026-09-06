@@ -103,8 +103,8 @@ export function HabitStreaks() {
             return (
               <View key={h.id}>
                 <View className="flex-row items-center justify-between">
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-9 h-9 rounded-lg items-center justify-center border border-leben-border-subtle bg-leben-bg-secondary">
+                  <View className="flex-1 flex-row items-center gap-3 mr-3">
+                    <View className="w-9 h-9 shrink-0 rounded-lg items-center justify-center border border-leben-border-subtle bg-leben-bg-secondary">
                       <Text
                         style={{ color: h.color, fontSize: 18 }}
                         className="font-geist-medium"
@@ -112,9 +112,9 @@ export function HabitStreaks() {
                         {h.icon}
                       </Text>
                     </View>
-                    <View className="gap-1">
+                    <View className="flex-1 gap-1">
                       <Text className="text-leben-text font-geist-medium text-[13px]">
-                        {h.label}
+                        {h.label ? h.label.charAt(0).toUpperCase() + h.label.slice(1) : ""}
                       </Text>
                       <Text className="text-leben-text-dim text-[11px] font-geist-medium">
                         🔥 {displayStreak} day streak
@@ -122,7 +122,7 @@ export function HabitStreaks() {
                     </View>
                   </View>
 
-                  <View className="flex-row items-center gap-2">
+                  <View className="flex-row shrink-0 items-center gap-2">
                     <TouchableOpacity
                       onPress={() =>
                         setReminderHabit(reminderHabit === h.id ? null : h.id)

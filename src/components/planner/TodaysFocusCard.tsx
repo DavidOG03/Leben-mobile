@@ -12,7 +12,7 @@ interface TodaysFocusCardProps {
 
 export function TodaysFocusCard({ focusItems }: TodaysFocusCardProps) {
   return (
-    <View className="rounded-2xl p-6 flex-col gap-5 bg-leben-bg-card border border-leben-border">
+    <View className="rounded-2xl p-6 flex-col gap-5 bg-leben-bg-card border border-leben-border-subtle">
       <Text className="text-leben-text font-geist-semibold text-[14px]">
         Today's Focus
       </Text>

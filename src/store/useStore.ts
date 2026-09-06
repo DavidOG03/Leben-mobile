@@ -8,6 +8,8 @@ import AsyncStorage        from '@react-native-async-storage/async-storage';
 import {
   fetchTasks, insertTask, updateTask, deleteTask,
   fetchHabits, insertHabit, updateHabit, removeHabit,
+  insertGoal, updateGoal, deleteGoal,
+  insertBook, updateBookDb, deleteBook,
   fetchProductivityHistory, upsertProductivityHistory,
   upsertNotificationPrefs,
   purgeAllData,
@@ -283,10 +285,12 @@ export const useLebenStore = create<LebenStore>()(
               case 'updateHabit': await updateHabit(mutation.args[0], mutation.args[1]); break;
               case 'removeHabit': await removeHabit(mutation.args[0]); break;
               case 'upsertProductivityHistory': await upsertProductivityHistory(mutation.args[0], mutation.args[1], mutation.args[2]); break;
-              // Goal slice and Book slice mutations (will implement their db updates below)
-              // case 'insertGoal': await insertGoal(mutation.args[0]); break; // Wait, these are in goalSlice
-              // case 'updateGoal': await updateGoal(mutation.args[0], mutation.args[1]); break;
-              // case 'deleteGoal': await deleteGoal(mutation.args[0]); break;
+              case 'insertGoal': await insertGoal(mutation.args[0]); break;
+              case 'updateGoal': await updateGoal(mutation.args[0], mutation.args[1]); break;
+              case 'deleteGoal': await deleteGoal(mutation.args[0]); break;
+              case 'insertBook': await insertBook(mutation.args[0]); break;
+              case 'updateBook': await updateBookDb(mutation.args[0], mutation.args[1]); break;
+              case 'deleteBook': await deleteBook(mutation.args[0]); break;
             }
             // Remove from queue on success
             set((s) => ({ offlineQueue: s.offlineQueue.filter(m => m.id !== mutation.id) }));

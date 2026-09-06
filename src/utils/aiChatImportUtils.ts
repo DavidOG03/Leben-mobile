@@ -16,34 +16,12 @@ const HABIT_REGEX   = /^\+\s+(.+)$/;
 const GOAL_REGEX    = /^>\s+(.+)$/;
 const BOOK_REGEX    = /^~\s+(.+)$/;
 const HEADING_REGEX = /^(#{1,6})\s+(.+)$/;
+const GENERIC_LIST_REGEX = /^([*•]|\d+\.)\s+(.+)$/;
 
 // Legacy planner regex kept for parsePlannerLine only
 const MONTH_PATTERN =
   "(jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december)";
 
-const SECTION_KIND_KEYWORDS: Record<ImportKind, string[]> = {
-  task: [
-    "task",
-    "tasks",
-    "todo",
-    "to do",
-    "action",
-    "actions",
-    "next step",
-    "next steps",
-  ],
-  habit: ["habit", "habits", "routine", "routines", "ritual", "rituals"],
-  goal: ["goal", "goals", "objective", "objectives", "target", "targets"],
-  book: ["book", "books", "reading", "read", "recommend"],
-  planner: [
-    "planner",
-    "schedule",
-    "timeline",
-    "plan",
-    "time block",
-    "time-block",
-  ],
-};
 
 export const normalizeText = (text: string) =>
   text
@@ -63,13 +41,17 @@ export const stripMarkdownFormatting = (text: string) =>
     .replace(/^#+\s*/g, "")
     .trim();
 
-export const cleanupImportedText = (text: string) =>
-  stripMarkdownFormatting(text)
+export const cleanupImportedText = (text: string) => {
+  const cleaned = stripMarkdownFormatting(text)
     .replace(/\s+/g, " ")
     .replace(/\s*([:;,.!?])\s*/g, "$1 ")
     .replace(/\s+\)/g, ")")
     .replace(/\(\s+/g, "(")
     .trim();
+    
+  if (!cleaned) return cleaned;
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+};
 
 const makePersonalPhrase = (text: string) => {
   const cleaned = cleanupImportedText(text)
@@ -150,14 +132,13 @@ export const parsePlannerLine = (text: string) => {
   return {
     start,
     end,
-    title:
-      shortenImportedText(rawTitle, { maxChars: 44, maxWords: 6 }) || rawTitle,
+    title: rawTitle,
     description:
       split.length > 1
         ? cleanupImportedText(
             remainder.slice(rawTitle.length).replace(/^\s*[:â€”â€“-]\s*/, ""),
           )
-        : `Work on ${shortenImportedText(rawTitle, { maxChars: 44, maxWords: 6 }) || rawTitle}.`,
+        : `Work on ${rawTitle}.`,
   };
 };
 
@@ -186,14 +167,29 @@ export const parseStructuredListItems = (
       continue;
     }
 
-    // Goal: > text | milestone1, milestone2
+    // Goal: > text | YYYY-MM | milestone1, milestone2
     const goalMatch = trimmed.match(GOAL_REGEX);
     if (goalMatch) {
-      const [goalTitle, milestonePart] = goalMatch[1].split("|").map((s) => s.trim());
+      const parts = goalMatch[1].split("|").map((s) => s.trim());
+      const goalTitle = parts[0];
+      let deadline = "";
+      let milestonePart = "";
+
+      if (parts.length >= 3) {
+        deadline = parts[1];
+        milestonePart = parts.slice(2).join("|");
+      } else if (parts.length === 2) {
+        if (/^\d{4}-\d{2}$/.test(parts[1])) {
+          deadline = parts[1];
+        } else {
+          milestonePart = parts[1];
+        }
+      }
+
       const milestones = milestonePart
         ? milestonePart.split(",").map((m) => m.trim()).filter(Boolean)
         : [];
-      items.push({ raw: trimmed, text: goalTitle, section: null, kind: "goal", milestones });
+      items.push({ raw: trimmed, text: goalTitle, section: null, kind: "goal", milestones, deadline });
       continue;
     }
 
@@ -210,7 +206,7 @@ export const parseStructuredListItems = (
 
 export const parseAssistantContent = (content: string): MessageBlock[] => {
   const blocks: MessageBlock[] = [];
-  let currentItems: Array<{ text: string; kind: ImportKind; milestones?: string[] }> = [];
+  let currentItems: Array<{ text: string; kind: ImportKind; milestones?: string[]; deadline?: string; bullet?: string }> = [];
 
   const flushList = () => {
     if (currentItems.length > 0) {
@@ -248,14 +244,29 @@ export const parseAssistantContent = (content: string): MessageBlock[] => {
       continue;
     }
 
-    // Goal: > text | milestone1, milestone2
+    // Goal: > text | YYYY-MM | milestone1, milestone2
     const goalMatch = trimmed.match(GOAL_REGEX);
     if (goalMatch) {
-      const [goalTitle, milestonePart] = goalMatch[1].split("|").map((s) => s.trim());
+      const parts = goalMatch[1].split("|").map((s) => s.trim());
+      const goalTitle = parts[0];
+      let deadline = "";
+      let milestonePart = "";
+
+      if (parts.length >= 3) {
+        deadline = parts[1];
+        milestonePart = parts.slice(2).join("|");
+      } else if (parts.length === 2) {
+        if (/^\d{4}-\d{2}$/.test(parts[1])) {
+          deadline = parts[1];
+        } else {
+          milestonePart = parts[1];
+        }
+      }
+
       const milestones = milestonePart
         ? milestonePart.split(",").map((m) => m.trim()).filter(Boolean)
         : [];
-      currentItems.push({ text: goalTitle, kind: "goal", milestones });
+      currentItems.push({ text: goalTitle, kind: "goal", milestones, deadline });
       continue;
     }
 
@@ -263,6 +274,13 @@ export const parseAssistantContent = (content: string): MessageBlock[] => {
     const bookMatch = trimmed.match(BOOK_REGEX);
     if (bookMatch) {
       currentItems.push({ text: bookMatch[1].trim(), kind: "book" });
+      continue;
+    }
+
+    // Generic list: * text, • text, 1. text
+    const genericListMatch = trimmed.match(GENERIC_LIST_REGEX);
+    if (genericListMatch) {
+      currentItems.push({ text: genericListMatch[2].trim(), kind: "unknown", bullet: genericListMatch[1] });
       continue;
     }
 
@@ -383,13 +401,13 @@ export const getImportStateKey = (messageId: string, kinds?: ImportKind[]) =>
 export const resolveImportKinds = (detected: ImportKind[]): ImportKind[] => detected;
 
 export const buildHabitDraft = (text: string) => {
-  const label = shortenImportedText(text, { maxChars: 44, maxWords: 6 }) || text;
+  const label = cleanupImportedText(text) || text;
   return { label, sub: "Daily Habit" };
 }
 
-export const buildGoalDraft = (text: string, milestones?: string[]): GoalFormData => {
-  const title = shortenImportedText(text, { maxChars: 44, maxWords: 6 }) || text;
-  return { title, targetValue: 10, currentValue: 0, deadline: "", icon: "🎯", color: "#4a90d9", milestones: milestones ?? [] };
+export const buildGoalDraft = (text: string, milestones?: string[], deadline?: string): GoalFormData => {
+  const title = cleanupImportedText(text) || text;
+  return { title, targetValue: 10, currentValue: 0, deadline: deadline ?? "", icon: "🎯", color: "#4a90d9", milestones: milestones ?? [] };
 };
 
 export const buildBookDraft = (text: string) => {

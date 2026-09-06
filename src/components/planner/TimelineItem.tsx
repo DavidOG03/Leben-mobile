@@ -42,20 +42,11 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
 
       {/* Card */}
       <View
-        className={`flex-1 rounded-2xl p-5 border ${isCurrent ? "bg-leben-accent-dim border-leben-accent/50" : "bg-leben-bg-card border-leben-border"}`}
+        className={`flex-1 rounded-2xl p-5 border ${isCurrent ? "bg-leben-accent-dim border-leben-accent/50" : "bg-leben-bg-card border-leben-border-subtle"}`}
       >
         <View className="flex-row items-start justify-between mb-4">
           <View className="flex-col gap-1 flex-1 pr-2">
             <View className="flex-row items-center gap-2">
-              <View
-                className={`px-2 py-0.5 rounded border ${isDeepWork ? "bg-leben-accent border-leben-accent" : isRecharge ? "bg-leben-success border-leben-success" : "bg-tag-personal-text border-leben-border"}`}
-              >
-                <Text
-                  className={`font-geist-bold uppercase tracking-widest text-[9px] ${isDeepWork || isRecharge ? "text-white" : "text-white"}`}
-                >
-                  {item.tag}
-                </Text>
-              </View>
               {item.reminderAt && (
                 <View className="flex-row items-center gap-1">
                   <BellIcon color="currentColor" size={9} />
@@ -93,21 +84,22 @@ export function TimelineItem({ item, isCurrent }: TimelineItemProps) {
           {item.description}
         </Text>
 
-        <View className="flex-row gap-2 mt-5">
-          <View className="px-3 py-1 rounded-full bg-leben-bg-secondary border border-leben-border">
+        <View className="flex-row items-center gap-2 mt-5">
+          <View
+            className={`px-2 py-0.5 rounded border ${isDeepWork ? "bg-leben-accent border-leben-accent" : isRecharge ? "bg-leben-success border-leben-success" : "bg-tag-personal-text border-leben-border"}`}
+          >
             <Text
-              className="text-leben-text-2 font-geist-medium"
-              style={{ fontSize: 10 }}
+              className={`font-geist-bold uppercase tracking-widest text-[9px] ${isDeepWork || isRecharge ? "text-white" : "text-white"}`}
             >
               {item.tag}
             </Text>
           </View>
-          <View className="px-3 py-1 rounded-full bg-leben-bg-secondary border border-leben-border">
+          <View className="px-3 py-1 rounded-full bg-leben-bg-secondary border border-leben-accent-90">
             <Text
               className="text-leben-text-2 font-geist-medium"
               style={{ fontSize: 10 }}
             >
-              {item.priority?.toUpperCase() || "MEDIUM"}
+              {item.priority?.toUpperCase() || "MEDIUM"} PRIORITY
             </Text>
           </View>
         </View>

@@ -18,6 +18,7 @@ export default function BookCard({ book }: BookCardProps) {
   const [editingDetails, setEditingDetails] = useState(false);
   const [editTitle, setEditTitle] = useState(book.title);
   const [editAuthor, setEditAuthor] = useState(book.author);
+  const [editTotalPages, setEditTotalPages] = useState(String(book.totalPages));
 
   const pct = Math.min(
     100,
@@ -39,18 +40,22 @@ export default function BookCard({ book }: BookCardProps) {
   };
 
   const handleSaveDetails = () => {
-    updateBook(book.id, { title: editTitle, author: editAuthor });
+    updateBook(book.id, {
+      title: editTitle,
+      author: editAuthor,
+      totalPages: Math.max(1, parseInt(editTotalPages) || 300),
+    });
     setEditingDetails(false);
   };
 
   return (
-    <View className="rounded-2xl p-5 bg-leben-bg-card border border-leben-border-subtle">
+    <View className="rounded-2xl p-4 bg-leben-bg-card border border-leben-border-subtle">
       <View className="flex-row items-start justify-between mb-4">
         <View
           className="items-center justify-center rounded-xl"
           style={{
-            width: 44,
-            height: 44,
+            width: 40,
+            height: 40,
             backgroundColor: `${book.coverColor}22`,
             borderWidth: 1,
             borderColor: `${book.coverColor}33`,
@@ -87,6 +92,15 @@ export default function BookCard({ book }: BookCardProps) {
             className="rounded-lg px-3 py-1.5 text-leben-text text-[11px] bg-leben-bg-secondary border"
             style={{ borderColor: `${book.coverColor}55` }}
             placeholder="Author"
+            placeholderTextColor="#666"
+          />
+          <TextInput
+            value={editTotalPages}
+            onChangeText={setEditTotalPages}
+            keyboardType="numeric"
+            className="rounded-lg px-3 py-1.5 text-leben-text text-[11px] bg-leben-bg-secondary border"
+            style={{ borderColor: `${book.coverColor}55` }}
+            placeholder="Total Pages"
             placeholderTextColor="#666"
           />
           <TouchableOpacity

@@ -134,7 +134,7 @@ export function HabitItem({ habit }: HabitItemProps) {
       ) : (
         <>
           <Text className="text-[15px] font-geist-bold text-leben-text mb-0.5">
-            {habit.label}
+            {habit.label ? habit.label.charAt(0).toUpperCase() + habit.label.slice(1) : ""}
           </Text>
           <Text className="text-[11px] text-leben-text-secondary mb-1">
             {habit.sub}
@@ -171,7 +171,7 @@ export function HabitItem({ habit }: HabitItemProps) {
             backgroundColor: isCheckedToday
               ? `${habit.color}22`
               : "transparent",
-            borderColor: isCheckedToday ? habit.color : "#33333335",
+            borderColor: isCheckedToday ? habit.color : "#333333",
           }}
           activeOpacity={0.7}
         >

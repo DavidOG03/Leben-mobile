@@ -71,19 +71,13 @@ const ReadingTracker: React.FC<ReadingTrackerProps> = ({
           </View>
         </View>
       ) : (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          className="-mx-4 px-4"
-        >
-          <View className="flex-row gap-4 pr-8">
-            {books.map((book: Book) => (
-              <View key={book.id} style={{ width: 220 }}>
-                <BookCard book={book} />
-              </View>
-            ))}
-          </View>
-        </ScrollView>
+        <View className="flex-row flex-wrap justify-between gap-y-4">
+          {books.map((book: Book) => (
+            <View key={book.id} style={{ width: "48%" }}>
+              <BookCard book={book} />
+            </View>
+          ))}
+        </View>
       )}
     </View>
   );

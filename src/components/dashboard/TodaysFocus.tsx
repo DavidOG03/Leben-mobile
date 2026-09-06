@@ -109,12 +109,8 @@ export function TodaysFocus() {
                         ? "text-leben-text-dim line-through"
                         : "text-leben-text-secondary"
                     }`}
-                    numberOfLines={1}
                   >
-                    {/* {truncateWords(task.title, 4)} */}
-                    {task.title.length > 25
-                      ? `${task.title.substring(0, 25)}...`
-                      : task.title}
+                    {task.title ? task.title.charAt(0).toUpperCase() + task.title.slice(1) : ""}
                   </Text>
 
                   {/* Right side: Tag + Date */}

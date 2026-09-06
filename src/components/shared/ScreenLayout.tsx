@@ -1,19 +1,21 @@
 // components/shared/ScreenLayout.tsx
-import { View, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
+import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface ScreenLayoutProps {
-  children:  ReactNode;
+  children: ReactNode;
   scrollable?: boolean;
-  className?:  string;
+  className?: string;
 }
 
-export function ScreenLayout({ children, scrollable = true, className = '' }: ScreenLayoutProps) {
+export function ScreenLayout({
+  children,
+  scrollable = true,
+  className = "",
+}: ScreenLayoutProps) {
   const content = (
-    <View className={`flex-1 bg-leben-bg ${className}`}>
-      {children}
-    </View>
+    <View className={`flex-1 bg-leben-bg px-4 ${className}`}>{children}</View>
   );
 
   return (
@@ -27,7 +29,9 @@ export function ScreenLayout({ children, scrollable = true, className = '' }: Sc
         >
           {content}
         </ScrollView>
-      ) : content}
+      ) : (
+        content
+      )}
     </SafeAreaView>
   );
 }

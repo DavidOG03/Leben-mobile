@@ -1,5 +1,6 @@
 import { Text } from "@/components/ui/Text";
 import { useAIChatPanel } from "@/hooks/useAIChatPanel";
+import { useColorScheme } from "nativewind";
 import { useRef } from "react";
 import {
   KeyboardAvoidingView,
@@ -9,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useColorScheme } from "nativewind";
 import { SendIcon } from "../../constants/Icons";
 import AIChatMessages from "./AIChatMessages";
 
@@ -26,8 +26,13 @@ export default function AIChatPanel() {
     input,
     setInput,
     isThinking,
+    thinkingStatus,
+    errorState,
     importedMessageIds,
     sendMessage,
+    removeMessage,
+    abortRequest,
+    retryRequest,
     importAssistantMessage,
   } = useAIChatPanel();
 
@@ -44,9 +49,13 @@ export default function AIChatPanel() {
         <AIChatMessages
           messages={messages}
           isThinking={isThinking}
+          thinkingStatus={thinkingStatus}
           importedMessageIds={importedMessageIds}
           onImport={importAssistantMessage}
           scrollViewRef={scrollViewRef}
+          errorState={errorState}
+          retryRequest={retryRequest}
+          onDeleteMessage={removeMessage}
         />
       </View>
 
@@ -76,33 +85,46 @@ export default function AIChatPanel() {
             value={input}
             onChangeText={setInput}
             placeholder="Ask me anything..."
-            placeholderTextColor={colorScheme === "dark" ? "#888899" : "#888899"}
+            placeholderTextColor={
+              colorScheme === "dark" ? "#888899" : "#888899"
+            }
             multiline
-            className="flex-1 text-leben-text-2 text-[14px] max-h-32 py-2"
+            className="flex-1 text-leben-text text-[14px] max-h-32 py-2"
           />
-          <TouchableOpacity
-            onPress={() => sendMessage(input)}
-            disabled={!input.trim() || isThinking}
-            className={`w-9 h-9 rounded-xl items-center justify-center border ${
-              input.trim()
-                ? "bg-leben-accent-dim border-leben-accent/40"
-                : "bg-leben-bg-element border-leben-border-subtle"
-            }`}
-            style={{
-              opacity: input.trim() && !isThinking ? 1 : 0.5,
-            }}
-          >
-            <Text className="text-leben-text text-lg leading-none mt-[-2px]">
-              <SendIcon 
-                color={
-                  input.trim() 
-                    ? "#6b7fff" 
-                    : colorScheme === "dark" ? "#a0a0b0" : "#707080"
-                } 
-                size={16} 
-              />
-            </Text>
-          </TouchableOpacity>
+          {isThinking ? (
+            <TouchableOpacity
+              onPress={abortRequest}
+              className="w-9 h-9 rounded-xl items-center justify-center border bg-red-900/30 border-red-500"
+            >
+              <View className="w-2.5 h-2.5 bg-red-500 rounded-sm" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => sendMessage(input)}
+              disabled={!input.trim()}
+              className={`w-9 h-9 rounded-xl items-center justify-center border ${
+                input.trim()
+                  ? "bg-leben-accent-dim border-leben-accent/40"
+                  : "bg-leben-bg-element border-leben-border-subtle"
+              }`}
+              style={{
+                opacity: input.trim() ? 1 : 0.5,
+              }}
+            >
+              <Text className="text-leben-text text-lg leading-none mt-[-2px]">
+                <SendIcon
+                  color={
+                    input.trim()
+                      ? "#6b7fff"
+                      : colorScheme === "dark"
+                        ? "#a0a0b0"
+                        : "#707080"
+                  }
+                  size={16}
+                />
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </KeyboardAvoidingView>
