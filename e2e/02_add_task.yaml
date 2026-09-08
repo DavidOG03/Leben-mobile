@@ -1,0 +1,14 @@
+# Leben - Add Task Flow
+# Tests: Navigate to tasks tab → add a new task → verify it appears in the list
+appId: com.leben.mobile
+---
+- launchApp
+- tapOn: "Continue as Guest"
+- tapOn:
+    id: "tab-tasks"
+- assertVisible: "Tasks"
+- tapOn:
+    id: "add-task-button"
+- inputText: "Write unit tests"
+- tapOn: "Save"
+- assertVisible: "Write unit tests"
