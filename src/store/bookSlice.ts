@@ -73,8 +73,13 @@ export function createBookSlice(
         set(() => ({ booksLoaded: true }));
         return;
       }
-      const books = await fetchBooks();
-      set(() => ({ books, booksLoaded: true }));
+      const cloudBooks = await fetchBooks();
+      const localBooks = get().books;
+      const mergedBooks = [
+        ...localBooks.filter((b: Book) => !cloudBooks.some(c => c.id === b.id)),
+        ...cloudBooks
+      ];
+      set(() => ({ books: mergedBooks, booksLoaded: true }));
     },
 
     addBook: async (data: BookFormData) => {

@@ -204,6 +204,7 @@ function renderAssistantMessage(
       >
         {block.content.map((line: string, lineIndex: number) => (
           <React.Fragment key={`line-${index}-${lineIndex}`}>
+            {lineIndex > 0 ? "\n" : ""}
             {renderInlineFormatting(line)}
           </React.Fragment>
         ))}

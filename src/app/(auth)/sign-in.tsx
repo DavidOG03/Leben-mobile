@@ -87,7 +87,7 @@ export default function SignInScreen() {
 
         if (error) throw error;
       } else {
-        throw new Error("No ID token returned from Google Sign-In.");
+        throw new Error("Google Sign-In was interrupted or failed to authenticate. Please try again.");
       }
     } catch (err: any) {
       if (err.code === statusCodes.SIGN_IN_CANCELLED) {

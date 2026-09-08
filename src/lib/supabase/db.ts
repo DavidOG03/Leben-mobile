@@ -158,7 +158,7 @@ export async function insertTask(task: Task): Promise<void> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) throw new Error("guest_mode");
   const dbRow = mapTaskToDB(task);
   const { error } = await supabase
     .from("tasks")
@@ -195,7 +195,7 @@ export async function insertHabit(habit: Habit): Promise<void> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) throw new Error("guest_mode");
   const dbRow = mapHabitToDB(habit);
   const { error } = await supabase
     .from("habits")
@@ -235,7 +235,7 @@ export async function insertGoal(goal: Goal): Promise<void> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) throw new Error("guest_mode");
   const dbRow = mapGoalToDB(goal);
   const { error } = await supabase
     .from("goals")
@@ -275,7 +275,7 @@ export async function insertBook(book: Book): Promise<void> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) throw new Error("guest_mode");
   const dbRow = mapBookToDB(book);
   const { error } = await supabase
     .from("books")
@@ -324,7 +324,7 @@ export async function upsertProductivityHistory(
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) throw new Error("guest_mode");
   const { error } = await supabase
     .from("productivity_history")
     .upsert(
@@ -343,7 +343,7 @@ export async function savePushToken(
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) throw new Error("guest_mode");
   const { error } = await supabase
     .from("push_tokens")
     .upsert({ user_id: user.id, token, platform }, { onConflict: "user_id" });
@@ -358,7 +358,7 @@ export async function upsertNotificationPrefs(
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) throw new Error("guest_mode");
   const { error } = await supabase
     .from("notification_prefs")
     .upsert(
@@ -382,7 +382,7 @@ export async function purgeAllData(): Promise<void> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) throw new Error("guest_mode");
   for (const table of [
     "tasks",
     "habits",

@@ -18,13 +18,13 @@ export default function GoalsScreen() {
             <Text className="text-leben-text font-geist-bold text-3xl tracking-tight leading-tight mb-1">
               Goals
             </Text>
-            <Text className="text-leben-text-muted text-[13px]">
+            <Text className="text-leben-text-muted text-[13px] max-w-[250px]">
               Visualize and execute your long-term ambitions.
             </Text>
           </View>
           <TouchableOpacity
             onPress={() => setShowAddSheet(true)}
-            className="flex flex-row items-center justify-center gap-2 rounded-full bg-leben-accent active:opacity-80 px-4 py-2"
+            className="flex flex-row items-center justify-center gap-2 rounded-xl bg-leben-accent active:opacity-80 px-4 py-2"
           >
             <Text className="text-white text-sm leading-none font-geist-light">
               + Add Goal

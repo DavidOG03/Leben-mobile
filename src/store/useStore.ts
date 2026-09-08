@@ -9,7 +9,7 @@ import {
   fetchTasks, insertTask, updateTask, deleteTask,
   fetchHabits, insertHabit, updateHabit, removeHabit,
   insertGoal, updateGoal, deleteGoal,
-  insertBook, updateBookDb, deleteBook,
+  insertBook, updateBook as updateBookDb, deleteBook,
   fetchProductivityHistory, upsertProductivityHistory,
   upsertNotificationPrefs,
   purgeAllData,
@@ -263,8 +263,13 @@ export const useLebenStore = create<LebenStore>()(
       
       processOfflineQueue: async () => {
         const state = get();
-        if (state.offlineQueue.length === 0) return;
+        if (state.isSyncing || state.offlineQueue.length === 0) return;
         
+        if (!state.userId) {
+          get().addToast({ message: "Can't sync in guest mode. Create an account to sync!", type: 'info' });
+          return;
+        }
+
         set({ isSyncing: true });
         
         // Show syncing toast
@@ -348,8 +353,14 @@ export const useLebenStore = create<LebenStore>()(
           set({ tasksLoaded: true });
           return;
         }
-        const tasks = await fetchTasks();
-        set({ tasks });
+        const cloudTasks = await fetchTasks();
+        const localTasks = get().tasks;
+        const mergedTasks = [
+          ...localTasks.filter(t => !cloudTasks.some(c => c.id === t.id)),
+          ...cloudTasks
+        ];
+        
+        set({ tasks: mergedTasks });
         await get().cleanStaleTasks();
         set({ tasksLoaded: true });
       },
@@ -441,8 +452,13 @@ export const useLebenStore = create<LebenStore>()(
           set({ habitsLoaded: true });
           return;
         }
-        const habits = await fetchHabits();
-        set({ habits, habitsLoaded: true });
+        const cloudHabits = await fetchHabits();
+        const localHabits = get().habits;
+        const mergedHabits = [
+          ...localHabits.filter(h => !cloudHabits.some(c => c.id === h.id)),
+          ...cloudHabits
+        ];
+        set({ habits: mergedHabits, habitsLoaded: true });
       },
 
       addHabit: async (habit) => {
@@ -555,8 +571,13 @@ export const useLebenStore = create<LebenStore>()(
       // ── Productivity History ──────────────────────────────────────────────────
       loadHistory: async () => {
         if (get().historyLoaded) return;
-        const history = await fetchProductivityHistory();
-        set({ productivityHistory: history, historyLoaded: true });
+        const cloudHistory = await fetchProductivityHistory();
+        const localHistory = get().productivityHistory || {};
+        const mergedHistory = { ...localHistory };
+        for (const [date, data] of Object.entries(cloudHistory)) {
+          mergedHistory[date] = data; // Cloud wins on conflict
+        }
+        set({ productivityHistory: mergedHistory, historyLoaded: true });
       },
 
       updateHistoryDelta: async (date, completedDelta, totalDelta) => {

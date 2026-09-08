@@ -9,23 +9,6 @@ export function HabitList() {
   if (habits.length === 0) {
     return (
       <View className="rounded-2xl border border-leben-border bg-leben-bg-secondary overflow-hidden">
-        {/* Ghost preview rows */}
-        <View style={{ flexDirection: "row", gap: 12, padding: 16 }}>
-          {[1, 1].map((op, i) => (
-            <View
-              key={i}
-              style={{
-                flex: 1,
-                height: 80,
-                borderRadius: 12,
-                backgroundColor: `rgba(255,255,255,${op * 0.03})`,
-                borderWidth: 1,
-                borderColor: `rgba(255,255,255,${op * 0.04})`,
-              }}
-            />
-          ))}
-        </View>
-
         {/* Empty state */}
         <View className="items-center justify-center py-8 gap-2 border-t border-leben-border">
           <Text className="text-[28px]">🌱</Text>
@@ -33,7 +16,7 @@ export function HabitList() {
             No habits yet
           </Text>
           <Text className="text-[12px] text-leben-text-dim text-center leading-[20px]">
-            Tap the + button above{"\n"}to build your first ritual.
+            Tap + Add Habit above{"\n"}to build your first ritual.
           </Text>
         </View>
       </View>

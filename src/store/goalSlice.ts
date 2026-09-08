@@ -40,8 +40,13 @@ export function createGoalSlice(
         set(() => ({ goalsLoaded: true }));
         return;
       }
-      const goals = await fetchGoals();
-      set(() => ({ goals, goalsLoaded: true }));
+      const cloudGoals = await fetchGoals();
+      const localGoals = get().goals;
+      const mergedGoals = [
+        ...localGoals.filter((g: Goal) => !cloudGoals.some(c => c.id === g.id)),
+        ...cloudGoals
+      ];
+      set(() => ({ goals: mergedGoals, goalsLoaded: true }));
     },
 
     addGoal: async (data) => {

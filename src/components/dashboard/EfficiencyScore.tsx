@@ -173,7 +173,9 @@ export function EfficiencyScore() {
 
     // ── Rating: relative when baseline exists, absolute as fallback ──────────
     let rating: string;
-    if (delta !== null) {
+    if (currentScore < 15) {
+      rating = "Stale";
+    } else if (delta !== null) {
       if (delta > 15) rating = "Surging";
       else if (delta > 5) rating = "Improving";
       else if (delta >= -5) rating = "Consistent";
@@ -188,14 +190,14 @@ export function EfficiencyScore() {
     }
 
     // Colour cue for the rating badge
-    const ratingColor =
-      delta !== null
-        ? delta > 5
-          ? "#22c55e"
-          : delta < -5
-            ? "#ef4444"
-            : "#7c6af0"
-        : "#7c6af0";
+    let ratingColor: string;
+    if (currentScore < 15) {
+      ratingColor = "#ef4444";
+    } else if (delta !== null) {
+      ratingColor = delta > 5 ? "#22c55e" : delta < -5 ? "#ef4444" : "#7c6af0";
+    } else {
+      ratingColor = "#7c6af0";
+    }
 
     return {
       score: Math.round(currentScore),
@@ -390,11 +392,13 @@ export function EfficiencyScore() {
           {/* Delta vs personal baseline */}
           {analytics.delta !== null ? (
             <Text className="text-leben-text-dim text-[11px] text-center leading-relaxed font-geist-medium">
-              {analytics.delta > 5
-                ? "You're outperforming your usual pace.\n"
-                : analytics.delta < -5
-                  ? "You're falling behind your usual pace.\n"
-                  : "You're right on track with your usual pace.\n"}
+              {analytics.rating === "Stale"
+                ? "Your productivity has been stale lately.\n"
+                : analytics.delta > 5
+                  ? "You're outperforming your usual pace.\n"
+                  : analytics.delta < -5
+                    ? "You're falling behind your usual pace.\n"
+                    : "You're right on track with your usual pace.\n"}
               <Text className="opacity-70 text-[10px]">
                 This week: {analytics.score}% • Your avg:{" "}
                 {analytics.baselineAvg}%

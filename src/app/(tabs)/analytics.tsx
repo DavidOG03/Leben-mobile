@@ -72,8 +72,7 @@ export default function AnalyticsScreen() {
                 <Text className="text-leben-accent">Metrics.</Text>
               </Text>
               <Text className="text-center mt-2 text-leben-text-muted text-[15px] leading-[22px]">
-                Sign in to unlock long-term trends, efficiency correlations, and
-                predictive analytics based on your historical behavior.
+                Sign in to unlock deep insights into your habits, productivity trends, and long-term correlations.
               </Text>
             </View>
 
@@ -89,39 +88,6 @@ export default function AnalyticsScreen() {
               </Text>
               <Ionicons name="arrow-forward" size={16} color="white" />
             </TouchableOpacity>
-
-            <View className="flex-row w-full gap-4">
-              <View
-                className="flex-1 p-4 rounded-xl"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.02)",
-                  borderColor: "rgba(255,255,255,0.05)",
-                  borderWidth: 1,
-                }}
-              >
-                <Text className="text-[10px] text-leben-text-dim font-geist-bold uppercase tracking-[1px] mb-1">
-                  Trends
-                </Text>
-                <Text className="text-[11px] text-leben-text-dim mt-1">
-                  Visualize your growth over weeks and months.
-                </Text>
-              </View>
-              <View
-                className="flex-1 p-4 rounded-xl"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.02)",
-                  borderColor: "rgba(255,255,255,0.05)",
-                  borderWidth: 1,
-                }}
-              >
-                <Text className="text-[10px] text-leben-text-dim font-geist-bold uppercase tracking-[1px] mb-1">
-                  Correlations
-                </Text>
-                <Text className="text-[11px] text-leben-text-dim mt-1">
-                  Find links between habits and task density.
-                </Text>
-              </View>
-            </View>
           </View>
         ) : (
           <View>

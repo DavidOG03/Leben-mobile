@@ -378,7 +378,7 @@ export function useAIChatPanel() {
         const nextIdx = currentIdx === -1 ? 0 : (currentIdx + 1) % statuses.length;
         return statuses[nextIdx];
       });
-    }, 100);
+    }, 2000);
 
     const controller = new AbortController();
     abortControllerRef.current = controller;

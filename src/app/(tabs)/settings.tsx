@@ -6,8 +6,9 @@ import { Text } from "@/components/ui/Text";
 import { supabase } from "@/lib/supabase/client";
 import { useLebenStore } from "@/store/useStore";
 import { useAIStore } from "@/store/useAiStore";
-import { useRouter } from "expo-router";
-import { Alert, ScrollView, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
+import { useState } from "react";
+import { Alert, ScrollView, TouchableOpacity, View, ActivityIndicator, Modal } from "react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 GoogleSignin.configure({
@@ -15,38 +16,43 @@ GoogleSignin.configure({
 });
 
 export default function SettingsScreen() {
-  const router = useRouter();
   const userId = useLebenStore((s) => s.userId);
   const clearChat = useAIStore((s) => s.clearChat);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const handleSignOut = async () => {
-    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Sign Out",
-        style: "destructive",
-        onPress: async () => {
-          // Clear AI chat so the next user can't see this user's history
-          clearChat();
+    const offlineQueueLength = useLebenStore.getState().offlineQueue.length;
+    
+    if (offlineQueueLength > 0) {
+      Alert.alert(
+        "Unsynced Changes",
+        "You have unsynced changes. Signing out will permanently delete them from this device. Are you sure?",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Sign Out Anyway", style: "destructive", onPress: performSignOut },
+        ]
+      );
+    } else {
+      Alert.alert("Sign Out", "Are you sure you want to sign out?", [
+        { text: "Cancel", style: "cancel" },
+        { text: "Sign Out", style: "destructive", onPress: performSignOut },
+      ]);
+    }
+  };
 
-          // Navigate first to prevent the Tabs navigator from crashing
-          // when the Zustand store clears the userId synchronously.
-          router.replace("/(auth)/logout" as any);
+  const performSignOut = async () => {
+    setIsSigningOut(true);
+    
+    // Clear AI chat so the next user can't see this user's history
+    clearChat();
 
-          setTimeout(async () => {
-            // Clear Google's local token cache. signOut() is safe to call even
-            // if the user never used Google Sign-In; errors are intentionally
-            // swallowed so the Supabase sign-out always runs.
-            try { await GoogleSignin.signOut(); } catch (_) {}
+    // Navigate to logout (guest mode entry) before we destroy the auth state
+    // to prevent navigation context errors when the store is cleared mid-render
+    router.replace("/(auth)/logout" as any);
 
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-              Alert.alert("Error", error.message);
-            }
-          }, 50);
-        },
-      },
-    ]);
+    try { await GoogleSignin.signOut(); } catch (_) {}
+
+    await supabase.auth.signOut();
   };
 
   return (
@@ -78,6 +84,13 @@ export default function SettingsScreen() {
 
         <DangerZone />
       </ScrollView>
+
+      <Modal visible={isSigningOut} transparent animationType="fade">
+        <View className="flex-1 items-center justify-center bg-black/60">
+          <ActivityIndicator size="large" color="#7c6af0" />
+          <Text className="text-white font-geist-medium mt-4">Signing out...</Text>
+        </View>
+      </Modal>
     </ScreenLayout>
   );
 }

@@ -30,7 +30,7 @@ export default function HabitsScreen() {
             >
               Daily Rituals
             </Text>
-            <Text className="text-leben-text-muted text-[12px] mt-0.5 mb-1 text-wrap">
+            <Text className="text-leben-text-muted text-[12px] mt-0.5 mb-1 text-wrap max-w-[250px]">
               Consistency is the bridge between goals and accomplishment.
             </Text>
           </View>

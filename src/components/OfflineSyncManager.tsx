@@ -29,6 +29,8 @@ export default function OfflineSyncManager() {
     
     if (offlineQueue.length > 0) {
       interval = setInterval(async () => {
+        const state = useLebenStore.getState();
+        if (!state.userId) return; // Do not process offline queue in guest mode automatically
         const networkState = await Network.getNetworkStateAsync();
         if (networkState.isConnected && networkState.isInternetReachable) {
           processOfflineQueue();

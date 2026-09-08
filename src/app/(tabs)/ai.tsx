@@ -36,7 +36,7 @@ export default function AIScreen() {
               Neural <Text className="text-leben-accent">AI Assistant</Text>
             </Text>
             <Text className="text-center text-leben-text-muted text-[15px] leading-[22px] max-w-[340px]">
-              Sign in to unlock interactive AI chat, personalized schedule optimization, and real-time task breakdowns powered by Neural.
+              Unlock your personal AI assistant. Sign in to chat, auto-schedule tasks, and optimize your routines.
             </Text>
           </View>
 
@@ -49,23 +49,6 @@ export default function AIScreen() {
             </Text>
             <Ionicons name="arrow-forward" size={18} color="#ffffff" />
           </TouchableOpacity>
-
-          <View className="flex-col w-full gap-3 max-w-[360px]">
-            <View className="p-4 rounded-xl bg-leben-bg-card border border-leben-border flex-row items-center gap-3">
-              <SparkleIcon size={18} color="#7c6af0" />
-              <View className="flex-1">
-                <Text className="text-[13px] font-geist-semibold text-leben-text">Context-Aware Planning</Text>
-                <Text className="text-[11px] text-leben-text-dim mt-0.5">AI analyzes your energy and habits</Text>
-              </View>
-            </View>
-            <View className="p-4 rounded-xl bg-leben-bg-card border border-leben-border flex-row items-center gap-3">
-              <SparkleIcon size={18} color="#7c6af0" />
-              <View className="flex-1">
-                <Text className="text-[13px] font-geist-semibold text-leben-text">Sub-Task Decomposition</Text>
-                <Text className="text-[11px] text-leben-text-dim mt-0.5">Automatically break complex goals down</Text>
-              </View>
-            </View>
-          </View>
         </View>
       </ScreenLayout>
     );
